@@ -6,6 +6,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "dogs")
@@ -17,6 +18,11 @@ public class Dog extends Animal {
     private Race race;
 
     public Dog() {
+    }
+
+    public Dog(String name, AnimalType type, LocalDate dateOfBirth, Person previousOwner, Race race) {
+        super(name, type, dateOfBirth, previousOwner);
+        this.race = race;
     }
 
     public Race getRace() {

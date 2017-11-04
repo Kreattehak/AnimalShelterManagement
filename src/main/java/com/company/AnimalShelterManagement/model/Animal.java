@@ -11,7 +11,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.sql.Date;
+import java.time.LocalDate;
 
 @MappedSuperclass
 public abstract class Animal extends BaseEntity {
@@ -30,15 +30,34 @@ public abstract class Animal extends BaseEntity {
     @Pattern(regexp = "\\d{8}", message = "{validation.animalIdentifierPattern}")
     @NotNull
     //first two letters - animal type, second two letters - year of birth, third four letters - unique id
+    //animalIdentifier is print on dog id tag
     private String animalIdentifier;
 
     @Column(name = "date_of_birth", nullable = false)
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @OneToOne
     @JoinTable(name = "animals_with_previous_owners", joinColumns = @JoinColumn(name = "animal_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))
     private Person previousOwner;
+
+    public Animal() {
+    }
+
+    public Animal(String name, AnimalType type, LocalDate dateOfBirth, Person previousOwner) {
+        this.name = name;
+        this.type = type;
+        this.dateOfBirth = dateOfBirth;
+        this.previousOwner = previousOwner;
+    }
+
+    //TODO:Extract it to common service for any type of animal
+    private String generateIdentifier() {
+        String firstPart = type.getTypeIdentifier();
+        String secondPart = String.valueOf(this.dateOfBirth.getYear() % 100);
+        String thirdPart = String.format("%04d", getId());
+        return firstPart + secondPart + thirdPart;
+    }
 
     public String getName() {
         return name;
@@ -60,15 +79,16 @@ public abstract class Animal extends BaseEntity {
         return animalIdentifier;
     }
 
+    //TODO: Is AnimalIdentifier generated?
 //    public void setAnimalIdentifier(String animalIdentifier) {
 //        this.animalIdentifier = animalIdentifier;
 //    }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -80,8 +100,20 @@ public abstract class Animal extends BaseEntity {
         this.previousOwner = previousOwner;
     }
 
-    private enum AnimalType {
-        DOG, CAT, BIRD,
+    public enum AnimalType {
+        DOG("00"),
+        CAT("01"),
+        BIRD("02");
+
+        private String typeIdentifier;
+
+        AnimalType(String typeIdentifier) {
+            this.typeIdentifier = typeIdentifier;
+        }
+
+        public String getTypeIdentifier() {
+            return typeIdentifier;
+        }
     }
 }
 
