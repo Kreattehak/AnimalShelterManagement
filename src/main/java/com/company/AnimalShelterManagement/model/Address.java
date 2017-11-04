@@ -11,11 +11,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "addresses")
-public class Address extends BaseEntity implements Serializable {
+public class Address extends BaseEntity {
 
     @ManyToOne
     @JoinTable(name = "person_address", joinColumns = @JoinColumn(name = "address_id"),
@@ -23,17 +22,17 @@ public class Address extends BaseEntity implements Serializable {
     @JsonIgnore
     private Person person;
 
-    @Column(name = "street_name", length = 50, nullable = false)
+    @Column(name = "street_name", nullable = false, length = 50)
     @Length(min = 3, message = "{validation.minLength}")
     @NotNull
     private String streetName;
 
-    @Column(name = "city_name", length = 25, nullable = false)
+    @Column(name = "city_name", nullable = false, length = 25)
     @Length(min = 3, message = "{validation.minLength}")
     @NotNull
     private String cityName;
 
-    @Column(name = "zip_code", length = 6, nullable = false)
+    @Column(name = "zip_code", nullable = false, length = 6)
     @Pattern(regexp = "\\d{2}-\\d{3}", message = "{validation.zipCodePattern}")
     @NotNull
     private String zipCode;
