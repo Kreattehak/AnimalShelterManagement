@@ -26,9 +26,8 @@ public abstract class Animal extends BaseEntity {
     @NotNull
     private AnimalType type;
 
-    @Column(name = "animal_identifier", nullable = false, length = 8)
+    @Column(name = "animal_identifier", length = 8)
     @Pattern(regexp = "\\d{8}", message = "{validation.animalIdentifierPattern}")
-    @NotNull
     //first two letters - animal type, second two letters - year of birth, third four letters - unique id
     //animalIdentifier is print on dog id tag
     private String animalIdentifier;
@@ -52,11 +51,17 @@ public abstract class Animal extends BaseEntity {
     }
 
     //TODO:Extract it to common service for any type of animal
-    private String generateIdentifier() {
+    public String generateIdentifier() {
+        if (animalIdentifier != null) {
+            return animalIdentifier;
+        }
+
         String firstPart = type.getTypeIdentifier();
-        String secondPart = String.valueOf(this.dateOfBirth.getYear() % 100);
+        String secondPart = String.format("%02d", this.dateOfBirth.getYear() % 100);
         String thirdPart = String.format("%04d", getId());
-        return firstPart + secondPart + thirdPart;
+        animalIdentifier = firstPart + secondPart + thirdPart;
+
+        return animalIdentifier;
     }
 
     public String getName() {
