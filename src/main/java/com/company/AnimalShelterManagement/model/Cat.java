@@ -15,26 +15,26 @@ public class Cat extends Animal {
     @Column(name = "race", nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
     @NotNull
-    private Race race;
+    private CatRace race;
 
     public Cat() {
 
     }
 
-    public Cat(String name, AnimalType type, LocalDate dateOfBirth, Person previousOwner, Race race) {
+    public Cat(String name, AnimalType type, LocalDate dateOfBirth, Person previousOwner, CatRace race) {
         super(name, type, dateOfBirth, previousOwner);
         this.race = race;
     }
 
-    public Race getRace() {
+    public CatRace getRace() {
         return race;
     }
 
-    public void setRace(Race race) {
+    public void setRace(CatRace race) {
         this.race = race;
     }
 
-    private enum Race {
+    public enum CatRace {
         PERSIAN, ROOFLANDER
     }
 }

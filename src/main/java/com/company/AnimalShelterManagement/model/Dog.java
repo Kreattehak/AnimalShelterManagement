@@ -15,26 +15,26 @@ public class Dog extends Animal {
     @Column(name = "race", nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
     @NotNull
-    private Race race;
+    private DogRace race;
 
     public Dog() {
     }
 
-    public Dog(String name, AnimalType type, LocalDate dateOfBirth, Person previousOwner, Race race) {
+    public Dog(String name, AnimalType type, LocalDate dateOfBirth, Person previousOwner, DogRace race) {
         super(name, type, dateOfBirth, previousOwner);
         this.race = race;
     }
 
-    public Race getRace() {
+    public DogRace getRace() {
         return race;
     }
 
-    public void setRace(Race race) {
+    public void setRace(DogRace race) {
         this.race = race;
     }
 
-    private enum Race {
+    public enum DogRace {
         HUSKY, GERMAN_SHEPERD, CROSSBREAD,
     }
-
 }
+
