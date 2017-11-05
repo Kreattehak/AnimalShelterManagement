@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 @RestController
 public class PersonController {
@@ -24,22 +25,24 @@ public class PersonController {
         this.personService = personService;
     }
 
-    @GetMapping("${rest.person.getPeople}")
+    @GetMapping(value = "${rest.person.getPeople}", produces = APPLICATION_JSON_UTF8_VALUE)
     public Iterable<Person> returnPeople() {
         return personService.returnPeople();
     }
 
-    @GetMapping("${rest.person.getPerson}")
+    @GetMapping(value = "${rest.person.getPerson}", produces = APPLICATION_JSON_UTF8_VALUE)
     public Person returnPerson(@PathVariable Long personId) {
         return personService.returnPerson(personId);
     }
 
-    @PostMapping("${rest.person.postPerson}")
+    @PostMapping(value = "${rest.person.postPerson}", consumes = APPLICATION_JSON_UTF8_VALUE,
+            produces = APPLICATION_JSON_UTF8_VALUE)
     public Person savePerson(@Valid @RequestBody Person person) {
         return personService.savePerson(person);
     }
 
-    @PutMapping("${rest.person.putPerson}")
+    @PutMapping(value = "${rest.person.putPerson}", consumes = APPLICATION_JSON_UTF8_VALUE,
+            produces = APPLICATION_JSON_UTF8_VALUE)
     public Person updatePerson(@Valid @RequestBody Person person) {
         return personService.updatePerson(person);
     }

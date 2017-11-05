@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+
 @RestController
 public class AddressController {
 
@@ -23,27 +25,29 @@ public class AddressController {
         this.addressService = addressService;
     }
 
-    @GetMapping("${rest.address.getAddresses}")
+    @GetMapping(value = "${rest.address.getAddresses}", produces = APPLICATION_JSON_UTF8_VALUE)
     public Iterable<Address> returnAddresses() {
         return addressService.returnAddresses();
     }
 
-    @GetMapping("${rest.address.getAddress}")
+    @GetMapping(value = "${rest.address.getAddress}", produces = APPLICATION_JSON_UTF8_VALUE)
     public Address returnAddress(@PathVariable Long addressId) {
         return addressService.returnAddress(addressId);
     }
 
-    @PostMapping("${rest.address.postAddress}")
+    @PostMapping(value = "${rest.address.postAddress}", consumes = APPLICATION_JSON_UTF8_VALUE,
+            produces = APPLICATION_JSON_UTF8_VALUE)
     public Address saveAddress(@Valid @RequestBody Address address) {
         return addressService.saveAddress(address);
     }
 
-    @PutMapping("${rest.address.putAddress}")
+    @PutMapping(value = "${rest.address.putAddress}", consumes = APPLICATION_JSON_UTF8_VALUE,
+            produces = APPLICATION_JSON_UTF8_VALUE)
     public Address updateAddress(@Valid @RequestBody Address address) {
         return addressService.updateAddress(address);
     }
 
-    @DeleteMapping("${rest.address.deleteAddress}")
+    @DeleteMapping(value = "${rest.address.deleteAddress}")
     public void deleteAddress(@PathVariable Long addressId) {
         addressService.deleteAddress(addressId);
     }
