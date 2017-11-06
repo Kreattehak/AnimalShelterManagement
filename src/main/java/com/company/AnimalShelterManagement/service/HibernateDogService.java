@@ -1,6 +1,7 @@
 package com.company.AnimalShelterManagement.service;
 
 import com.company.AnimalShelterManagement.model.Dog;
+import com.company.AnimalShelterManagement.repository.CatRepository;
 import com.company.AnimalShelterManagement.repository.DogRepository;
 import com.company.AnimalShelterManagement.service.interfaces.DogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class HibernateDogService implements DogService {
-
-    private final DogRepository dogRepository;
+public class HibernateDogService extends HibernateAnimalService implements DogService {
 
     @Autowired
-    public HibernateDogService(DogRepository dogRepository) {
-        this.dogRepository = dogRepository;
+    public HibernateDogService(CatRepository catRepository, DogRepository dogRepository) {
+        super(catRepository, dogRepository);
     }
 
     @Override
@@ -32,7 +31,9 @@ public class HibernateDogService implements DogService {
 
     @Override
     public Dog saveDog(Dog dog) {
-        return dogRepository.save(dog);
+        dog = dogRepository.save(dog);
+        super.generateIdentifier(dog);
+        return dog;
     }
 
     @Override

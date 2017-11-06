@@ -7,4 +7,7 @@ import java.util.List;
 public interface AnimalService {
 
     List<Animal> returnAnimals();
+
+    void generateIdentifier(Animal animal);
+
 }

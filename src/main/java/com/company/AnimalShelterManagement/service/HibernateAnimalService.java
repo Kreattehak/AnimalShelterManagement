@@ -11,12 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("defaultAnimalService")
 @Transactional
 public class HibernateAnimalService implements AnimalService {
 
-    private final CatRepository catRepository;
-    private final DogRepository dogRepository;
+    protected final CatRepository catRepository;
+    protected final DogRepository dogRepository;
 
     @Autowired
     public HibernateAnimalService(CatRepository catRepository, DogRepository dogRepository) {
@@ -30,5 +30,15 @@ public class HibernateAnimalService implements AnimalService {
         catRepository.findAll().forEach(animals::add);
         dogRepository.findAll().forEach(animals::add);
         return animals;
+    }
+
+    @Override
+    public void generateIdentifier(Animal animal) {
+        if (animal.getAnimalIdentifier() == null) {
+            String firstPart = animal.getAnimalType().getTypeIdentifier();
+            String secondPart = String.format("%02d", animal.getDateOfBirth().getYear() % 100);
+            String thirdPart = String.format("%04d", animal.getId());
+            animal.setAnimalIdentifier(firstPart + secondPart + thirdPart);
+        }
     }
 }
