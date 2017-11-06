@@ -36,5 +36,10 @@ public class Dog extends Animal {
     public enum Race {
         HUSKY, GERMAN_SHEPERD, CROSSBREAD,
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", dogRace=" + dogRace + '}';
+    }
 }
 

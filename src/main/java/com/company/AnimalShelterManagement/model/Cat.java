@@ -37,4 +37,9 @@ public class Cat extends Animal {
     public enum Race {
         PERSIAN, ROOFLANDER
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", catRace=" + catRace + '}';
+    }
 }

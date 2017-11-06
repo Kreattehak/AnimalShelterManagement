@@ -5,8 +5,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
@@ -14,7 +12,7 @@ import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @MappedSuperclass
-public class Animal extends BaseEntity {
+public abstract class Animal extends BaseEntity {
 
     @Column(name = "name", nullable = false, length = 25)
     @Length(min = 3, message = "{validation.minLength}")
@@ -36,8 +34,6 @@ public class Animal extends BaseEntity {
     private LocalDate dateOfBirth;
 
     @OneToOne
-    @JoinTable(name = "animals_with_previous_owners", joinColumns = @JoinColumn(name = "animal_id"),
-            inverseJoinColumns = @JoinColumn(name = "person_id"))
     private Person previousOwner;
 
     Animal() {
@@ -48,20 +44,6 @@ public class Animal extends BaseEntity {
         this.animalType = animalType;
         this.dateOfBirth = dateOfBirth;
         this.previousOwner = previousOwner;
-    }
-
-    //TODO:Extract it to common service for any animalType of animal
-    public String generateIdentifier() {
-        if (animalIdentifier != null) {
-            return animalIdentifier;
-        }
-
-        String firstPart = animalType.getTypeIdentifier();
-        String secondPart = String.format("%02d", this.dateOfBirth.getYear() % 100);
-        String thirdPart = String.format("%04d", getId());
-        animalIdentifier = firstPart + secondPart + thirdPart;
-
-        return animalIdentifier;
     }
 
     public String getName() {
@@ -84,10 +66,11 @@ public class Animal extends BaseEntity {
         return animalIdentifier;
     }
 
-    //TODO: Is AnimalIdentifier generated?
-//    public void setAnimalIdentifier(String animalIdentifier) {
-//        this.animalIdentifier = animalIdentifier;
-//    }
+    public void setAnimalIdentifier(String animalIdentifier) {
+        if (this.animalIdentifier == null) {
+            this.animalIdentifier = animalIdentifier;
+        }
+    }
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
@@ -119,6 +102,16 @@ public class Animal extends BaseEntity {
         public String getTypeIdentifier() {
             return typeIdentifier;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Animal{" +
+                "name='" + name + '\'' +
+                ", animalType=" + animalType +
+                ", animalIdentifier='" + animalIdentifier + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", previousOwner=" + previousOwner;
     }
 }
 
