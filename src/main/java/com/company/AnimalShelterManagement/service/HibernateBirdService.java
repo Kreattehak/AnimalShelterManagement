@@ -1,7 +1,9 @@
 package com.company.AnimalShelterManagement.service;
 
 import com.company.AnimalShelterManagement.model.Bird;
+import com.company.AnimalShelterManagement.repository.BirdRepository;
 import com.company.AnimalShelterManagement.service.interfaces.BirdService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,15 +11,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class HibernateBirdService extends HibernateAnimalService implements BirdService {
 
-    public HibernateBirdService() {
+    private final BirdRepository birdRepository;
+
+    @Autowired
+    public HibernateBirdService(BirdRepository birdRepository) {
+        this.birdRepository = birdRepository;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Iterable<Bird> returnBirds() {
         return birdRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Bird returnBird(Long birdId) {
         return birdRepository.findOne(birdId);
     }

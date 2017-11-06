@@ -1,9 +1,7 @@
 package com.company.AnimalShelterManagement.service;
 
 import com.company.AnimalShelterManagement.model.Animal;
-import com.company.AnimalShelterManagement.repository.BirdRepository;
-import com.company.AnimalShelterManagement.repository.CatRepository;
-import com.company.AnimalShelterManagement.repository.DogRepository;
+import com.company.AnimalShelterManagement.repository.AnimalRepository;
 import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,19 +15,16 @@ import java.util.List;
 @Transactional
 public class HibernateAnimalService implements AnimalService {
 
-    protected CatRepository catRepository;
-    protected DogRepository dogRepository;
-    protected BirdRepository birdRepository;
+    private AnimalRepository animalRepository;
 
     public HibernateAnimalService() {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Animal> returnAnimals() {
         List<Animal> animals = new ArrayList<>();
-        catRepository.findAll().forEach(animals::add);
-        dogRepository.findAll().forEach(animals::add);
-        birdRepository.findAll().forEach(animals::add);
+        animalRepository.findAll().forEach(animals::add);
         return animals;
     }
 
@@ -43,18 +38,14 @@ public class HibernateAnimalService implements AnimalService {
         }
     }
 
-    @Autowired
-    public void setCatRepository(CatRepository catRepository) {
-        this.catRepository = catRepository;
+    @Override
+    @Transactional(readOnly = true)
+    public Long countAnimals() {
+        return animalRepository.count();
     }
 
     @Autowired
-    public void setDogRepository(DogRepository dogRepository) {
-        this.dogRepository = dogRepository;
-    }
-
-    @Autowired
-    public void setBirdRepository(BirdRepository birdRepository) {
-        this.birdRepository = birdRepository;
+    public void setAnimalRepository(AnimalRepository animalRepository) {
+        this.animalRepository = animalRepository;
     }
 }

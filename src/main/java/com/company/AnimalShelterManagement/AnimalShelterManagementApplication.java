@@ -7,16 +7,19 @@ import com.company.AnimalShelterManagement.model.Cat;
 import com.company.AnimalShelterManagement.model.Dog;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.service.interfaces.AddressService;
+import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
 import com.company.AnimalShelterManagement.service.interfaces.BirdService;
 import com.company.AnimalShelterManagement.service.interfaces.CatService;
 import com.company.AnimalShelterManagement.service.interfaces.DogService;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
@@ -30,8 +33,10 @@ public class AnimalShelterManagementApplication {
     }
 
     @Bean
-    public CommandLineRunner demo(CatService catService, DogService dogService, BirdService birdService,
-                                  PersonService personService, AddressService addressService) {
+    public CommandLineRunner demo(CatService catService, DogService dogService,
+                                  PersonService personService, AddressService addressService,
+                                  BirdService birdService,
+                                  @Qualifier("defaultAnimalService") AnimalService animalService) {
         return (args) -> {
             Person person = new Person("Dany", "Devito");
             Address address = new Address("West Side Street", "Czikago", "40-400");

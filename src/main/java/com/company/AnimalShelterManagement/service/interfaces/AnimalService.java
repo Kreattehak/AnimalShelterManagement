@@ -10,4 +10,5 @@ public interface AnimalService {
 
     void generateIdentifier(Animal animal);
 
+    Long countAnimals();
 }

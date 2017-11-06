@@ -3,16 +3,22 @@ package com.company.AnimalShelterManagement.model;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
-@MappedSuperclass
-public abstract class Animal extends BaseEntity {
+//TODO: Think about displaying animals available to adoption
+@Entity
+@Table(name = "animals")
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Animal extends BaseEntity {
 
     @Column(name = "name", nullable = false, length = 25)
     @Length(min = 3, message = "{validation.minLength}")
