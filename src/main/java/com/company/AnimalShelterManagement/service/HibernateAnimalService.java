@@ -1,6 +1,7 @@
 package com.company.AnimalShelterManagement.service;
 
 import com.company.AnimalShelterManagement.model.Animal;
+import com.company.AnimalShelterManagement.repository.BirdRepository;
 import com.company.AnimalShelterManagement.repository.CatRepository;
 import com.company.AnimalShelterManagement.repository.DogRepository;
 import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
@@ -11,17 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO: Think about one abstract service
 @Service("defaultAnimalService")
 @Transactional
 public class HibernateAnimalService implements AnimalService {
 
-    protected final CatRepository catRepository;
-    protected final DogRepository dogRepository;
+    protected CatRepository catRepository;
+    protected DogRepository dogRepository;
+    protected BirdRepository birdRepository;
 
-    @Autowired
-    public HibernateAnimalService(CatRepository catRepository, DogRepository dogRepository) {
-        this.catRepository = catRepository;
-        this.dogRepository = dogRepository;
+    public HibernateAnimalService() {
     }
 
     @Override
@@ -29,6 +29,7 @@ public class HibernateAnimalService implements AnimalService {
         List<Animal> animals = new ArrayList<>();
         catRepository.findAll().forEach(animals::add);
         dogRepository.findAll().forEach(animals::add);
+        birdRepository.findAll().forEach(animals::add);
         return animals;
     }
 
@@ -40,5 +41,20 @@ public class HibernateAnimalService implements AnimalService {
             String thirdPart = String.format("%04d", animal.getId());
             animal.setAnimalIdentifier(firstPart + secondPart + thirdPart);
         }
+    }
+
+    @Autowired
+    public void setCatRepository(CatRepository catRepository) {
+        this.catRepository = catRepository;
+    }
+
+    @Autowired
+    public void setDogRepository(DogRepository dogRepository) {
+        this.dogRepository = dogRepository;
+    }
+
+    @Autowired
+    public void setBirdRepository(BirdRepository birdRepository) {
+        this.birdRepository = birdRepository;
     }
 }
