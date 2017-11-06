@@ -4,7 +4,7 @@ import com.company.AnimalShelterManagement.model.Address;
 
 public interface AddressService {
 
-    Iterable<Address> returnAddresses();
+    Iterable<Address> returnPersonAddresses(Long personId);
 
     Address returnAddress(Long addressId);
 

@@ -26,8 +26,8 @@ public class AddressController {
     }
 
     @GetMapping(value = "${rest.address.getAddresses}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public Iterable<Address> returnAddresses() {
-        return addressService.returnAddresses();
+    public Iterable<Address> returnPersonAddresses(@PathVariable Long personId) {
+        return addressService.returnPersonAddresses(personId);
     }
 
     @GetMapping(value = "${rest.address.getAddress}", produces = APPLICATION_JSON_UTF8_VALUE)

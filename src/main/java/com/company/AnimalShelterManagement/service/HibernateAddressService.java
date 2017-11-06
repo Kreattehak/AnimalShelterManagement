@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class HibernateAddressService implements AddressService {
 
     private final AddressRepository addressRepository;
@@ -18,11 +18,13 @@ public class HibernateAddressService implements AddressService {
     }
 
     @Override
-    public Iterable<Address> returnAddresses() {
-        return addressRepository.findAll();
+    @Transactional(readOnly = true)
+    public Iterable<Address> returnPersonAddresses(Long personId) {
+        return addressRepository.findByPersonId(personId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Address returnAddress(Long addressId) {
         return addressRepository.findOne(addressId);
     }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class HibernatePersonService implements PersonService {
 
     private final PersonRepository personRepository;
@@ -18,11 +18,13 @@ public class HibernatePersonService implements PersonService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Iterable<Person> returnPeople() {
         return personRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Person returnPerson(Long personId) {
         return personRepository.findOne(personId);
     }
