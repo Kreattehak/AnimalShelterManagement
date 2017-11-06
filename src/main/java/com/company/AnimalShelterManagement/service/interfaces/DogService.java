@@ -1,4 +1,4 @@
-package com.company.AnimalShelterManagement.service;
+package com.company.AnimalShelterManagement.service.interfaces;
 
 import com.company.AnimalShelterManagement.model.Dog;
 

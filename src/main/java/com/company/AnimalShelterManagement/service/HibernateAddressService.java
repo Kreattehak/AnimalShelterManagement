@@ -2,6 +2,7 @@ package com.company.AnimalShelterManagement.service;
 
 import com.company.AnimalShelterManagement.model.Address;
 import com.company.AnimalShelterManagement.repository.AddressRepository;
+import com.company.AnimalShelterManagement.service.interfaces.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

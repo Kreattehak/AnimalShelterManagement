@@ -2,6 +2,7 @@ package com.company.AnimalShelterManagement.service;
 
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.repository.PersonRepository;
+import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
