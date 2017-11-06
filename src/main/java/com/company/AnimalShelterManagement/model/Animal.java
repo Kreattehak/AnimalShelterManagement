@@ -14,7 +14,7 @@ import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @MappedSuperclass
-public abstract class Animal extends BaseEntity {
+public class Animal extends BaseEntity {
 
     @Column(name = "name", nullable = false, length = 25)
     @Length(min = 3, message = "{validation.minLength}")
@@ -24,11 +24,11 @@ public abstract class Animal extends BaseEntity {
     @Column(name = "animal_type", nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
     @NotNull
-    private AnimalType type;
+    private Type animalType;
 
     @Column(name = "animal_identifier", length = 8)
     @Pattern(regexp = "\\d{8}", message = "{validation.animalIdentifierPattern}")
-    //first two letters - animal type, second two letters - year of birth, third four letters - unique id
+    //first two letters - animal animalType, second two letters - year of birth, third four letters - unique id
     //animalIdentifier is print on dog id tag
     private String animalIdentifier;
 
@@ -40,23 +40,23 @@ public abstract class Animal extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "person_id"))
     private Person previousOwner;
 
-    public Animal() {
+    Animal() {
     }
 
-    public Animal(String name, AnimalType type, LocalDate dateOfBirth, Person previousOwner) {
+    Animal(String name, Type animalType, LocalDate dateOfBirth, Person previousOwner) {
         this.name = name;
-        this.type = type;
+        this.animalType = animalType;
         this.dateOfBirth = dateOfBirth;
         this.previousOwner = previousOwner;
     }
 
-    //TODO:Extract it to common service for any type of animal
+    //TODO:Extract it to common service for any animalType of animal
     public String generateIdentifier() {
         if (animalIdentifier != null) {
             return animalIdentifier;
         }
 
-        String firstPart = type.getTypeIdentifier();
+        String firstPart = animalType.getTypeIdentifier();
         String secondPart = String.format("%02d", this.dateOfBirth.getYear() % 100);
         String thirdPart = String.format("%04d", getId());
         animalIdentifier = firstPart + secondPart + thirdPart;
@@ -72,12 +72,12 @@ public abstract class Animal extends BaseEntity {
         this.name = name;
     }
 
-    public AnimalType getType() {
-        return type;
+    public Type getAnimalType() {
+        return animalType;
     }
 
-    public void setType(AnimalType type) {
-        this.type = type;
+    public void setAnimalType(Type animalType) {
+        this.animalType = animalType;
     }
 
     public String getAnimalIdentifier() {
@@ -105,14 +105,14 @@ public abstract class Animal extends BaseEntity {
         this.previousOwner = previousOwner;
     }
 
-    public enum AnimalType {
+    public enum Type {
         DOG("00"),
         CAT("01"),
         BIRD("02");
 
         private String typeIdentifier;
 
-        AnimalType(String typeIdentifier) {
+        Type(String typeIdentifier) {
             this.typeIdentifier = typeIdentifier;
         }
 

@@ -12,29 +12,29 @@ import java.time.LocalDate;
 @Table(name = "cats")
 public class Cat extends Animal {
 
-    @Column(name = "race", nullable = false, length = 15)
+    @Column(name = "cat_race", nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
     @NotNull
-    private CatRace race;
+    private Race catRace;
 
     public Cat() {
 
     }
 
-    public Cat(String name, AnimalType type, LocalDate dateOfBirth, Person previousOwner, CatRace race) {
+    public Cat(String name, Type type, LocalDate dateOfBirth, Person previousOwner, Race catRace) {
         super(name, type, dateOfBirth, previousOwner);
-        this.race = race;
+        this.catRace = catRace;
     }
 
-    public CatRace getRace() {
-        return race;
+    public Race getCatRace() {
+        return catRace;
     }
 
-    public void setRace(CatRace race) {
-        this.race = race;
+    public void setCatRace(Race catRace) {
+        this.catRace = catRace;
     }
 
-    public enum CatRace {
+    public enum Race {
         PERSIAN, ROOFLANDER
     }
 }
