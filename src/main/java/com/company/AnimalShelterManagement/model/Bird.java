@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "birds")
+@Table(name = "bird")
 public class Bird extends Animal {
 
     //TODO: Update lentght to the longest enum

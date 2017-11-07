@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Entity
-@Table(name = "addresses")
+@Table(name = "address")
 public class Address extends BaseEntity {
 
     @ManyToOne

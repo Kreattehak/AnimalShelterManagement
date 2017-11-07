@@ -19,7 +19,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
@@ -44,7 +43,7 @@ public class AnimalShelterManagementApplication {
                     person, Dog.Race.CROSSBREAD);
             Cat cat = new Cat("Mruczek", Animal.Type.CAT, LocalDate.of(2011, 10, 7),
                     person, Cat.Race.PERSIAN);
-            Bird bird= new Bird("Papi", Animal.Type.BIRD, LocalDate.of(2012, 9, 8),
+            Bird bird = new Bird("Papi", Animal.Type.BIRD, LocalDate.of(2012, 9, 8),
                     person, Bird.Species.AFRICAN_GREY);
             person.addAddress(address);
 
@@ -58,6 +57,8 @@ public class AnimalShelterManagementApplication {
             System.out.println(cat);
             System.out.println(dog);
             System.out.println(bird);
+
+            System.out.println(animalService.countAnimals());
         };
     }
 }

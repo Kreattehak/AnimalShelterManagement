@@ -16,14 +16,14 @@ import java.time.LocalDate;
 
 //TODO: Think about displaying animals available to adoption
 @Entity
-@Table(name = "animals")
+@Table(name = "animal")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Animal extends BaseEntity {
 
-    @Column(name = "name", nullable = false, length = 25)
+    @Column(name = "animal_name", nullable = false, length = 25)
     @Length(min = 3, message = "{validation.minLength}")
     @NotNull
-    private String name;
+    private String animalName;
 
     @Column(name = "animal_type", nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
@@ -45,19 +45,19 @@ public class Animal extends BaseEntity {
     Animal() {
     }
 
-    Animal(String name, Type animalType, LocalDate dateOfBirth, Person previousOwner) {
-        this.name = name;
+    Animal(String animalName, Type animalType, LocalDate dateOfBirth, Person previousOwner) {
+        this.animalName = animalName;
         this.animalType = animalType;
         this.dateOfBirth = dateOfBirth;
         this.previousOwner = previousOwner;
     }
 
-    public String getName() {
-        return name;
+    public String getAnimalName() {
+        return animalName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAnimalName(String animalName) {
+        this.animalName = animalName;
     }
 
     public Type getAnimalType() {
@@ -113,7 +113,7 @@ public class Animal extends BaseEntity {
     @Override
     public String toString() {
         return "Animal{" +
-                "name='" + name + '\'' +
+                "animalName='" + animalName + '\'' +
                 ", animalType=" + animalType +
                 ", animalIdentifier='" + animalIdentifier + '\'' +
                 ", dateOfBirth=" + dateOfBirth +

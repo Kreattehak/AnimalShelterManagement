@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "dogs")
+@Table(name = "dog")
 public class Dog extends Animal {
 
     @Column(name = "dog_race", nullable = false, length = 15)

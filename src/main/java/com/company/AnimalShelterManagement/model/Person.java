@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "people")
+@Table(name = "person")
 public class Person extends BaseEntity {
 
     @Column(name = "first_name", nullable = false, length = 25)
