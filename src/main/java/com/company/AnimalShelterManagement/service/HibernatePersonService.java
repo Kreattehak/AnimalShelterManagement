@@ -3,6 +3,7 @@ package com.company.AnimalShelterManagement.service;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.repository.PersonRepository;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
+import com.company.AnimalShelterManagement.utils.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,12 @@ public class HibernatePersonService implements PersonService {
     @Override
     @Transactional(readOnly = true)
     public Person returnPerson(Long personId) {
-        return personRepository.findOne(personId);
+        Person person = personRepository.findOne(personId);
+        if (person == null) {
+            throw new EntityNotFoundException(Person.class, "personId", personId.toString());
+        }
+
+        return person;
     }
 
     @Override
@@ -37,11 +43,14 @@ public class HibernatePersonService implements PersonService {
 
     @Override
     public Person updatePerson(Person person) {
+        Person personFromDatabase = returnPerson(person.getId());
         return personRepository.save(person);
     }
 
+    //TODO: Should I really search and then delete person?
     @Override
     public void deletePerson(Long personId) {
-        personRepository.delete(personId);
+        Person person = returnPerson(personId);
+        personRepository.delete(person);
     }
 }
