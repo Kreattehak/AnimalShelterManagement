@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/animal_shelter_test\
+    ?serverTimezone=Europe/Warsaw&verifyServerCertificate=false&useSSL=true"
+  jpa:
+    hibernate:
+      ddl-auto: create

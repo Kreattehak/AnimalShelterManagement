@@ -18,7 +18,6 @@ public class HibernatePersonService implements PersonService {
     private final PersonRepository personRepository;
     private final ModelMapper modelMapper;
 
-
     @Autowired
     public HibernatePersonService(PersonRepository personRepository, ModelMapper modelMapper) {
         this.personRepository = personRepository;

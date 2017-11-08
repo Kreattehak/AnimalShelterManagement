@@ -1,16 +1,13 @@
 package com.company.AnimalShelterManagement;
 
-import org.junit.Test;
+import com.company.AnimalShelterManagement.controller.PersonControllerIntegrationTest;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.runners.Suite;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+        PersonControllerIntegrationTest.class
+})
 public class AnimalShelterManagementApplicationTests {
-
-	@Test
-	public void contextLoads() {
-	}
-
+    //intentionally empty
 }
