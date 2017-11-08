@@ -1,6 +1,7 @@
 package com.company.AnimalShelterManagement.controller;
 
 import com.company.AnimalShelterManagement.model.Person;
+import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,20 +32,20 @@ public class PersonController {
     }
 
     @GetMapping(value = "${rest.person.getPerson}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public Person returnPerson(@PathVariable Long personId) {
+    public PersonDTO returnPerson(@PathVariable Long personId) {
         return personService.returnPerson(personId);
     }
 
     @PostMapping(value = "${rest.person.postPerson}", consumes = APPLICATION_JSON_UTF8_VALUE,
             produces = APPLICATION_JSON_UTF8_VALUE)
-    public Person savePerson(@Valid @RequestBody Person person) {
-        return personService.savePerson(person);
+    public PersonDTO savePerson(@Valid @RequestBody PersonDTO personDTO) {
+        return personService.savePerson(personDTO);
     }
 
     @PutMapping(value = "${rest.person.putPerson}", consumes = APPLICATION_JSON_UTF8_VALUE,
             produces = APPLICATION_JSON_UTF8_VALUE)
-    public Person updatePerson(@Valid @RequestBody Person person) {
-        return personService.updatePerson(person);
+    public PersonDTO updatePerson(@Valid @RequestBody PersonDTO personDTO) {
+        return personService.updatePerson(personDTO);
     }
 
     @DeleteMapping("${rest.person.deletePerson}")
