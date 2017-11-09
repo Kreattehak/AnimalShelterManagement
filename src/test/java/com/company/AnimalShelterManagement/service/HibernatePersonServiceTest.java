@@ -51,7 +51,7 @@ public class HibernatePersonServiceTest {
     }
 
     @Test
-    public void shouldReturnPeople() {
+    public void shouldPerformReturnPeople() {
         Person anotherTestPerson = new Person(ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME);
         when(personRepository.findAll()).thenReturn(Arrays.asList(testPerson, anotherTestPerson));
 
@@ -62,7 +62,7 @@ public class HibernatePersonServiceTest {
     }
 
     @Test
-    public void shouldReturnPerson() {
+    public void shouldPerformReturnPerson() {
         when(personRepository.findOne(anyLong())).thenReturn(testPerson);
 
         hibernatePersonService.returnPerson(PERSON_ID);
@@ -81,7 +81,7 @@ public class HibernatePersonServiceTest {
     }
 
     @Test
-    public void shouldSavePerson() {
+    public void shouldPerformSavePerson() {
         when(personRepository.save(any(Person.class))).thenReturn(testPerson);
 
         hibernatePersonService.savePerson(testPersonDTO);
@@ -91,7 +91,7 @@ public class HibernatePersonServiceTest {
     }
 
     @Test
-    public void shouldUpdatePerson() {
+    public void shouldPerformUpdatePerson() {
         PersonDTO anotherPersonDTO = new PersonDTO(
                 PERSON_ID, ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME);
 
@@ -110,7 +110,7 @@ public class HibernatePersonServiceTest {
     }
 
     @Test
-    public void shouldDeletePerson() {
+    public void shouldPerformDeletePerson() {
         when(personRepository.findOne(anyLong())).thenReturn(testPerson);
 
         hibernatePersonService.deletePerson(PERSON_ID);
@@ -121,7 +121,7 @@ public class HibernatePersonServiceTest {
     }
 
     @Test
-    public void shouldAddFirstAddressToPersonAndSetItAsMainAddress() {
+    public void shouldPerformAddFirstAddressToPersonAndSetItAsMainAddress() {
         Address address = new Address(ADDRESS_STREET_NAME, ADDRESS_CITY_NAME, ADDRESS_ZIP_CODE);
 
         when(personRepository.findOne(anyLong())).thenReturn(testPerson);

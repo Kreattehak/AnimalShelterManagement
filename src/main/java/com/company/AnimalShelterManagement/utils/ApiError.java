@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 public class ApiError {
 
+    //TODO: There is a problem with parsing JSON timestamp to LocalDateTime
     private LocalDateTime timestamp;
     private HttpStatus status;
     private String message;

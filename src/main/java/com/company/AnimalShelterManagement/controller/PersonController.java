@@ -1,6 +1,5 @@
 package com.company.AnimalShelterManagement.controller;
 
-import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,28 +1,12 @@
 package com.company.AnimalShelterManagement;
 
-import com.company.AnimalShelterManagement.model.Address;
-import com.company.AnimalShelterManagement.model.Animal;
-import com.company.AnimalShelterManagement.model.Bird;
-import com.company.AnimalShelterManagement.model.Cat;
-import com.company.AnimalShelterManagement.model.Dog;
-import com.company.AnimalShelterManagement.model.Person;
-import com.company.AnimalShelterManagement.repository.PersonRepository;
-import com.company.AnimalShelterManagement.service.interfaces.AddressService;
-import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
-import com.company.AnimalShelterManagement.service.interfaces.BirdService;
-import com.company.AnimalShelterManagement.service.interfaces.CatService;
-import com.company.AnimalShelterManagement.service.interfaces.DogService;
-import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-
-import java.time.LocalDate;
 
 @SpringBootApplication
 @EnableAutoConfiguration
