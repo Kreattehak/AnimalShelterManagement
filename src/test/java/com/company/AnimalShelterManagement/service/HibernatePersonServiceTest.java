@@ -47,7 +47,7 @@ public class HibernatePersonServiceTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         testPerson = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
-        testPersonDTO = new PersonDTO(PERSON_ID, PERSON_FIRST_NAME, PERSON_LAST_NAME);
+        testPersonDTO = new PersonDTO(ID_VALUE, PERSON_FIRST_NAME, PERSON_LAST_NAME);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class HibernatePersonServiceTest {
     public void shouldPerformReturnPerson() {
         when(personRepository.findOne(anyLong())).thenReturn(testPerson);
 
-        hibernatePersonService.returnPerson(PERSON_ID);
+        hibernatePersonService.returnPerson(ID_VALUE);
 
         verify(personRepository).findOne(anyLong());
         verifyNoMoreInteractions(personRepository);
@@ -77,7 +77,7 @@ public class HibernatePersonServiceTest {
 
         expectedException.expect(EntityNotFoundException.class);
         expectedException.expectMessage("was not found");
-        hibernatePersonService.returnPerson(PERSON_ID);
+        hibernatePersonService.returnPerson(ID_VALUE);
     }
 
     @Test
@@ -93,7 +93,7 @@ public class HibernatePersonServiceTest {
     @Test
     public void shouldPerformUpdatePerson() {
         PersonDTO anotherPersonDTO = new PersonDTO(
-                PERSON_ID, ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME);
+                ID_VALUE, ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME);
 
         when(personRepository.findOne(anyLong())).thenReturn(testPerson);
         when(personRepository.save(any(Person.class))).thenReturn(testPerson);
@@ -113,7 +113,7 @@ public class HibernatePersonServiceTest {
     public void shouldPerformDeletePerson() {
         when(personRepository.findOne(anyLong())).thenReturn(testPerson);
 
-        hibernatePersonService.deletePerson(PERSON_ID);
+        hibernatePersonService.deletePerson(ID_VALUE);
 
         verify(personRepository).findOne(anyLong());
         verify(personRepository).delete(any(Person.class));
@@ -126,7 +126,7 @@ public class HibernatePersonServiceTest {
 
         when(personRepository.findOne(anyLong())).thenReturn(testPerson);
 
-        hibernatePersonService.addAddressForPerson(address, PERSON_ID);
+        hibernatePersonService.addAddressForPerson(address, ID_VALUE);
 
         assertThat(testPerson, allOf(
                 hasProperty(ADDRESS, contains(equalTo(address))),

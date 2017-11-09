@@ -30,13 +30,13 @@ public class PersonControllerTest {
 
     @Before
     public void setUp() {
-        testPersonDTO = new PersonDTO(PERSON_ID, PERSON_FIRST_NAME, PERSON_LAST_NAME);
+        testPersonDTO = new PersonDTO(ID_VALUE, PERSON_FIRST_NAME, PERSON_LAST_NAME);
     }
 
     @Test
     public void shouldPerformReturnPeople() {
         PersonDTO anotherTestPersonDTO = new PersonDTO(
-                PERSON_ID, ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME);
+                ID_VALUE, ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME);
 
         when(personService.returnPeople()).thenReturn(Arrays.asList(testPersonDTO, anotherTestPersonDTO));
 
@@ -52,7 +52,7 @@ public class PersonControllerTest {
 
         when(personService.returnPerson(anyLong())).thenReturn(testPerson);
 
-        personController.returnPerson(PERSON_ID);
+        personController.returnPerson(ID_VALUE);
 
         verify(personService).returnPerson(anyLong());
         verifyNoMoreInteractions(personService);
@@ -80,9 +80,9 @@ public class PersonControllerTest {
 
     @Test
     public void shouldPerformDeletePerson() {
-        personController.deletePerson(PERSON_ID);
+        personController.deletePerson(ID_VALUE);
 
-        verify(personService).deletePerson(PERSON_ID);
+        verify(personService).deletePerson(ID_VALUE);
         verifyNoMoreInteractions(personService);
     }
 }

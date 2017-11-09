@@ -1,8 +1,8 @@
 package com.company.AnimalShelterManagement.util;
 
 public class TestConstant {
-    public static final Long PERSON_ID = 10L;
-    public static final Long ANOTHER_PERSON_ID = 11L;
+    public static final Long ID_VALUE = 10L;
+    public static final Long ANOTHER_ID_VALUE = 11L;
     public static final String FIRST_NAME = "firstName";
     public static final String PERSON_FIRST_NAME = "Test";
     public static final String ANOTHER_PERSON_FIRST_NAME = "Another";
@@ -14,10 +14,14 @@ public class TestConstant {
 
     public static final String CITY_NAME = "cityName";
     public static final String ADDRESS_CITY_NAME = "TestCity";
+    public static final String ANOTHER_ADDRESS_CITY_NAME = "AnotherTestCity";
     public static final String STREET_NAME = "streetName";
     public static final String ADDRESS_STREET_NAME = "TestStreet";
+    public static final String ANOTHER_ADDRESS_STREET_NAME = "AnotherTestStreet";
     public static final String ZIP_CODE = "zipCode";
     public static final String ADDRESS_ZIP_CODE = "11-111";
+    public static final String ANOTHER_ADDRESS_ZIP_CODE = "99-999";
+    public static final String PERSON = "person";
 
 
 }

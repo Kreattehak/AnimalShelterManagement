@@ -54,7 +54,7 @@ public class PersonControllerIntegrationTest {
 
     @Before
     public void setUp() {
-        testPersonDTO = new PersonDTO(PERSON_ID, PERSON_FIRST_NAME, PERSON_LAST_NAME);
+        testPersonDTO = new PersonDTO(ID_VALUE, PERSON_FIRST_NAME, PERSON_LAST_NAME);
         restTemplate = new RestTemplate();
         httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(APPLICATION_JSON);
