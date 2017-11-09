@@ -1,5 +1,6 @@
 package com.company.AnimalShelterManagement.controller;
 
+import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import org.junit.Before;
@@ -47,7 +48,9 @@ public class PersonControllerTest {
 
     @Test
     public void shouldPerformReturnPerson() {
-        when(personService.returnPerson(anyLong())).thenReturn(testPersonDTO);
+        Person testPerson = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
+
+        when(personService.returnPerson(anyLong())).thenReturn(testPerson);
 
         personController.returnPerson(PERSON_ID);
 

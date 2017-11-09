@@ -37,8 +37,8 @@ public class HibernatePersonService implements PersonService {
 
     @Override
     @Transactional(readOnly = true)
-    public PersonDTO returnPerson(Long personId) {
-        return mapToDTO(ifExistsReturnPerson(personId));
+    public Person returnPerson(Long personId) {
+        return ifExistsReturnPerson(personId);
     }
 
     @Override

@@ -37,8 +37,8 @@ public class AddressController {
 
     @PostMapping(value = "${rest.address.postAddress}", consumes = APPLICATION_JSON_UTF8_VALUE,
             produces = APPLICATION_JSON_UTF8_VALUE)
-    public Address saveAddress(@Valid @RequestBody Address address) {
-        return addressService.saveAddress(address);
+    public Address saveAddress(@Valid @RequestBody Address address, @PathVariable Long personId) {
+        return addressService.saveAddress(address, personId);
     }
 
     @PutMapping(value = "${rest.address.putAddress}", consumes = APPLICATION_JSON_UTF8_VALUE,

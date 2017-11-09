@@ -1,7 +1,9 @@
 package com.company.AnimalShelterManagement.controller;
 
+import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +21,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 public class PersonController {
 
     private final PersonService personService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public PersonController(PersonService personService) {
+    public PersonController(PersonService personService, ModelMapper modelMapper) {
         this.personService = personService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping(value = "${rest.person.getPeople}", produces = APPLICATION_JSON_UTF8_VALUE)
@@ -32,7 +36,7 @@ public class PersonController {
 
     @GetMapping(value = "${rest.person.getPerson}", produces = APPLICATION_JSON_UTF8_VALUE)
     public PersonDTO returnPerson(@PathVariable Long personId) {
-        return personService.returnPerson(personId);
+        return mapToDTO(personService.returnPerson(personId));
     }
 
     @PostMapping(value = "${rest.person.postPerson}", consumes = APPLICATION_JSON_UTF8_VALUE,
@@ -51,4 +55,9 @@ public class PersonController {
     public void deletePerson(@PathVariable Long personId) {
         personService.deletePerson(personId);
     }
+
+    private PersonDTO mapToDTO(Person person) {
+        return modelMapper.map(person, PersonDTO.class);
+    }
+
 }

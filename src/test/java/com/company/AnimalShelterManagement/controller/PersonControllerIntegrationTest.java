@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonDtoFieldsEquality;
+import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
 import static com.company.AnimalShelterManagement.util.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -116,7 +117,7 @@ public class PersonControllerIntegrationTest {
                 entity, PersonDTO.class);
 
         assertThat(personService.returnPerson(testPersonDTO.getId()), is(
-                checkPersonDtoFieldsEquality(ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME)));
+                checkPersonFieldsEquality(ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME)));
     }
 
     @Test
