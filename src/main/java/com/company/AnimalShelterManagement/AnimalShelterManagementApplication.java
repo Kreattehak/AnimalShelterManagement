@@ -34,34 +34,9 @@ public class AnimalShelterManagementApplication {
     }
 
     @Bean
-    public CommandLineRunner demo(CatService catService, DogService dogService,
-                                  PersonService personService, AddressService addressService,
-                                  BirdService birdService, PersonRepository personRepository,
-                                  @Qualifier("defaultAnimalService") AnimalService animalService) {
+    public CommandLineRunner demo() {
         return (args) -> {
-            Person person = new Person("Dany", "Devito");
-            Address address = new Address("West Side Street", "Czikago", "40-400");
-//            Dog dog = new Dog("Pimpek", Animal.Type.DOG, LocalDate.of(2010, 11, 6),
-//                    person, Dog.Race.CROSSBREAD);
-//            Cat cat = new Cat("Mruczek", Animal.Type.CAT, LocalDate.of(2011, 10, 7),
-//                    person, Cat.Race.PERSIAN);
-//            Bird bird = new Bird("Papi", Animal.Type.BIRD, LocalDate.of(2012, 9, 8),
-//                    person, Bird.Species.AFRICAN_GREY);
-//            person.addAddress(address);
-
-            person = personRepository.save(person);
-            personService.addAddressForPerson(address, person.getId());
-            addressService.saveAddress(address);
-//
-//            cat = catService.saveCat(cat);
-//            dog = dogService.saveDog(dog);
-//            bird = birdService.saveBird(bird);
-//
-//            System.out.println(cat);
-//            System.out.println(dog);
-//            System.out.println(bird);
-//
-//            System.out.println(animalService.countAnimals());
+            //data is loaded to db from data.sql
         };
     }
 
