@@ -49,6 +49,7 @@ public class HibernatePersonService implements PersonService {
         return mapToDTO(person);
     }
 
+    //TODO: Request without main address change that data in db
     @Override
     public PersonDTO updatePerson(PersonDTO personDTO) {
         Person person = ifExistsReturnPerson(personDTO.getId());

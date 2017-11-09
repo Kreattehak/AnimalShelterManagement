@@ -8,7 +8,7 @@ public interface AddressService {
 
     Address returnAddress(Long addressId);
 
-    Address saveAddress(Address address);
+    Address saveAddress(Address address, Long personId);
 
     Address updateAddress(Address address);
 
