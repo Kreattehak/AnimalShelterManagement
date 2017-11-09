@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional
 public class HibernatePersonService implements PersonService {
@@ -26,8 +29,10 @@ public class HibernatePersonService implements PersonService {
 
     @Override
     @Transactional(readOnly = true)
-    public Iterable<Person> returnPeople() {
-        return personRepository.findAll();
+    public Iterable<PersonDTO> returnPeople() {
+        List<PersonDTO> peopleDTO = new ArrayList<>();
+        personRepository.findAll().forEach(person -> peopleDTO.add(mapToDTO(person)));
+        return peopleDTO;
     }
 
     @Override
@@ -74,11 +79,11 @@ public class HibernatePersonService implements PersonService {
         return person;
     }
 
-    private PersonDTO mapToDTO(Person person){
+    private PersonDTO mapToDTO(Person person) {
         return modelMapper.map(person, PersonDTO.class);
     }
 
-    private Person mapFromDTO(PersonDTO personDTO){
+    private Person mapFromDTO(PersonDTO personDTO) {
         return modelMapper.map(personDTO, Person.class);
     }
 }

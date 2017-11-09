@@ -27,7 +27,7 @@ public class PersonController {
     }
 
     @GetMapping(value = "${rest.person.getPeople}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public Iterable<Person> returnPeople() {
+    public Iterable<PersonDTO> returnPeople() {
         return personService.returnPeople();
     }
 

@@ -18,7 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
-import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
+import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonDtoFieldsEquality;
 import static com.company.AnimalShelterManagement.util.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -79,7 +79,7 @@ public class PersonControllerIntegrationTest {
                 .postForEntity("http://localhost:" + port + "/people", entity, PersonDTO.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-        assertThat(response.getBody(), is(checkPersonFieldsEquality(
+        assertThat(response.getBody(), is(checkPersonDtoFieldsEquality(
                 testPersonDTO.getFirstName(), testPersonDTO.getLastName())));
     }
 
@@ -94,7 +94,7 @@ public class PersonControllerIntegrationTest {
                 entity, PersonDTO.class);
 
         assertThat(personService.returnPerson(testPersonDTO.getId()), is(
-                checkPersonFieldsEquality(ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME)));
+                checkPersonDtoFieldsEquality(ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME)));
     }
 
     @Test

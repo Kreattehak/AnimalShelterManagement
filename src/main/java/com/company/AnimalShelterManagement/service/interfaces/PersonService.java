@@ -1,12 +1,11 @@
 package com.company.AnimalShelterManagement.service.interfaces;
 
 import com.company.AnimalShelterManagement.model.Address;
-import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 
 public interface PersonService {
 
-    Iterable<Person> returnPeople();
+    Iterable<PersonDTO> returnPeople();
 
     PersonDTO returnPerson(Long personId);
 

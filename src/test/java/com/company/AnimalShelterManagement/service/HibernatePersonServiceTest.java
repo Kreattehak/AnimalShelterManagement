@@ -1,12 +1,15 @@
 package com.company.AnimalShelterManagement.service;
 
+import com.company.AnimalShelterManagement.model.Address;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.repository.PersonRepository;
+import com.company.AnimalShelterManagement.utils.EntityNotFoundException;
 import org.hamcrest.Matcher;
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +17,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
+
 import static com.company.AnimalShelterManagement.util.TestConstant.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.contains;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -29,20 +36,29 @@ public class HibernatePersonServiceTest {
     @Autowired
     private HibernatePersonService hibernatePersonService;
 
+    //TODO: Should I extract it to some class instead of creating this fields in almost every test class?
     private Person testPerson;
     private PersonDTO testPersonDTO;
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        testPerson = new Person("Test", "Person");
+        testPerson = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
         testPersonDTO = new PersonDTO(PERSON_ID, PERSON_FIRST_NAME, PERSON_LAST_NAME);
     }
 
-    @After
-    public void tearDown() {
-        personRepository = null;
-        testPerson = null;
+    @Test
+    public void shouldReturnPeople() {
+        Person anotherTestPerson = new Person(ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME);
+        when(personRepository.findAll()).thenReturn(Arrays.asList(testPerson, anotherTestPerson));
+
+        hibernatePersonService.returnPeople();
+
+        verify(personRepository).findAll();
+        verifyNoMoreInteractions(personRepository);
     }
 
     @Test
@@ -51,6 +67,44 @@ public class HibernatePersonServiceTest {
 
         hibernatePersonService.returnPerson(PERSON_ID);
 
+        verify(personRepository).findOne(anyLong());
+        verifyNoMoreInteractions(personRepository);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenPersonIdWasNotFound() {
+        when(personRepository.findOne(anyLong())).thenReturn(null);
+
+        expectedException.expect(EntityNotFoundException.class);
+        expectedException.expectMessage("was not found");
+        hibernatePersonService.returnPerson(PERSON_ID);
+    }
+
+    @Test
+    public void shouldSavePerson() {
+        when(personRepository.save(any(Person.class))).thenReturn(testPerson);
+
+        hibernatePersonService.savePerson(testPersonDTO);
+
+        verify(personRepository).save(any(Person.class));
+        verifyNoMoreInteractions(personRepository);
+    }
+
+    @Test
+    public void shouldUpdatePerson() {
+        PersonDTO anotherPersonDTO = new PersonDTO(
+                PERSON_ID, ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME);
+
+        when(personRepository.findOne(anyLong())).thenReturn(testPerson);
+        when(personRepository.save(any(Person.class))).thenReturn(testPerson);
+
+        hibernatePersonService.updatePerson(anotherPersonDTO);
+
+        //updatePerson() operates on reference returned by findOne()
+        assertThat(testPerson, is(checkPersonFieldsEquality(
+                ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME)));
+
+        verify(personRepository).save(any(Person.class));
         verify(personRepository).findOne(anyLong());
         verifyNoMoreInteractions(personRepository);
     }
@@ -66,10 +120,31 @@ public class HibernatePersonServiceTest {
         verifyNoMoreInteractions(personRepository);
     }
 
-    public static Matcher<PersonDTO> checkPersonFieldsEquality(String firstName, String lastName) {
+    @Test
+    public void shouldAddFirstAddressToPersonAndSetItAsMainAddress() {
+        Address address = new Address(ADDRESS_STREET_NAME, ADDRESS_CITY_NAME, ADDRESS_ZIP_CODE);
+
+        when(personRepository.findOne(anyLong())).thenReturn(testPerson);
+
+        hibernatePersonService.addAddressForPerson(address, PERSON_ID);
+
+        assertThat(testPerson, allOf(
+                hasProperty(ADDRESS, contains(equalTo(address))),
+                hasProperty(MAIN_ADDRESS, equalTo(address))));
+
+        verify(personRepository).findOne(anyLong());
+        verifyNoMoreInteractions(personRepository);
+    }
+
+    public static Matcher<PersonDTO> checkPersonDtoFieldsEquality(String firstName, String lastName) {
         return allOf(
                 hasProperty(FIRST_NAME, is(firstName)),
                 hasProperty(LAST_NAME, is(lastName)));
     }
 
+    public static Matcher<Person> checkPersonFieldsEquality(String firstName, String lastName) {
+        return allOf(
+                hasProperty(FIRST_NAME, is(firstName)),
+                hasProperty(LAST_NAME, is(lastName)));
+    }
 }

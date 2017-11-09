@@ -9,5 +9,15 @@ public class TestConstant {
     public static final String LAST_NAME = "lastName";
     public static final String ANOTHER_PERSON_LAST_NAME = "Data";
     public static final String PERSON_LAST_NAME = "Person";
+    public static final String ADDRESS = "address";
+    public static final String MAIN_ADDRESS = "mainAddress";
+
+    public static final String CITY_NAME = "cityName";
+    public static final String ADDRESS_CITY_NAME = "TestCity";
+    public static final String STREET_NAME = "streetName";
+    public static final String ADDRESS_STREET_NAME = "TestStreet";
+    public static final String ZIP_CODE = "zipCode";
+    public static final String ADDRESS_ZIP_CODE = "11-111";
+
 
 }
