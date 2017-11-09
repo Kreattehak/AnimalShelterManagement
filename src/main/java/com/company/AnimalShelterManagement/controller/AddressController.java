@@ -48,7 +48,7 @@ public class AddressController {
     }
 
     @DeleteMapping(value = "${rest.address.deleteAddress}")
-    public void deleteAddress(@PathVariable Long addressId) {
-        addressService.deleteAddress(addressId);
+    public void deleteAddress(@PathVariable Long addressId, @PathVariable Long personId) {
+        addressService.deleteAddress(addressId, personId);
     }
 }

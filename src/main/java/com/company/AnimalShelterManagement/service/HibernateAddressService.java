@@ -6,11 +6,10 @@ import com.company.AnimalShelterManagement.repository.AddressRepository;
 import com.company.AnimalShelterManagement.service.interfaces.AddressService;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import com.company.AnimalShelterManagement.utils.EntityNotFoundException;
+import com.company.AnimalShelterManagement.utils.ProcessUserRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Objects;
 
 @Service
 @Transactional
@@ -39,16 +38,32 @@ public class HibernateAddressService implements AddressService {
 
     @Override
     public Address saveAddress(Address address, Long personId) {
-        return addressRepository.save(address);
+        Person person = personService.returnPerson(personId);
+        address = addressRepository.save(address);
+        person.addAddress(address);
+
+        return address;
     }
 
     @Override
     public Address updateAddress(Address address) {
-        return addressRepository.save(address);
+        Address addressFromDb = returnAddress(address.getId());
+        addressFromDb.setStreetName(address.getStreetName());
+        addressFromDb.setCityName(address.getCityName());
+        addressFromDb.setZipCode(address.getZipCode());
+
+        return addressRepository.save(addressFromDb);
     }
 
     @Override
-    public void deleteAddress(Long addressId) {
+    public void deleteAddress(Long addressId, Long personId) {
+        Person person = personService.returnPerson(personId);
+        Address address = returnAddress(addressId);
+        if(person.getMainAddress() == address) {
+            throw new ProcessUserRequestException("Address you try to delete is main address!");
+        }
+        person.removeAddress(address);
+
         addressRepository.delete(addressId);
     }
 

@@ -87,8 +87,9 @@ public class Person extends BaseEntity {
         address.setPerson(this);
     }
 
-    public boolean removeAddress(Address address) {
-        return this.address.remove(address);
+    public void removeAddress(Address address) {
+        this.address.remove(address);
+        address.setPerson(null);
     }
 
     public Date getDateOfRegistration() {
