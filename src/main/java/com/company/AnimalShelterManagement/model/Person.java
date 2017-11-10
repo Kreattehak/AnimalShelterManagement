@@ -3,17 +3,8 @@ package com.company.AnimalShelterManagement.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +28,7 @@ public class Person extends BaseEntity {
     private Set<Address> address;
 
     @Column(name = "date_of_registration", nullable = false, updatable = false)
-    private Date dateOfRegistration;
+    private LocalDate dateOfRegistration;
 
     @OneToOne
     @JoinTable(name = "person_main_address", joinColumns = @JoinColumn(name = "person_id"),
@@ -46,7 +37,7 @@ public class Person extends BaseEntity {
 
     public Person() {
         this.address = new HashSet<>();
-        this.dateOfRegistration = Date.valueOf(LocalDate.now());
+        this.dateOfRegistration = LocalDate.now();
     }
 
     public Person(String firstName, String lastName) {
@@ -92,11 +83,11 @@ public class Person extends BaseEntity {
         address.setPerson(null);
     }
 
-    public Date getDateOfRegistration() {
+    public LocalDate getDateOfRegistration() {
         return dateOfRegistration;
     }
 
-    public void setDateOfRegistration(Date dateOfRegistration) {
+    public void setDateOfRegistration(LocalDate dateOfRegistration) {
         this.dateOfRegistration = dateOfRegistration;
     }
 
