@@ -152,7 +152,8 @@ public class HibernateAddressServiceTest {
         when(addressRepository.findOne(anyLong())).thenReturn(testAddress);
 
         expectedException.expect(ProcessUserRequestException.class);
-        expectedException.expectMessage("main address");
+        expectedException.expectMessage(
+                "{personId=" + ID_VALUE + ", addressId=" + ID_VALUE + '}');
         hibernateAddressService.deleteAddress(ID_VALUE, ID_VALUE);
     }
 

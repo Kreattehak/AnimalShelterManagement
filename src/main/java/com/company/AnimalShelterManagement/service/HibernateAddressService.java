@@ -60,7 +60,8 @@ public class HibernateAddressService implements AddressService {
         Person person = personService.returnPerson(personId);
         Address address = returnAddress(addressId);
         if(person.getMainAddress() == address) {
-            throw new ProcessUserRequestException("Address you try to delete is main address!");
+            throw new ProcessUserRequestException(Address.class,
+                    "addressId", addressId.toString(), "personId", personId.toString());
         }
         person.removeAddress(address);
 

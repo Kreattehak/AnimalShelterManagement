@@ -1,13 +1,15 @@
 package com.company.AnimalShelterManagement.utils;
 
-//TODO: Rework, simple message string is not enough
-public class ProcessUserRequestException extends RuntimeException {
+import java.util.Map;
 
-    public ProcessUserRequestException(String message) {
-        super(message);
+public class ProcessUserRequestException extends AnimalShelterException {
+
+    public ProcessUserRequestException(Class clazz, String... searchParamsMap) {
+        super(ProcessUserRequestException.generateMessage(
+                clazz.getSimpleName(), toMap(String.class, String.class, searchParamsMap)));
     }
 
-    public ProcessUserRequestException(String message, Throwable cause) {
-        super(message, cause);
+    private static String generateMessage(String entity, Map<String, String> searchParams) {
+        return "Request could not be processed for " + entity.toUpperCase() + ", for parameters: " + searchParams;
     }
 }

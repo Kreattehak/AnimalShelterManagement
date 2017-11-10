@@ -15,7 +15,6 @@ public class AnimalController {
     private final AnimalService animalService;
 
     @Autowired
-
     public AnimalController(@Qualifier("defaultAnimalService") AnimalService animalService) {
         this.animalService = animalService;
     }
