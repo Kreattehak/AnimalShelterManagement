@@ -4,4 +4,4 @@ spring:
     ?serverTimezone=Europe/Warsaw&verifyServerCertificate=false&useSSL=true"
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop

@@ -164,4 +164,13 @@ public class HibernateAddressServiceTest {
                 hasProperty(ZIP_CODE, is(zipCode)),
                 hasProperty(PERSON, nullValue()));
     }
+
+    public static Matcher<Address> checkAddressFieldsEqualityWithPerson(
+            String streetName, String cityName, String zipCode, Person person) {
+        return allOf(
+                hasProperty(STREET_NAME, is(streetName)),
+                hasProperty(CITY_NAME, is(cityName)),
+                hasProperty(ZIP_CODE, is(zipCode)),
+                hasProperty(PERSON, is(equalTo(person))));
+    }
 }
