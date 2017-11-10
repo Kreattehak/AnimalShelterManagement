@@ -30,6 +30,15 @@ public class Animal extends BaseEntity {
     @NotNull
     private Type animalType;
 
+    @Column(name = "behaviour_description", length = 500)
+    @Length(min = 3, message = "{validation.minLength}")
+    private String behaviourDescription;
+
+    @Column(name = "available_for_adoption", nullable = false, length = 15)
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private AvailableForAdoption availableForAdoption;
+
     @Column(name = "animal_identifier", length = 8)
     @Pattern(regexp = "\\d{8}", message = "{validation.animalIdentifierPattern}")
     //first two letters - animal animalType, second two letters - year of birth, third four letters - unique id
@@ -42,14 +51,26 @@ public class Animal extends BaseEntity {
     @OneToOne
     private Person previousOwner;
 
+    //TODO: think about builder pattern.
+    //TODO: Eventually, implement subclass constructors
     Animal() {
     }
 
+    Animal(String animalName, Type animalType, LocalDate dateOfBirth) {
+        this(animalName, animalType, dateOfBirth, null);
+    }
+
     Animal(String animalName, Type animalType, LocalDate dateOfBirth, Person previousOwner) {
+        this(animalName, animalType, dateOfBirth, previousOwner, null);
+    }
+
+    Animal(String animalName, Type animalType, LocalDate dateOfBirth, Person previousOwner,
+           String behaviourDescription) {
         this.animalName = animalName;
         this.animalType = animalType;
         this.dateOfBirth = dateOfBirth;
         this.previousOwner = previousOwner;
+        this.behaviourDescription = behaviourDescription;
     }
 
     public String getAnimalName() {
@@ -66,6 +87,22 @@ public class Animal extends BaseEntity {
 
     public void setAnimalType(Type animalType) {
         this.animalType = animalType;
+    }
+
+    public String getBehaviourDescription() {
+        return behaviourDescription;
+    }
+
+    public void setBehaviourDescription(String behaviourDescription) {
+        this.behaviourDescription = behaviourDescription;
+    }
+
+    public AvailableForAdoption getAvailableForAdoption() {
+        return availableForAdoption;
+    }
+
+    public void setAvailableForAdoption(AvailableForAdoption availableForAdoption) {
+        this.availableForAdoption = availableForAdoption;
     }
 
     public String getAnimalIdentifier() {
@@ -110,14 +147,33 @@ public class Animal extends BaseEntity {
         }
     }
 
+    public enum AvailableForAdoption {
+        AVAILABLE(true),
+        UNDER_VETERINARY_CARE(false),
+        ADOPTED(false);
+
+        private boolean isAvailable;
+
+        AvailableForAdoption(boolean isAvailable){
+            this.isAvailable = isAvailable;
+        }
+
+        public boolean isAvailable() {
+            return isAvailable;
+        }
+    }
+
     @Override
     public String toString() {
         return "Animal{" +
                 "animalName='" + animalName + '\'' +
                 ", animalType=" + animalType +
+                ", behaviourDescription='" + behaviourDescription + '\'' +
+                ", availableForAdoption=" + availableForAdoption +
                 ", animalIdentifier='" + animalIdentifier + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
-                ", previousOwner=" + previousOwner;
+                ", previousOwner=" + previousOwner +
+                '}';
     }
 }
 

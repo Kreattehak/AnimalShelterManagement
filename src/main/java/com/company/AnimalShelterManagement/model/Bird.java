@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Table(name = "bird")
 public class Bird extends Animal {
 
-    //TODO: Update lentght to the longest enum
+    //TODO: Update length to the longest enum
     @Column(name = "bird_species", nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
     @NotNull

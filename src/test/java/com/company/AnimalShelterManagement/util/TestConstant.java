@@ -23,5 +23,14 @@ public class TestConstant {
     public static final String ANOTHER_ADDRESS_ZIP_CODE = "99-999";
     public static final String PERSON = "person";
 
+    public static final String ANIMAL_NAME = "animalName";
+    public static final String ANIMAL_TYPE = "animalType";
+    public static final String DATE_OF_BIRTH = "dateOfBirth";
+
+    public static final String DOG_NAME = "Sparky";
+    public static final String ANOTHER_DOG_NAME = "AnotherDog";
+    public static final String CAT_NAME = "Fluffy";
+    public static final String BIRD_NAME = "Papi";
+
 
 }

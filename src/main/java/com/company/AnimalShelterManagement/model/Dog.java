@@ -20,8 +20,19 @@ public class Dog extends Animal {
     public Dog() {
     }
 
+    public Dog(String name, Type type, LocalDate dateOfBirth, Race dogRace) {
+        super(name, type, dateOfBirth);
+        this.dogRace = dogRace;
+    }
+
     public Dog(String name, Type type, LocalDate dateOfBirth, Person previousOwner, Race dogRace) {
         super(name, type, dateOfBirth, previousOwner);
+        this.dogRace = dogRace;
+    }
+
+    public Dog(String name, Type type, LocalDate dateOfBirth, Person previousOwner,
+               String behaviourDescription, Race dogRace) {
+        super(name, type, dateOfBirth, previousOwner, behaviourDescription);
         this.dogRace = dogRace;
     }
 
