@@ -7,9 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 //TODO: Think about one abstract service
 @Service("defaultAnimalService")
 @Transactional
@@ -22,10 +19,13 @@ public class HibernateAnimalService implements AnimalService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Animal> returnAnimals() {
-        List<Animal> animals = new ArrayList<>();
-        animalRepository.findAll().forEach(animals::add);
-        return animals;
+    public Iterable<Animal> returnAnimals() {
+        return animalRepository.findAll();
+    }
+
+    @Override
+    public Iterable<Animal> returnAnimalsAvailableForAdoption() {
+        return animalRepository.findAnimalByAvailableForAdoption();
     }
 
     @Override
