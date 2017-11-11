@@ -4,7 +4,6 @@ import com.company.AnimalShelterManagement.model.Dog;
 import com.company.AnimalShelterManagement.model.dto.DogDTO;
 import com.company.AnimalShelterManagement.repository.DogRepository;
 import com.company.AnimalShelterManagement.service.interfaces.DogService;
-import com.company.AnimalShelterManagement.utils.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.company.AnimalShelterManagement.service.interfaces.CommonService.ifExistsReturnEntity;
 
 @Service
 @Transactional
@@ -38,7 +39,7 @@ public class HibernateDogService extends HibernateAnimalService implements DogSe
     @Override
     @Transactional(readOnly = true)
     public Dog returnDog(Long dogId) {
-        return ifExistsReturnDog(dogId);
+        return ifExistsReturnEntity(dogId, dogRepository, Dog.class);
     }
 
     @Override
@@ -52,7 +53,7 @@ public class HibernateDogService extends HibernateAnimalService implements DogSe
 
     @Override
     public DogDTO updateDog(DogDTO dogDTO) {
-        Dog dog = ifExistsReturnDog(dogDTO.getId());
+        Dog dog = returnDog(dogDTO.getId());
         dog.setAnimalName(dogDTO.getAnimalName());
         dog.setDateOfBirth(dogDTO.getDateOfBirth());
         dog.setAvailableForAdoption(dogDTO.getAvailableForAdoption());
@@ -63,15 +64,6 @@ public class HibernateDogService extends HibernateAnimalService implements DogSe
     @Override
     public void deleteDog(Long dogId) {
         dogRepository.delete(dogId);
-    }
-
-    private Dog ifExistsReturnDog(Long dogId) {
-        Dog dog = dogRepository.findOne(dogId);
-        if (dog == null) {
-            throw new EntityNotFoundException(Dog.class, "dogId", dogId.toString());
-        }
-
-        return dog;
     }
 
     private DogDTO mapToDTO(Dog dog) {

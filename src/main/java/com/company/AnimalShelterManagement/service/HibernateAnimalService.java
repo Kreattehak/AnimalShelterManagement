@@ -48,4 +48,5 @@ public class HibernateAnimalService implements AnimalService {
     public void setAnimalRepository(AnimalRepository animalRepository) {
         this.animalRepository = animalRepository;
     }
+
 }

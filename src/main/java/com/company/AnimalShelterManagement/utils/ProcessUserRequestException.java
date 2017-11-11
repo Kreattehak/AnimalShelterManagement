@@ -6,7 +6,7 @@ public class ProcessUserRequestException extends AnimalShelterException {
 
     public ProcessUserRequestException(Class clazz, String... searchParamsMap) {
         super(ProcessUserRequestException.generateMessage(
-                clazz.getSimpleName(), toMap(String.class, String.class, searchParamsMap)));
+                clazz.getSimpleName(), toMap(clazz.getSimpleName(), searchParamsMap)));
     }
 
     private static String generateMessage(String entity, Map<String, String> searchParams) {

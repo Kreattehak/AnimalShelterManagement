@@ -5,7 +5,6 @@ import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.repository.PersonRepository;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
-import com.company.AnimalShelterManagement.utils.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.company.AnimalShelterManagement.service.interfaces.CommonService.ifExistsReturnEntity;
 
 @Service
 @Transactional
@@ -39,7 +40,7 @@ public class HibernatePersonService implements PersonService {
     @Override
     @Transactional(readOnly = true)
     public Person returnPerson(Long personId) {
-        return ifExistsReturnPerson(personId);
+        return ifExistsReturnEntity(personId, personRepository, Person.class);
     }
 
     @Override
@@ -52,7 +53,7 @@ public class HibernatePersonService implements PersonService {
 
     @Override
     public PersonDTO updatePerson(PersonDTO personDTO) {
-        Person person = ifExistsReturnPerson(personDTO.getId());
+        Person person = returnPerson(personDTO.getId());
         person.setFirstName(personDTO.getFirstName());
         person.setLastName(personDTO.getLastName());
         person = personRepository.save(person);
@@ -62,21 +63,12 @@ public class HibernatePersonService implements PersonService {
 
     @Override
     public void deletePerson(Long personId) {
-        personRepository.delete(ifExistsReturnPerson(personId));
+        personRepository.delete(returnPerson(personId));
     }
 
     @Override
     public void addAddressForPerson(Address address, Long personId) {
-        ifExistsReturnPerson(personId).addAddress(address);
-    }
-
-    private Person ifExistsReturnPerson(Long personId) {
-        Person person = personRepository.findOne(personId);
-        if (person == null) {
-            throw new EntityNotFoundException(Person.class, "personId", personId.toString());
-        }
-
-        return person;
+        returnPerson(personId).addAddress(address);
     }
 
     private PersonDTO mapToDTO(Person person) {

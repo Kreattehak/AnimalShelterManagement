@@ -5,11 +5,12 @@ import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.repository.AddressRepository;
 import com.company.AnimalShelterManagement.service.interfaces.AddressService;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
-import com.company.AnimalShelterManagement.utils.EntityNotFoundException;
 import com.company.AnimalShelterManagement.utils.ProcessUserRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.company.AnimalShelterManagement.service.interfaces.CommonService.ifExistsReturnEntity;
 
 @Service
 @Transactional
@@ -33,7 +34,7 @@ public class HibernateAddressService implements AddressService {
     @Override
     @Transactional(readOnly = true)
     public Address returnAddress(Long addressId) {
-        return ifExistsReturnAddress(addressId);
+        return ifExistsReturnEntity(addressId, addressRepository, Address.class);
     }
 
     @Override
@@ -59,21 +60,12 @@ public class HibernateAddressService implements AddressService {
     public void deleteAddress(Long addressId, Long personId) {
         Person person = personService.returnPerson(personId);
         Address address = returnAddress(addressId);
-        if(person.getMainAddress() == address) {
+        if (person.getMainAddress() == address) {
             throw new ProcessUserRequestException(Address.class,
                     "addressId", addressId.toString(), "personId", personId.toString());
         }
         person.removeAddress(address);
 
         addressRepository.delete(addressId);
-    }
-
-    private Address ifExistsReturnAddress(Long addressId) {
-        Address address = addressRepository.findOne(addressId);
-        if (address == null) {
-            throw new EntityNotFoundException(Address.class, "addressId", addressId.toString());
-        }
-
-        return address;
     }
 }

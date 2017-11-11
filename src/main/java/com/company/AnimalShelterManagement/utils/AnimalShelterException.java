@@ -13,15 +13,16 @@ class AnimalShelterException extends RuntimeException {
         super(message);
     }
 
-    static <K, V> Map<K, V> toMap(Class<K> keyType, Class<V> valueType, String... entries) {
+    static Map<String, String> toMap(String className, String... entries) {
         if (entries.length % 2 == 1) {
             throw new IllegalArgumentException("Invalid entries!");
         }
 
+        String entity = className.toLowerCase();
         return IntStream.range(0, entries.length / 2)
                 .map(i -> i * 2)
                 .collect(HashMap::new,
-                        (m, i) -> m.put(keyType.cast(entries[i]), valueType.cast(entries[i + 1])),
+                        (m, i) -> m.put(entity + '_' + entries[i], entries[i + 1]),
                         Map::putAll);
     }
 }

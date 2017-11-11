@@ -10,7 +10,7 @@ public class EntityNotFoundException extends AnimalShelterException {
 
     public EntityNotFoundException(Class clazz, String... searchParamsMap) {
         super(EntityNotFoundException.generateMessage(
-                clazz.getSimpleName(), toMap(String.class, String.class, searchParamsMap)));
+                clazz.getSimpleName(), toMap(clazz.getSimpleName(), searchParamsMap)));
     }
 
     private static String generateMessage(String entity, Map<String, String> searchParams) {
