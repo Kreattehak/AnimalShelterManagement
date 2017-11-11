@@ -2,19 +2,11 @@ package com.company.AnimalShelterManagement.model;
 
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
-//TODO: Think about displaying animals available to adoption
 @Entity
 @Table(name = "animal")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -136,7 +128,7 @@ public class Animal extends BaseEntity {
 
         private boolean isAvailable;
 
-        AvailableForAdoption(boolean isAvailable){
+        AvailableForAdoption(boolean isAvailable) {
             this.isAvailable = isAvailable;
         }
 

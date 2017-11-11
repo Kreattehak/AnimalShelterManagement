@@ -1,16 +1,17 @@
 package com.company.AnimalShelterManagement.service.interfaces;
 
 import com.company.AnimalShelterManagement.model.Dog;
+import com.company.AnimalShelterManagement.model.dto.DogDTO;
 
 public interface DogService {
 
-    Iterable<Dog> returnDogs();
+    Iterable<DogDTO> returnDogs();
 
     Dog returnDog(Long dogId);
 
-    Dog saveDog(Dog dog);
+    DogDTO saveDog(DogDTO dogDTO);
 
-    Dog updateDog(Dog dog);
+    DogDTO updateDog(DogDTO dogDTO);
 
     void deleteDog(Long dogId);
 }
