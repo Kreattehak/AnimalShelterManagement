@@ -1,12 +1,7 @@
 package com.company.AnimalShelterManagement.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "dog")
@@ -18,22 +13,6 @@ public class Dog extends Animal {
     private Race dogRace;
 
     public Dog() {
-    }
-
-    public Dog(String name, Type type, LocalDate dateOfBirth, Race dogRace) {
-        super(name, type, dateOfBirth);
-        this.dogRace = dogRace;
-    }
-
-    public Dog(String name, Type type, LocalDate dateOfBirth, Person previousOwner, Race dogRace) {
-        super(name, type, dateOfBirth, previousOwner);
-        this.dogRace = dogRace;
-    }
-
-    public Dog(String name, Type type, LocalDate dateOfBirth, Person previousOwner,
-               String behaviourDescription, Race dogRace) {
-        super(name, type, dateOfBirth, previousOwner, behaviourDescription);
-        this.dogRace = dogRace;
     }
 
     public Race getDogRace() {

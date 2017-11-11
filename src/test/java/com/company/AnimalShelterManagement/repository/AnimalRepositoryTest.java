@@ -13,11 +13,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 
-import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.ADOPTED;
-import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.AVAILABLE;
 import static com.company.AnimalShelterManagement.service.HibernateAnimalServiceTest.checkAnimalFieldsEquality;
 import static com.company.AnimalShelterManagement.util.TestConstant.ANOTHER_DOG_NAME;
 import static com.company.AnimalShelterManagement.util.TestConstant.DOG_NAME;
+import static com.company.AnimalShelterManagement.utils.AnimalFactory.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
@@ -36,11 +35,11 @@ public class AnimalRepositoryTest {
     private AnimalRepository animalRepository;
 
     @Test
-    public void shouldReturnAllPersonAddresses() {
-        Dog dog = new Dog(DOG_NAME, Animal.Type.DOG, LocalDate.now(), Dog.Race.GERMAN_SHEPERD);
-        dog.setAvailableForAdoption(AVAILABLE);
-        Dog anotherDog = new Dog(ANOTHER_DOG_NAME, Animal.Type.DOG, LocalDate.now(), Dog.Race.GERMAN_SHEPERD);
-        anotherDog.setAvailableForAdoption(ADOPTED);
+    public void shouldReturnAllDogsAvailableForAdoption() {
+        Dog dog = newAvailableForAdoptionDog(DOG_NAME, Dog.Race.GERMAN_SHEPERD);
+        dog.setDateOfBirth(LocalDate.now());
+        Dog anotherDog = newlyReceivedDog(ANOTHER_DOG_NAME, Dog.Race.CROSSBREAD);
+        anotherDog.setDateOfBirth(LocalDate.now());
 
         this.entityManager.persist(dog);
         this.entityManager.persist(anotherDog);

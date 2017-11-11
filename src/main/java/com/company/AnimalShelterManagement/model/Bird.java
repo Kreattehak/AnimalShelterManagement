@@ -1,12 +1,7 @@
 package com.company.AnimalShelterManagement.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "bird")
@@ -19,11 +14,6 @@ public class Bird extends Animal {
     private Species birdSpecies;
 
     public Bird() {
-    }
-
-    public Bird(String name, Type type, LocalDate dateOfBirth, Person previousOwner, Species birdSpecies) {
-        super(name, type, dateOfBirth, previousOwner);
-        this.birdSpecies = birdSpecies;
     }
 
     public Species getBirdSpecies() {

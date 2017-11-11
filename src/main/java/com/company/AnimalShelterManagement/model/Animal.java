@@ -34,7 +34,7 @@ public class Animal extends BaseEntity {
     @Length(min = 3, message = "{validation.minLength}")
     private String behaviourDescription;
 
-    @Column(name = "available_for_adoption", nullable = false, length = 15)
+    @Column(name = "available_for_adoption", nullable = false, length = 25)
     @Enumerated(EnumType.STRING)
     @NotNull
     private AvailableForAdoption availableForAdoption;
@@ -51,26 +51,7 @@ public class Animal extends BaseEntity {
     @OneToOne
     private Person previousOwner;
 
-    //TODO: think about builder pattern.
-    //TODO: Eventually, implement subclass constructors
     Animal() {
-    }
-
-    Animal(String animalName, Type animalType, LocalDate dateOfBirth) {
-        this(animalName, animalType, dateOfBirth, null);
-    }
-
-    Animal(String animalName, Type animalType, LocalDate dateOfBirth, Person previousOwner) {
-        this(animalName, animalType, dateOfBirth, previousOwner, null);
-    }
-
-    Animal(String animalName, Type animalType, LocalDate dateOfBirth, Person previousOwner,
-           String behaviourDescription) {
-        this.animalName = animalName;
-        this.animalType = animalType;
-        this.dateOfBirth = dateOfBirth;
-        this.previousOwner = previousOwner;
-        this.behaviourDescription = behaviourDescription;
     }
 
     public String getAnimalName() {
@@ -150,7 +131,8 @@ public class Animal extends BaseEntity {
     public enum AvailableForAdoption {
         AVAILABLE(true),
         UNDER_VETERINARY_CARE(false),
-        ADOPTED(false);
+        ADOPTED(false),
+        BEFORE_VACCINATION(false);
 
         private boolean isAvailable;
 
