@@ -16,6 +16,5 @@ public interface PersonService {
 
     void deletePerson(Long personId);
 
-    //TODO: Should this method later accept AddressDTO as argument?
     void addAddressForPerson(Address address, Long personId);
 }

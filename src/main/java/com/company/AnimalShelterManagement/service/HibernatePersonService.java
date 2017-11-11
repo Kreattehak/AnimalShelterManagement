@@ -32,6 +32,7 @@ public class HibernatePersonService implements PersonService {
     public Iterable<PersonDTO> returnPeople() {
         List<PersonDTO> peopleDTO = new ArrayList<>();
         personRepository.findAll().forEach(person -> peopleDTO.add(mapToDTO(person)));
+
         return peopleDTO;
     }
 
@@ -49,7 +50,6 @@ public class HibernatePersonService implements PersonService {
         return mapToDTO(person);
     }
 
-    //TODO: Request without main address change that data in db
     @Override
     public PersonDTO updatePerson(PersonDTO personDTO) {
         Person person = ifExistsReturnPerson(personDTO.getId());
@@ -60,7 +60,6 @@ public class HibernatePersonService implements PersonService {
         return mapToDTO(person);
     }
 
-    //TODO: Should I really search and then delete person?
     @Override
     public void deletePerson(Long personId) {
         personRepository.delete(ifExistsReturnPerson(personId));

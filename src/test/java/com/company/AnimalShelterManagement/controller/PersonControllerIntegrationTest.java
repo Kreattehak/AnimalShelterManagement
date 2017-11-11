@@ -60,13 +60,13 @@ public class PersonControllerIntegrationTest {
         httpHeaders.setContentType(APPLICATION_JSON);
     }
 
-    //TODO: Data provided by data.sql
     @Test
     public void shouldReturnPeople() {
         ResponseEntity<List<PersonDTO>> response =
                 restTemplate.exchange("http://localhost:" + port + "/people", GET,
                         null, new ParameterizedTypeReference<List<PersonDTO>>() {
                         });
+        assertThat(response.getBody(), hasSize(greaterThan(0)));
     }
 
     @Test
