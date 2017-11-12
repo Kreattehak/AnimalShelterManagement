@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class HibernateCatService extends HibernateAnimalService implements CatService {
+public class HibernateCatService implements CatService {
 
     private final CatRepository catRepository;
 
@@ -33,7 +33,8 @@ public class HibernateCatService extends HibernateAnimalService implements CatSe
     @Override
     public Cat saveCat(Cat cat) {
         cat = catRepository.save(cat);
-        super.generateIdentifier(cat);
+//        super.generateIdentifier(cat);
+
         return cat;
     }
 

@@ -9,44 +9,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.company.AnimalShelterManagement.service.interfaces.CommonService.ifExistsReturnEntity;
-
 @Service
 @Transactional
-public class HibernateDogService extends HibernateAnimalService implements DogService {
-
-    private final DogRepository dogRepository;
-    private final ModelMapper modelMapper;
+public class HibernateDogService extends CommonDTOService<Dog, DogDTO, DogRepository> implements DogService {
 
     @Autowired
     public HibernateDogService(DogRepository dogRepository, ModelMapper modelMapper) {
-        this.dogRepository = dogRepository;
-        this.modelMapper = modelMapper;
+        super(modelMapper, Dog.class, DogDTO.class);
+        this.repository = dogRepository;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Iterable<DogDTO> returnDogs() {
-        List<DogDTO> dogsDTO = new ArrayList<>();
-        dogRepository.findAll().forEach(dog -> dogsDTO.add(mapToDTO(dog)));
-
-        return dogsDTO;
+        return returnMappedEntities();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Dog returnDog(Long dogId) {
-        return ifExistsReturnEntity(dogId, dogRepository, Dog.class);
+        return ifExistsReturnEntity(dogId);
     }
 
     @Override
     public DogDTO saveDog(DogDTO dogDTO) {
         Dog dog = mapFromDTO(dogDTO);
-        dog = dogRepository.save(dog);
-        super.generateIdentifier(dog);
+        dog = repository.save(dog);
+//        super.generateIdentifier(dog);
 
         return mapToDTO(dog);
     }
@@ -58,19 +47,11 @@ public class HibernateDogService extends HibernateAnimalService implements DogSe
         dog.setDateOfBirth(dogDTO.getDateOfBirth());
         dog.setAvailableForAdoption(dogDTO.getAvailableForAdoption());
 
-        return mapToDTO(dogRepository.save(dog));
+        return mapToDTO(repository.save(dog));
     }
 
     @Override
     public void deleteDog(Long dogId) {
-        dogRepository.delete(dogId);
-    }
-
-    private DogDTO mapToDTO(Dog dog) {
-        return modelMapper.map(dog, DogDTO.class);
-    }
-
-    private Dog mapFromDTO(DogDTO dogDTO) {
-        return modelMapper.map(dogDTO, Dog.class);
+        repository.delete(dogId);
     }
 }

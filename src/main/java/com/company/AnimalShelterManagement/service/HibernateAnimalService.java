@@ -7,25 +7,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-//TODO: Think about one abstract service
+
 @Service("defaultAnimalService")
 @Transactional
-public class HibernateAnimalService implements AnimalService {
+public class HibernateAnimalService extends CommonService<Animal, AnimalRepository> implements AnimalService {
 
-    private AnimalRepository animalRepository;
-
-    public HibernateAnimalService() {
+    @Autowired
+    public HibernateAnimalService(AnimalRepository animalRepository) {
+        super(Animal.class);
+        this.repository = animalRepository;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Iterable<Animal> returnAnimals() {
-        return animalRepository.findAll();
+        return repository.findAll();
     }
 
     @Override
     public Iterable<Animal> returnAnimalsAvailableForAdoption() {
-        return animalRepository.findAnimalByAvailableForAdoption();
+        return repository.findAnimalByAvailableForAdoption();
     }
 
     @Override
@@ -41,12 +42,12 @@ public class HibernateAnimalService implements AnimalService {
     @Override
     @Transactional(readOnly = true)
     public Long countAnimals() {
-        return animalRepository.count();
+        return repository.count();
     }
 
     @Autowired
     public void setAnimalRepository(AnimalRepository animalRepository) {
-        this.animalRepository = animalRepository;
+        this.repository = animalRepository;
     }
 
 }

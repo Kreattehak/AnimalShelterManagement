@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class HibernateBirdService extends HibernateAnimalService implements BirdService {
+public class HibernateBirdService  implements BirdService {
 
     private final BirdRepository birdRepository;
 
@@ -33,7 +33,8 @@ public class HibernateBirdService extends HibernateAnimalService implements Bird
     @Override
     public Bird saveBird(Bird bird) {
         bird = birdRepository.save(bird);
-        super.generateIdentifier(bird);
+//        super.generateIdentifier(bird);
+
         return bird;
     }
 

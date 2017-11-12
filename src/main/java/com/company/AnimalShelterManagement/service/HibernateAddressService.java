@@ -10,37 +10,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.company.AnimalShelterManagement.service.interfaces.CommonService.ifExistsReturnEntity;
-
 @Service
 @Transactional
-public class HibernateAddressService implements AddressService {
+public class HibernateAddressService extends CommonService<Address, AddressRepository> implements AddressService {
 
-    private final AddressRepository addressRepository;
     private final PersonService personService;
 
     @Autowired
     public HibernateAddressService(AddressRepository addressRepository, PersonService personService) {
-        this.addressRepository = addressRepository;
+        super(Address.class);
+        this.repository = addressRepository;
         this.personService = personService;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Iterable<Address> returnPersonAddresses(Long personId) {
-        return addressRepository.findAddressesByPersonId(personId);
+        return repository.findAddressesByPersonId(personId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Address returnAddress(Long addressId) {
-        return ifExistsReturnEntity(addressId, addressRepository, Address.class);
+        return ifExistsReturnEntity(addressId);
     }
 
     @Override
     public Address saveAddress(Address address, Long personId) {
         Person person = personService.returnPerson(personId);
-        address = addressRepository.save(address);
+        address = repository.save(address);
         person.addAddress(address);
 
         return address;
@@ -53,7 +51,7 @@ public class HibernateAddressService implements AddressService {
         addressFromDb.setCityName(address.getCityName());
         addressFromDb.setZipCode(address.getZipCode());
 
-        return addressRepository.save(addressFromDb);
+        return repository.save(addressFromDb);
     }
 
     @Override
@@ -66,6 +64,6 @@ public class HibernateAddressService implements AddressService {
         }
         person.removeAddress(address);
 
-        addressRepository.delete(addressId);
+        repository.delete(addressId);
     }
 }
