@@ -55,5 +55,14 @@ public class AnimalFactory {
 
         return d;
     }
+
+    public static void generateIdentifier(Animal animal) {
+        if (animal.getAnimalIdentifier() == null) {
+            String firstPart = animal.getAnimalType().getTypeIdentifier();
+            String secondPart = String.format("%02d", animal.getDateOfBirth().getYear() % 100);
+            String thirdPart = String.format("%04d", animal.getId());
+            animal.setAnimalIdentifier(firstPart + secondPart + thirdPart);
+        }
+    }
 }
 

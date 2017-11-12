@@ -3,13 +3,14 @@ package com.company.AnimalShelterManagement.service;
 import com.company.AnimalShelterManagement.model.Bird;
 import com.company.AnimalShelterManagement.repository.BirdRepository;
 import com.company.AnimalShelterManagement.service.interfaces.BirdService;
+import com.company.AnimalShelterManagement.utils.AnimalFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class HibernateBirdService  implements BirdService {
+public class HibernateBirdService implements BirdService {
 
     private final BirdRepository birdRepository;
 
@@ -33,7 +34,7 @@ public class HibernateBirdService  implements BirdService {
     @Override
     public Bird saveBird(Bird bird) {
         bird = birdRepository.save(bird);
-//        super.generateIdentifier(bird);
+        AnimalFactory.generateIdentifier(bird);
 
         return bird;
     }

@@ -3,6 +3,7 @@ package com.company.AnimalShelterManagement.service;
 import com.company.AnimalShelterManagement.model.Cat;
 import com.company.AnimalShelterManagement.repository.CatRepository;
 import com.company.AnimalShelterManagement.service.interfaces.CatService;
+import com.company.AnimalShelterManagement.utils.AnimalFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +34,7 @@ public class HibernateCatService implements CatService {
     @Override
     public Cat saveCat(Cat cat) {
         cat = catRepository.save(cat);
-//        super.generateIdentifier(cat);
+        AnimalFactory.generateIdentifier(cat);
 
         return cat;
     }

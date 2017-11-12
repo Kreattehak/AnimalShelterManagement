@@ -3,7 +3,7 @@ package com.company.AnimalShelterManagement.service;
 import com.company.AnimalShelterManagement.utils.EntityNotFoundException;
 import org.springframework.data.repository.CrudRepository;
 
-class CommonService<T, R extends CrudRepository<T, Long>> {
+abstract class CommonService<T, R extends CrudRepository<T, Long>> {
 
     R repository;
     final Class<T> mapFrom;

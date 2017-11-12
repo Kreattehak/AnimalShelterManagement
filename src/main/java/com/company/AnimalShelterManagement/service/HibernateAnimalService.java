@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service("defaultAnimalService")
 @Transactional
 public class HibernateAnimalService extends CommonService<Animal, AnimalRepository> implements AnimalService {
@@ -27,16 +26,6 @@ public class HibernateAnimalService extends CommonService<Animal, AnimalReposito
     @Override
     public Iterable<Animal> returnAnimalsAvailableForAdoption() {
         return repository.findAnimalByAvailableForAdoption();
-    }
-
-    @Override
-    public void generateIdentifier(Animal animal) {
-        if (animal.getAnimalIdentifier() == null) {
-            String firstPart = animal.getAnimalType().getTypeIdentifier();
-            String secondPart = String.format("%02d", animal.getDateOfBirth().getYear() % 100);
-            String thirdPart = String.format("%04d", animal.getId());
-            animal.setAnimalIdentifier(firstPart + secondPart + thirdPart);
-        }
     }
 
     @Override

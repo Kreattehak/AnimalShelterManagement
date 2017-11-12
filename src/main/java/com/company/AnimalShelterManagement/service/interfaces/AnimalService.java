@@ -8,7 +8,5 @@ public interface AnimalService {
 
     Iterable<Animal> returnAnimalsAvailableForAdoption();
 
-    void generateIdentifier(Animal animal);
-
     Long countAnimals();
 }

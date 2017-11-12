@@ -4,8 +4,10 @@ import com.company.AnimalShelterManagement.model.Dog;
 import com.company.AnimalShelterManagement.model.dto.DogDTO;
 import com.company.AnimalShelterManagement.repository.DogRepository;
 import com.company.AnimalShelterManagement.service.interfaces.DogService;
+import com.company.AnimalShelterManagement.utils.AnimalFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class HibernateDogService extends CommonDTOService<Dog, DogDTO, DogRepository> implements DogService {
 
     @Autowired
-    public HibernateDogService(DogRepository dogRepository, ModelMapper modelMapper) {
+    public HibernateDogService(DogRepository dogRepository, ModelMapper modelMapper,
+                               @Qualifier("defaultAnimalService") HibernateAnimalService hibernateAnimalService) {
         super(modelMapper, Dog.class, DogDTO.class);
         this.repository = dogRepository;
     }
@@ -35,7 +38,7 @@ public class HibernateDogService extends CommonDTOService<Dog, DogDTO, DogReposi
     public DogDTO saveDog(DogDTO dogDTO) {
         Dog dog = mapFromDTO(dogDTO);
         dog = repository.save(dog);
-//        super.generateIdentifier(dog);
+        AnimalFactory.generateIdentifier(dog);
 
         return mapToDTO(dog);
     }
