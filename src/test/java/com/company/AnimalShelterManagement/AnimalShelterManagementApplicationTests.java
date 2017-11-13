@@ -1,5 +1,7 @@
 package com.company.AnimalShelterManagement;
 
+import com.company.AnimalShelterManagement.controller.AddressControllerIntegrationTest;
+import com.company.AnimalShelterManagement.controller.AddressControllerTest;
 import com.company.AnimalShelterManagement.controller.PersonControllerIntegrationTest;
 import com.company.AnimalShelterManagement.controller.PersonControllerTest;
 import com.company.AnimalShelterManagement.repository.AddressRepositoryTest;
@@ -18,7 +20,9 @@ import org.junit.runners.Suite;
         HibernateAddressServiceTest.class,
         HibernateAnimalServiceTest.class,
         PersonControllerTest.class,
-        PersonControllerIntegrationTest.class
+        PersonControllerIntegrationTest.class,
+        AddressControllerTest.class,
+        AddressControllerIntegrationTest.class
 })
 public class AnimalShelterManagementApplicationTests {
     //intentionally empty
