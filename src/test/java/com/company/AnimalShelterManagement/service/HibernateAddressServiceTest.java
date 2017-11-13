@@ -2,7 +2,6 @@ package com.company.AnimalShelterManagement.service;
 
 import com.company.AnimalShelterManagement.model.Address;
 import com.company.AnimalShelterManagement.model.Person;
-import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.repository.AddressRepository;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import com.company.AnimalShelterManagement.utils.EntityNotFoundException;
@@ -152,8 +151,7 @@ public class HibernateAddressServiceTest {
         when(addressRepository.findOne(anyLong())).thenReturn(testAddress);
 
         expectedException.expect(ProcessUserRequestException.class);
-        expectedException.expectMessage(
-                "{personId=" + ID_VALUE + ", addressId=" + ID_VALUE + '}');
+        expectedException.expectMessage("{address_id=" + ID_VALUE + ", person_id=" + ID_VALUE + '}');
         hibernateAddressService.deleteAddress(ID_VALUE, ID_VALUE);
     }
 

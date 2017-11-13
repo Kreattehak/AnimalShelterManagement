@@ -60,7 +60,7 @@ public class HibernateAddressService extends CommonService<Address, AddressRepos
         Address address = returnAddress(addressId);
         if (person.getMainAddress() == address) {
             throw new ProcessUserRequestException(Address.class,
-                    "addressId", addressId.toString(), "personId", personId.toString());
+                    "address_id", addressId.toString(), "person_id", personId.toString());
         }
         person.removeAddress(address);
 

@@ -31,6 +31,4 @@ abstract class CommonDTOService<T, U, R extends CrudRepository<T, Long>> extends
     T mapFromDTO(U dto) {
         return modelMapper.map(dto, mapFrom);
     }
-
-
 }

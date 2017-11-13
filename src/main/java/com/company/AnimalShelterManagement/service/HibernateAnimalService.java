@@ -38,5 +38,4 @@ public class HibernateAnimalService extends CommonService<Animal, AnimalReposito
     public void setAnimalRepository(AnimalRepository animalRepository) {
         this.repository = animalRepository;
     }
-
 }
