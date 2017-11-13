@@ -4,9 +4,9 @@ import java.util.Map;
 
 public class ProcessUserRequestException extends AnimalShelterException {
 
-    public ProcessUserRequestException(Class clazz, String... searchParamsMap) {
+    public ProcessUserRequestException(Class clazz, String... searchParams) {
         super(ProcessUserRequestException.generateMessage(
-                clazz.getSimpleName(), toMap(clazz.getSimpleName(), searchParamsMap)));
+                clazz.getSimpleName(), toMap(searchParams)));
     }
 
     private static String generateMessage(String entity, Map<String, String> searchParams) {

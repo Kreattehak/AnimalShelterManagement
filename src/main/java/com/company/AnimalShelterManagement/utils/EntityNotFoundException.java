@@ -8,9 +8,9 @@ import java.util.Map;
  */
 public class EntityNotFoundException extends AnimalShelterException {
 
-    public EntityNotFoundException(Class clazz, String... searchParamsMap) {
+    public EntityNotFoundException(Class clazz, String... searchParams) {
         super(EntityNotFoundException.generateMessage(
-                clazz.getSimpleName(), toMap(clazz.getSimpleName(), searchParamsMap)));
+                clazz.getSimpleName(), toMap(searchParams)));
     }
 
     private static String generateMessage(String entity, Map<String, String> searchParams) {
