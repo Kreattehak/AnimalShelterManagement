@@ -120,22 +120,6 @@ public class HibernatePersonServiceTest {
         verifyNoMoreInteractions(personRepository);
     }
 
-    @Test
-    public void shouldPerformAddFirstAddressToPersonAndSetItAsMainAddress() {
-        Address address = new Address(ADDRESS_STREET_NAME, ADDRESS_CITY_NAME, ADDRESS_ZIP_CODE);
-
-        when(personRepository.findOne(anyLong())).thenReturn(testPerson);
-
-        hibernatePersonService.addAddressForPerson(address, ID_VALUE);
-
-        assertThat(testPerson, allOf(
-                hasProperty(ADDRESS, contains(equalTo(address))),
-                hasProperty(MAIN_ADDRESS, equalTo(address))));
-
-        verify(personRepository).findOne(anyLong());
-        verifyNoMoreInteractions(personRepository);
-    }
-
     public static Matcher<PersonDTO> checkPersonDtoFieldsEquality(String firstName, String lastName) {
         return allOf(
                 hasProperty(FIRST_NAME, is(firstName)),

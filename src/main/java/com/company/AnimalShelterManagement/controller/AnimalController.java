@@ -29,4 +29,9 @@ public class AnimalController {
     public Iterable<Animal> returnAnimalsAvailableForAdoption() {
         return animalService.returnAnimalsAvailableForAdoption();
     }
+
+    @GetMapping(value = "${rest.animal.animalsCount}")
+    public long returnAnimalsCount() {
+        return animalService.countAnimals();
+    }
 }

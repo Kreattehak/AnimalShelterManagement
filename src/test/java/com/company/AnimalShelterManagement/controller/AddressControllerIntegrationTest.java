@@ -187,7 +187,7 @@ public class AddressControllerIntegrationTest {
     }
 
     private void setUpAddressInDatabase() {
-        personRepository.save(testPerson);
+        setUpAddressInDatabase();
         addressService.saveAddress(testAddress, testPerson.getId());
     }
 

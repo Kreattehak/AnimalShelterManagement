@@ -49,7 +49,7 @@ public class HibernateAddressServiceTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         testPerson = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
-        testAddress = new Address(STREET_NAME, CITY_NAME, ZIP_CODE);
+        testAddress = new Address(ADDRESS_STREET_NAME, ADDRESS_CITY_NAME, ADDRESS_ZIP_CODE);
     }
 
     @Test

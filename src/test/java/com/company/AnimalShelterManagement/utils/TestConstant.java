@@ -3,6 +3,7 @@ package com.company.AnimalShelterManagement.utils;
 public class TestConstant {
     public static final Long ID_VALUE = 10L;
     public static final Long ANOTHER_ID_VALUE = 11L;
+
     public static final String FIRST_NAME = "firstName";
     public static final String PERSON_FIRST_NAME = "Test";
     public static final String ANOTHER_PERSON_FIRST_NAME = "Another";

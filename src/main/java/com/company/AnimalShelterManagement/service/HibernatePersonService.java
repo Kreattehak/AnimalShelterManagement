@@ -1,6 +1,5 @@
 package com.company.AnimalShelterManagement.service;
 
-import com.company.AnimalShelterManagement.model.Address;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.repository.PersonRepository;
@@ -53,10 +52,5 @@ public class HibernatePersonService extends CommonDTOService<Person, PersonDTO, 
     @Override
     public void deletePerson(Long personId) {
         repository.delete(returnPerson(personId));
-    }
-
-    @Override
-    public void addAddressForPerson(Address address, Long personId) {
-        returnPerson(personId).addAddress(address);
     }
 }
