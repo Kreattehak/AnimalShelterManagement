@@ -37,7 +37,7 @@ public class Animal extends BaseEntity {
     //animalIdentifier is print on dog id tag
     private String animalIdentifier;
 
-    @Column(name = "date_of_birth", nullable = false)
+    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
     @OneToOne

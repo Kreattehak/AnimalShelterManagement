@@ -8,5 +8,5 @@ public interface AnimalService {
 
     Iterable<Animal> returnAnimalsAvailableForAdoption();
 
-    Long countAnimals();
+    long countAnimals();
 }

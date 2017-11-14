@@ -30,7 +30,7 @@ public class HibernateAnimalService extends CommonService<Animal, AnimalReposito
 
     @Override
     @Transactional(readOnly = true)
-    public Long countAnimals() {
+    public long countAnimals() {
         return repository.count();
     }
 
