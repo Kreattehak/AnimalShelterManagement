@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonDtoFieldsEquality;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
 import static com.company.AnimalShelterManagement.util.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,6 +29,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -78,13 +80,8 @@ public class PersonControllerIntegrationTest {
     }
 
     @Test
-    public void shouldReturnApiErrorResponse() {
-        //skip handleError() when status is 404
-        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
-            protected boolean hasError(HttpStatus statusCode) {
-                return false;
-            }
-        });
+    public void shouldReturnApiErrorResponseWhenPersonIdDoesNotExists() {
+        skipHandleErrorWhenNot404Found();
 
         ResponseEntity<Object> response = restTemplate.exchange(
                 "http://localhost:" + port + "/person/122", GET, null, Object.class);
@@ -102,6 +99,17 @@ public class PersonControllerIntegrationTest {
     }
 
     @Test
+    public void shouldResponseWithSavedPersonData() {
+        HttpEntity<PersonDTO> entity = new HttpEntity<>(testPersonDTO, httpHeaders);
+        response = restTemplate
+                .postForEntity("http://localhost:" + port + "/people", entity, PersonDTO.class);
+
+        assertThat(response.getStatusCode(), equalTo(OK));
+        assertThat(response.getBody(), is(checkPersonDtoFieldsEquality(
+                PERSON_FIRST_NAME, PERSON_LAST_NAME)));
+    }
+
+    @Test
     public void shouldUpdatePerson() {
         testPersonDTO = setUpPersonInDatabase();
         testPersonDTO.setFirstName(ANOTHER_PERSON_FIRST_NAME);
@@ -116,6 +124,21 @@ public class PersonControllerIntegrationTest {
     }
 
     @Test
+    public void shouldResponseWithUpdatedPersonData() {
+        testPersonDTO = setUpPersonInDatabase();
+        testPersonDTO.setFirstName(ANOTHER_PERSON_FIRST_NAME);
+        testPersonDTO.setLastName(ANOTHER_PERSON_LAST_NAME);
+        HttpEntity<PersonDTO> entity = new HttpEntity<>(testPersonDTO, httpHeaders);
+
+        response = restTemplate.exchange("http://localhost:" + port + "/person/" + testPersonDTO.getId(),
+                PUT, entity, PersonDTO.class);
+
+        assertThat(response.getStatusCode(), equalTo(OK));
+        assertThat(response.getBody(), is(checkPersonDtoFieldsEquality(
+                ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME)));
+    }
+
+    @Test
     public void shouldDeletePerson() {
         testPersonDTO = setUpPersonInDatabase();
         long countAfterDeletion = personRepository.count() - 1;
@@ -127,5 +150,13 @@ public class PersonControllerIntegrationTest {
 
     private PersonDTO setUpPersonInDatabase() {
         return personService.savePerson(testPersonDTO);
+    }
+
+    private void skipHandleErrorWhenNot404Found() {
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
+            protected boolean hasError(HttpStatus statusCode) {
+                return false;
+            }
+        });
     }
 }
