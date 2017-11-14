@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 
-import static com.company.AnimalShelterManagement.util.TestConstant.*;
+import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.*;
 

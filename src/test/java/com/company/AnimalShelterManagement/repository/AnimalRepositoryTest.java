@@ -14,8 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.LocalDate;
 
 import static com.company.AnimalShelterManagement.service.HibernateAnimalServiceTest.checkAnimalFieldsEquality;
-import static com.company.AnimalShelterManagement.util.TestConstant.ANOTHER_DOG_NAME;
-import static com.company.AnimalShelterManagement.util.TestConstant.DOG_NAME;
+import static com.company.AnimalShelterManagement.utils.TestConstant.ANOTHER_DOG_NAME;
+import static com.company.AnimalShelterManagement.utils.TestConstant.DOG_NAME;
 import static com.company.AnimalShelterManagement.utils.AnimalFactory.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;

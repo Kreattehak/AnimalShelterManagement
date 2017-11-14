@@ -6,9 +6,9 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 
-import static com.company.AnimalShelterManagement.util.TestConstant.ANIMAL_NAME;
-import static com.company.AnimalShelterManagement.util.TestConstant.ANIMAL_TYPE;
-import static com.company.AnimalShelterManagement.util.TestConstant.DATE_OF_BIRTH;
+import static com.company.AnimalShelterManagement.utils.TestConstant.ANIMAL_NAME;
+import static com.company.AnimalShelterManagement.utils.TestConstant.ANIMAL_TYPE;
+import static com.company.AnimalShelterManagement.utils.TestConstant.DATE_OF_BIRTH;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;

@@ -9,11 +9,15 @@ import com.company.AnimalShelterManagement.repository.AnimalRepositoryTest;
 import com.company.AnimalShelterManagement.service.HibernateAddressServiceTest;
 import com.company.AnimalShelterManagement.service.HibernateAnimalServiceTest;
 import com.company.AnimalShelterManagement.service.HibernatePersonServiceTest;
+import com.company.AnimalShelterManagement.utils.AnimalFactoryTest;
+import com.company.AnimalShelterManagement.utils.AnimalShelterExceptionTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        AnimalShelterExceptionTest.class,
+        AnimalFactoryTest.class,
         AddressRepositoryTest.class,
         AnimalRepositoryTest.class,
         HibernatePersonServiceTest.class,

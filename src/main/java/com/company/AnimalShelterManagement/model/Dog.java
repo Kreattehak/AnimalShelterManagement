@@ -24,8 +24,8 @@ public class Dog extends Animal {
     }
 
     public enum Race {
-        HUSKY, GERMAN_SHEPERD, CROSSBREAD,
-    }
+        HUSKY, GERMAN_SHEPERD, CROSSBREAD, ENGLISH_COCKER_SPANIEL,
+        }
 
     @Override
     public String toString() {

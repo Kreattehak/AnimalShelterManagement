@@ -38,7 +38,7 @@ public class HibernateDogService extends CommonDTOService<Dog, DogDTO, DogReposi
     public DogDTO saveDog(DogDTO dogDTO) {
         Dog dog = mapFromDTO(dogDTO);
         dog = repository.save(dog);
-        AnimalFactory.generateIdentifier(dog);
+        AnimalFactory.generateAnimalIdentifier(dog);
 
         return mapToDTO(dog);
     }

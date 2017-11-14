@@ -34,7 +34,7 @@ public class HibernateCatService implements CatService {
     @Override
     public Cat saveCat(Cat cat) {
         cat = catRepository.save(cat);
-        AnimalFactory.generateIdentifier(cat);
+        AnimalFactory.generateAnimalIdentifier(cat);
 
         return cat;
     }

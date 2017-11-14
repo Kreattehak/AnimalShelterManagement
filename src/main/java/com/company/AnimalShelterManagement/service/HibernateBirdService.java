@@ -34,7 +34,7 @@ public class HibernateBirdService implements BirdService {
     @Override
     public Bird saveBird(Bird bird) {
         bird = birdRepository.save(bird);
-        AnimalFactory.generateIdentifier(bird);
+        AnimalFactory.generateAnimalIdentifier(bird);
 
         return bird;
     }

@@ -1,4 +1,4 @@
-package com.company.AnimalShelterManagement.util;
+package com.company.AnimalShelterManagement.utils;
 
 public class TestConstant {
     public static final Long ID_VALUE = 10L;
@@ -26,6 +26,8 @@ public class TestConstant {
     public static final String ANIMAL_NAME = "animalName";
     public static final String ANIMAL_TYPE = "animalType";
     public static final String DATE_OF_BIRTH = "dateOfBirth";
+    public static final String ANIMAL_BEHAVIOUR_DESCRIPTION = "Good boy";
+    public static final String ANIMAL_IDENTIFIER_PATTERN = "00170010";
 
     public static final String DOG_NAME = "Sparky";
     public static final String ANOTHER_DOG_NAME = "AnotherDog";
