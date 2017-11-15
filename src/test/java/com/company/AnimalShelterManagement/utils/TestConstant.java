@@ -3,6 +3,8 @@ package com.company.AnimalShelterManagement.utils;
 public class TestConstant {
     public static final Long ID_VALUE = 10L;
     public static final Long ANOTHER_ID_VALUE = 11L;
+    public static final Long RANDOM_NUMBER = 12345L;
+    public static final int NO_ENTITIES = 0;
 
     public static final String FIRST_NAME = "firstName";
     public static final String PERSON_FIRST_NAME = "Test";
@@ -34,6 +36,4 @@ public class TestConstant {
     public static final String ANOTHER_DOG_NAME = "AnotherDog";
     public static final String CAT_NAME = "Fluffy";
     public static final String BIRD_NAME = "Papi";
-
-    public static final Long RANDOM_NUMBER = 12345L;
 }

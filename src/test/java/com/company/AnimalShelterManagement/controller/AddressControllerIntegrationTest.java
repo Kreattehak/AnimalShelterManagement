@@ -5,6 +5,7 @@ import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.repository.AddressRepository;
 import com.company.AnimalShelterManagement.repository.PersonRepository;
 import com.company.AnimalShelterManagement.service.interfaces.AddressService;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.assertApiErrorResponse;
 import static com.company.AnimalShelterManagement.service.HibernateAddressServiceTest.checkAddressFieldsEquality;
 import static com.company.AnimalShelterManagement.service.HibernateAddressServiceTest.checkAddressFieldsEqualityWithPerson;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
@@ -32,7 +34,8 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpMethod.*;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @RunWith(SpringRunner.class)
@@ -71,18 +74,19 @@ public class AddressControllerIntegrationTest {
                 restTemplate.exchange("http://localhost:" + port + "/person/1/addresses", GET,
                         null, new ParameterizedTypeReference<List<Address>>() {
                         });
+
+        assertThat(response.getStatusCode(), equalTo(OK));
         assertThat(response.getBody(), hasSize(greaterThan(0)));
     }
 
     @Test
     public void shouldReturnAddress() {
         setUpAddressInDatabase();
-        response = restTemplate.getForEntity("http://localhost:" + port + "/person/" + testPerson.getId()
-                        + "/address/" + testAddress.getId(),
-                Address.class);
 
-        assertThat(response.getStatusCode(), equalTo(OK));
-        assertThat(response.getBody(), equalTo(testAddress));
+        response = restTemplate.getForEntity("http://localhost:" + port + "/person/" + testPerson.getId()
+                        + "/address/" + testAddress.getId(), Address.class);
+
+        assertResponse(equalTo(testAddress));
     }
 
     @Test
@@ -102,13 +106,10 @@ public class AddressControllerIntegrationTest {
         HttpEntity<Address> entity = new HttpEntity<>(testAddress, httpHeaders);
         setUpPersonInDatabase();
 
-        response = restTemplate
-                .postForEntity("http://localhost:" + port + "/person/" + testPerson.getId() + "/addresses",
-                        entity, Address.class);
+        response = restTemplate.postForEntity("http://localhost:" + port + "/person/" + testPerson.getId()
+                + "/addresses", entity, Address.class);
 
-        assertThat(response.getStatusCode(), equalTo(OK));
-        assertThat(response.getBody(), is(checkAddressFieldsEquality(ADDRESS_STREET_NAME, ADDRESS_CITY_NAME,
-                ADDRESS_ZIP_CODE)));
+        assertResponse(is(checkAddressFieldsEquality(ADDRESS_STREET_NAME, ADDRESS_CITY_NAME, ADDRESS_ZIP_CODE)));
     }
 
     @Test
@@ -118,8 +119,7 @@ public class AddressControllerIntegrationTest {
         ResponseEntity<Object> response = restTemplate.exchange(
                 "http://localhost:" + port + "/person/1/address/111", GET, null, Object.class);
 
-        assertThat(response.getStatusCode(), equalTo(NOT_FOUND));
-        assertThat(response.getBody().toString(), containsString("was not found for parameters: {id=111}"));
+        assertApiErrorResponse(response);
     }
 
     @Test
@@ -141,18 +141,15 @@ public class AddressControllerIntegrationTest {
     @Test
     public void shouldResponseWithUpdatedAddressData() {
         setUpAddressInDatabase();
-        Address anotherTestAddress = new Address(ANOTHER_ADDRESS_STREET_NAME, ANOTHER_ADDRESS_CITY_NAME,
-                ANOTHER_ADDRESS_ZIP_CODE);
-        anotherTestAddress.setId(testAddress.getId());
+        changeAddressData();
 
-        HttpEntity<Address> entity = new HttpEntity<>(anotherTestAddress, httpHeaders);
+        HttpEntity<Address> entity = new HttpEntity<>(testAddress, httpHeaders);
 
         response = restTemplate.exchange("http://localhost:" + port + "/person/" + testPerson.getId()
                 + "/address/" + testAddress.getId(), PUT, entity, Address.class);
 
-        assertThat(response.getStatusCode(), equalTo(OK));
-        assertThat(response.getBody(), is(checkAddressFieldsEquality(ANOTHER_ADDRESS_STREET_NAME,
-                ANOTHER_ADDRESS_CITY_NAME, ANOTHER_ADDRESS_ZIP_CODE)));
+        assertResponse(is(checkAddressFieldsEquality(ANOTHER_ADDRESS_STREET_NAME, ANOTHER_ADDRESS_CITY_NAME,
+                ANOTHER_ADDRESS_ZIP_CODE)));
     }
 
     @Test
@@ -160,8 +157,7 @@ public class AddressControllerIntegrationTest {
         long addressId = setUpTwoAddressesInDatabase();
         long countAfterDeletion = addressRepository.count() - 1;
 
-        restTemplate.delete("http://localhost:" + port + "/person/" + testPerson.getId()
-                + "/address/" + addressId);
+        restTemplate.delete("http://localhost:" + port + "/person/" + testPerson.getId() + "/address/" + addressId);
 
         assertEquals(addressRepository.count(), countAfterDeletion);
     }
@@ -176,10 +172,20 @@ public class AddressControllerIntegrationTest {
                 + testPerson.getId() + "/address/" + testAddress.getId(), DELETE, null, Object.class);
 
         assertThat(response.getStatusCode(), equalTo(UNPROCESSABLE_ENTITY));
-        assertThat(response.getBody().toString(), containsString(
-                "Request could not be processed for ADDRESS, for parameters: "
-                        + "{address_id=" + testAddress.getId() + ", person_id=" + testPerson.getId() + '}'));
+        assertThat(response.getBody().toString(), containsString("Request could not be processed for ADDRESS, "
+                + "for parameters: {address_id=" + testAddress.getId() + ", person_id=" + testPerson.getId() + '}'));
         assertEquals(addressRepository.count(), countBeforeDelete);
+    }
+
+    private void assertResponse(Matcher<Address> matcher) {
+        assertThat(response.getStatusCode(), equalTo(OK));
+        assertThat(response.getBody(), matcher);
+    }
+
+    private void changeAddressData() {
+        testAddress.setStreetName(ANOTHER_ADDRESS_STREET_NAME);
+        testAddress.setCityName(ANOTHER_ADDRESS_CITY_NAME);
+        testAddress.setZipCode(ANOTHER_ADDRESS_ZIP_CODE);
     }
 
     private void setUpPersonInDatabase() {
@@ -187,7 +193,7 @@ public class AddressControllerIntegrationTest {
     }
 
     private void setUpAddressInDatabase() {
-        setUpAddressInDatabase();
+        setUpPersonInDatabase();
         addressService.saveAddress(testAddress, testPerson.getId());
     }
 

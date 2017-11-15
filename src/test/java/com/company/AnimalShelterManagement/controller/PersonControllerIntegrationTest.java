@@ -3,6 +3,7 @@ package com.company.AnimalShelterManagement.controller;
 import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.repository.PersonRepository;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.assertApiErrorResponse;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonDtoFieldsEquality;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
@@ -30,7 +32,6 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PUT;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
@@ -51,6 +52,8 @@ public class PersonControllerIntegrationTest {
     private PersonService personService;
     @Autowired
     private PersonRepository personRepository;
+    @Autowired
+    private PersonController personController;
 
     @Before
     public void setUp() {
@@ -66,17 +69,19 @@ public class PersonControllerIntegrationTest {
                 restTemplate.exchange("http://localhost:" + port + "/people", GET,
                         null, new ParameterizedTypeReference<List<PersonDTO>>() {
                         });
-        assertThat(response.getBody(), hasSize(greaterThan(0)));
+
+        assertThat(response.getStatusCode(), equalTo(OK));
+        assertThat(response.getBody(), hasSize(greaterThan(NO_ENTITIES)));
     }
 
     @Test
     public void shouldReturnPerson() {
-        testPersonDTO = setUpPersonInDatabase();
+        setUpPersonInDatabase();
+
         response = restTemplate.getForEntity("http://localhost:" + port + "/person/" + testPersonDTO.getId(),
                 PersonDTO.class);
 
-        assertThat(response.getStatusCode(), equalTo(OK));
-        assertThat(response.getBody(), equalTo(testPersonDTO));
+        assertResponse(equalTo(testPersonDTO));
     }
 
     @Test
@@ -84,40 +89,35 @@ public class PersonControllerIntegrationTest {
         skipHandleErrorWhenNot404Found();
 
         ResponseEntity<Object> response = restTemplate.exchange(
-                "http://localhost:" + port + "/person/122", GET, null, Object.class);
+                "http://localhost:" + port + "/person/111", GET, null, Object.class);
 
-        assertThat(response.getStatusCode(), equalTo(NOT_FOUND));
-        assertThat(response.getBody().toString(), containsString("was not found"));
+        assertApiErrorResponse(response);
     }
 
     @Test
     public void shouldSavePerson() {
-        PersonDTO personDTO = personService.savePerson(testPersonDTO);
+        personController.savePerson(testPersonDTO);
 
-        assertThat(personRepository.findOne(personDTO.getId()), checkPersonFieldsEquality(
-                PERSON_FIRST_NAME, PERSON_LAST_NAME));
+        assertThat(personRepository.findOne(testPersonDTO.getId()), checkPersonFieldsEquality(PERSON_FIRST_NAME,
+                PERSON_LAST_NAME));
     }
 
     @Test
     public void shouldResponseWithSavedPersonData() {
         HttpEntity<PersonDTO> entity = new HttpEntity<>(testPersonDTO, httpHeaders);
+
         response = restTemplate
                 .postForEntity("http://localhost:" + port + "/people", entity, PersonDTO.class);
 
-        assertThat(response.getStatusCode(), equalTo(OK));
-        assertThat(response.getBody(), is(checkPersonDtoFieldsEquality(
-                PERSON_FIRST_NAME, PERSON_LAST_NAME)));
+        assertResponse(is(checkPersonDtoFieldsEquality(PERSON_FIRST_NAME, PERSON_LAST_NAME)));
     }
 
     @Test
     public void shouldUpdatePerson() {
-        testPersonDTO = setUpPersonInDatabase();
-        testPersonDTO.setFirstName(ANOTHER_PERSON_FIRST_NAME);
-        testPersonDTO.setLastName(ANOTHER_PERSON_LAST_NAME);
-        HttpEntity<PersonDTO> entity = new HttpEntity<>(testPersonDTO, httpHeaders);
+        setUpPersonInDatabase();
+        changePersonData();
 
-        restTemplate.put("http://localhost:" + port + "/person/" + testPersonDTO.getId(),
-                entity, PersonDTO.class);
+        personController.updatePerson(testPersonDTO);
 
         assertThat(personRepository.findOne(testPersonDTO.getId()), is(
                 checkPersonFieldsEquality(ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME)));
@@ -125,22 +125,19 @@ public class PersonControllerIntegrationTest {
 
     @Test
     public void shouldResponseWithUpdatedPersonData() {
-        testPersonDTO = setUpPersonInDatabase();
-        testPersonDTO.setFirstName(ANOTHER_PERSON_FIRST_NAME);
-        testPersonDTO.setLastName(ANOTHER_PERSON_LAST_NAME);
+        setUpPersonInDatabase();
+        changePersonData();
         HttpEntity<PersonDTO> entity = new HttpEntity<>(testPersonDTO, httpHeaders);
 
         response = restTemplate.exchange("http://localhost:" + port + "/person/" + testPersonDTO.getId(),
                 PUT, entity, PersonDTO.class);
 
-        assertThat(response.getStatusCode(), equalTo(OK));
-        assertThat(response.getBody(), is(checkPersonDtoFieldsEquality(
-                ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME)));
+        assertResponse(is(checkPersonDtoFieldsEquality(ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME)));
     }
 
     @Test
     public void shouldDeletePerson() {
-        testPersonDTO = setUpPersonInDatabase();
+        setUpPersonInDatabase();
         long countAfterDeletion = personRepository.count() - 1;
 
         restTemplate.delete("http://localhost:" + port + "/person/" + testPersonDTO.getId());
@@ -148,8 +145,18 @@ public class PersonControllerIntegrationTest {
         assertEquals(personRepository.count(), countAfterDeletion);
     }
 
-    private PersonDTO setUpPersonInDatabase() {
-        return personService.savePerson(testPersonDTO);
+    private void assertResponse(Matcher<PersonDTO> matcher) {
+        assertThat(response.getStatusCode(), equalTo(OK));
+        assertThat(response.getBody(), matcher);
+    }
+
+    private void changePersonData() {
+        testPersonDTO.setFirstName(ANOTHER_PERSON_FIRST_NAME);
+        testPersonDTO.setLastName(ANOTHER_PERSON_LAST_NAME);
+    }
+
+    private void setUpPersonInDatabase() {
+        testPersonDTO = personService.savePerson(testPersonDTO);
     }
 
     private void skipHandleErrorWhenNot404Found() {
