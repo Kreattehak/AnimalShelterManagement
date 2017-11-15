@@ -1,5 +1,6 @@
 package com.company.AnimalShelterManagement.utils;
 
+import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.model.Dog;
 import com.company.AnimalShelterManagement.model.Person;
 import org.junit.Test;
@@ -19,10 +20,7 @@ public class AnimalFactoryTest {
     public void shouldCreateNewlyReceivedDog() {
         Dog d = newlyReceivedDog(DOG_NAME, CROSSBREAD);
 
-        assertEquals(d.getAnimalType(), DOG);
-        assertEquals(d.getAnimalName(), DOG_NAME);
-        assertEquals(d.getDogRace(), CROSSBREAD);
-        assertEquals(d.getAvailableForAdoption(), BEFORE_VACCINATION);
+        checkEqualityOfCommonDogFields(d, CROSSBREAD, BEFORE_VACCINATION);
     }
 
     @Test
@@ -30,12 +28,9 @@ public class AnimalFactoryTest {
         Person p = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
         Dog d = newGaveUpDog(DOG_NAME, HUSKY, LocalDate.now(), p, ANIMAL_BEHAVIOUR_DESCRIPTION);
 
-        assertEquals(d.getAnimalType(), DOG);
-        assertEquals(d.getAnimalName(), DOG_NAME);
-        assertEquals(d.getDogRace(), HUSKY);
+        checkEqualityOfCommonDogFields(d, HUSKY, AVAILABLE);
         assertEquals(d.getDateOfBirth(), LocalDate.now());
         assertEquals(d.getPreviousOwner(), p);
-        assertEquals(d.getAvailableForAdoption(), AVAILABLE);
         assertEquals(d.getBehaviourDescription(), ANIMAL_BEHAVIOUR_DESCRIPTION);
     }
 
@@ -43,20 +38,14 @@ public class AnimalFactoryTest {
     public void shouldCreateNewDogUnderVeterinaryCare() {
         Dog d = newDogUnderVeterinaryCare(DOG_NAME, GERMAN_SHEPERD);
 
-        assertEquals(d.getAnimalType(), DOG);
-        assertEquals(d.getAnimalName(), DOG_NAME);
-        assertEquals(d.getDogRace(), GERMAN_SHEPERD);
-        assertEquals(d.getAvailableForAdoption(), UNDER_VETERINARY_CARE);
+        checkEqualityOfCommonDogFields(d, GERMAN_SHEPERD, UNDER_VETERINARY_CARE);
     }
 
     @Test
     public void shouldCreateNewAvailableForAdoptionDog() {
         Dog d = newAvailableForAdoptionDog(DOG_NAME, ENGLISH_COCKER_SPANIEL);
 
-        assertEquals(d.getAnimalType(), DOG);
-        assertEquals(d.getAnimalName(), DOG_NAME);
-        assertEquals(d.getDogRace(), ENGLISH_COCKER_SPANIEL);
-        assertEquals(d.getAvailableForAdoption(), AVAILABLE);
+        checkEqualityOfCommonDogFields(d, ENGLISH_COCKER_SPANIEL, AVAILABLE);
     }
 
     @Test
@@ -68,5 +57,13 @@ public class AnimalFactoryTest {
         generateAnimalIdentifier(d);
 
         assertEquals(d.getAnimalIdentifier(), ANIMAL_IDENTIFIER_PATTERN);
+    }
+
+    private void checkEqualityOfCommonDogFields(Dog dog, Dog.Race dogRace,
+                                                Animal.AvailableForAdoption availability) {
+        assertEquals(dog.getAnimalType(), DOG);
+        assertEquals(dog.getAnimalName(), DOG_NAME);
+        assertEquals(dog.getDogRace(), dogRace);
+        assertEquals(dog.getAvailableForAdoption(), availability);
     }
 }

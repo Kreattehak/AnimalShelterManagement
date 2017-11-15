@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.mockito.Matchers.anyLong;
@@ -34,11 +34,7 @@ public class AddressControllerTest {
 
     @Test
     public void shouldPerformPersonAddresses() {
-        Address anotherTestAddress = new Address(ANOTHER_ADDRESS_STREET_NAME,
-                ANOTHER_ADDRESS_CITY_NAME, ANOTHER_ADDRESS_ZIP_CODE);
-
-        when(addressService.returnPersonAddresses(anyLong())).thenReturn(
-                Arrays.asList(testAddress, anotherTestAddress));
+        when(addressService.returnPersonAddresses(anyLong())).thenReturn(new ArrayList<>());
 
         addressController.returnPersonAddresses(ID_VALUE);
 

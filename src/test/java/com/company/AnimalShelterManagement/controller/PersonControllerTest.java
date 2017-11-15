@@ -11,7 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.mockito.Matchers.anyLong;
@@ -35,10 +35,7 @@ public class PersonControllerTest {
 
     @Test
     public void shouldPerformReturnPeople() {
-        PersonDTO anotherTestPersonDTO = new PersonDTO(
-                ID_VALUE, ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME);
-
-        when(personService.returnPeople()).thenReturn(Arrays.asList(testPersonDTO, anotherTestPersonDTO));
+        when(personService.returnPeople()).thenReturn(new ArrayList<>());
 
         personController.returnPeople();
 

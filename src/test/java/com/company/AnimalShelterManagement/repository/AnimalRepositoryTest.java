@@ -14,9 +14,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.LocalDate;
 
 import static com.company.AnimalShelterManagement.service.HibernateAnimalServiceTest.checkAnimalFieldsEquality;
+import static com.company.AnimalShelterManagement.utils.AnimalFactory.newAvailableForAdoptionDog;
+import static com.company.AnimalShelterManagement.utils.AnimalFactory.newlyReceivedDog;
 import static com.company.AnimalShelterManagement.utils.TestConstant.ANOTHER_DOG_NAME;
 import static com.company.AnimalShelterManagement.utils.TestConstant.DOG_NAME;
-import static com.company.AnimalShelterManagement.utils.AnimalFactory.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
@@ -36,18 +37,26 @@ public class AnimalRepositoryTest {
 
     @Test
     public void shouldReturnAllDogsAvailableForAdoption() {
-        Dog dog = newAvailableForAdoptionDog(DOG_NAME, Dog.Race.GERMAN_SHEPERD);
-        dog.setDateOfBirth(LocalDate.now());
-        Dog anotherDog = newlyReceivedDog(ANOTHER_DOG_NAME, Dog.Race.CROSSBREAD);
-        anotherDog.setDateOfBirth(LocalDate.now());
-
-        this.entityManager.persist(dog);
-        this.entityManager.persist(anotherDog);
+        createAndPersistTwoDogs();
 
         Iterable<Animal> animals = animalRepository.findAnimalByAvailableForAdoption();
 
         assertThat(animals, hasItem(checkAnimalFieldsEquality(DOG_NAME, Animal.Type.DOG, LocalDate.now())));
         assertThat(animals, not(hasItem(checkAnimalFieldsEquality(
                 ANOTHER_DOG_NAME, Animal.Type.DOG, LocalDate.now()))));
+    }
+
+    private void createAndPersistTwoDogs() {
+        Dog dog = newAvailableForAdoptionDog(DOG_NAME, Dog.Race.GERMAN_SHEPERD);
+        dog.setDateOfBirth(LocalDate.now());
+        Dog anotherDog = newlyReceivedDog(ANOTHER_DOG_NAME, Dog.Race.CROSSBREAD);
+        anotherDog.setDateOfBirth(LocalDate.now());
+
+        saveTwoDogsInDatabase(dog, anotherDog);
+    }
+
+    private void saveTwoDogsInDatabase(Dog dog, Dog anotherDog) {
+        entityManager.persist(dog);
+        entityManager.persist(anotherDog);
     }
 }

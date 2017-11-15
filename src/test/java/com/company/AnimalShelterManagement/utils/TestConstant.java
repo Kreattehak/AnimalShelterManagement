@@ -36,6 +36,4 @@ public class TestConstant {
     public static final String BIRD_NAME = "Papi";
 
     public static final Long RANDOM_NUMBER = 12345L;
-
-
 }

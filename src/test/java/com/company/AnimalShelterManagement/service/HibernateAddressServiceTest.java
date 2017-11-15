@@ -12,13 +12,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -47,18 +46,13 @@ public class HibernateAddressServiceTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         testPerson = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
         testAddress = new Address(ADDRESS_STREET_NAME, ADDRESS_CITY_NAME, ADDRESS_ZIP_CODE);
     }
 
     @Test
     public void shouldReturnPersonAddresses() {
-        Address anotherTestAddress = new Address(
-                ANOTHER_ADDRESS_STREET_NAME, ANOTHER_ADDRESS_CITY_NAME, ANOTHER_ADDRESS_ZIP_CODE);
-
-        when(addressRepository.findAddressesByPersonId(anyLong()))
-                .thenReturn(Arrays.asList(testAddress, anotherTestAddress));
+        when(addressRepository.findAddressesByPersonId(anyLong())).thenReturn(new ArrayList<>());
 
         hibernateAddressService.returnPersonAddresses(ID_VALUE);
 
@@ -121,12 +115,7 @@ public class HibernateAddressServiceTest {
 
     @Test
     public void shouldDeleteAddress() {
-        Address anotherTestAddress = new Address(
-                ANOTHER_ADDRESS_STREET_NAME, ANOTHER_ADDRESS_CITY_NAME, ANOTHER_ADDRESS_ZIP_CODE);
-        testAddress.setId(ID_VALUE);
-        anotherTestAddress.setId(ANOTHER_ID_VALUE);
-        testPerson.addAddress(testAddress);
-        testPerson.addAddress(anotherTestAddress);
+        Address anotherTestAddress = setUpPersonWithTwoAddresses();
 
         when(personService.returnPerson(anyLong())).thenReturn(testPerson);
         when(addressRepository.findOne(anyLong())).thenReturn(anotherTestAddress);
@@ -171,5 +160,16 @@ public class HibernateAddressServiceTest {
                 hasProperty(CITY_NAME, is(cityName)),
                 hasProperty(ZIP_CODE, is(zipCode)),
                 hasProperty(PERSON, is(equalTo(person))));
+    }
+
+    private Address setUpPersonWithTwoAddresses() {
+        Address anotherTestAddress = new Address(
+                ANOTHER_ADDRESS_STREET_NAME, ANOTHER_ADDRESS_CITY_NAME, ANOTHER_ADDRESS_ZIP_CODE);
+        testAddress.setId(ID_VALUE);
+        anotherTestAddress.setId(ANOTHER_ID_VALUE);
+        testPerson.addAddress(testAddress);
+        testPerson.addAddress(anotherTestAddress);
+
+        return anotherTestAddress;
     }
 }
