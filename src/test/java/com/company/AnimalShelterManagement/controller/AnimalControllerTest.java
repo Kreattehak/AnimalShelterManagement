@@ -46,7 +46,7 @@ public class AnimalControllerTest {
     }
 
     @Test
-    public void shouldPerformReturnAnimalsCoun() {
+    public void shouldPerformReturnAnimalsCount() {
         when(animalService.countAnimals()).thenReturn(RANDOM_NUMBER);
 
         animalController.returnAnimalsCount();

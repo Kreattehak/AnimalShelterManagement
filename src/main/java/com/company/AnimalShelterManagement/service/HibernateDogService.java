@@ -7,7 +7,6 @@ import com.company.AnimalShelterManagement.service.interfaces.DogService;
 import com.company.AnimalShelterManagement.utils.AnimalFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class HibernateDogService extends CommonDTOService<Dog, DogDTO, DogRepository> implements DogService {
 
     @Autowired
-    public HibernateDogService(DogRepository dogRepository, ModelMapper modelMapper,
-                               @Qualifier("defaultAnimalService") HibernateAnimalService hibernateAnimalService) {
+    public HibernateDogService(DogRepository dogRepository, ModelMapper modelMapper) {
         super(modelMapper, Dog.class, DogDTO.class);
         this.repository = dogRepository;
     }

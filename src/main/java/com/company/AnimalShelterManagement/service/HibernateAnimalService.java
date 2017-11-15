@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service("defaultAnimalService")
-@Transactional
+@Transactional(readOnly = true)
 public class HibernateAnimalService extends CommonService<Animal, AnimalRepository> implements AnimalService {
 
     @Autowired
@@ -18,7 +18,6 @@ public class HibernateAnimalService extends CommonService<Animal, AnimalReposito
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Iterable<Animal> returnAnimals() {
         return repository.findAll();
     }
@@ -29,7 +28,6 @@ public class HibernateAnimalService extends CommonService<Animal, AnimalReposito
     }
 
     @Override
-    @Transactional(readOnly = true)
     public long countAnimals() {
         return repository.count();
     }

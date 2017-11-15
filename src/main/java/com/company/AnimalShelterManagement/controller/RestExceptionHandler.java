@@ -15,20 +15,20 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
-    protected ResponseEntity<ApiError> handleEntityNotFound(EntityNotFoundException e) {
+    protected ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException e) {
         ApiError apiError = new ApiError(NOT_FOUND);
         apiError.setMessage(e.getMessage());
         return buildResponseEntity(apiError);
     }
 
     @ExceptionHandler(ProcessUserRequestException.class)
-    protected ResponseEntity<ApiError> handleInvalidProcessUserRequest(ProcessUserRequestException e) {
+    protected ResponseEntity<Object> handleInvalidProcessUserRequest(ProcessUserRequestException e) {
         ApiError apiError = new ApiError(UNPROCESSABLE_ENTITY);
         apiError.setMessage(e.getMessage());
         return buildResponseEntity(apiError);
     }
 
-    private ResponseEntity<ApiError> buildResponseEntity(ApiError apiError) {
+    private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 }

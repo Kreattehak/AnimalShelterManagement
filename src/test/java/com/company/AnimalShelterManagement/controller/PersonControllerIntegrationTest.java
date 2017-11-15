@@ -10,24 +10,21 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-
-import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.assertApiErrorResponse;
+import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertThatResponseHaveMultipleEntitiesReturned;
+import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseEntityNotFoundException;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonDtoFieldsEquality;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpMethod.GET;
@@ -65,13 +62,7 @@ public class PersonControllerIntegrationTest {
 
     @Test
     public void shouldReturnPeople() {
-        ResponseEntity<List<PersonDTO>> response =
-                restTemplate.exchange("http://localhost:" + port + "/people", GET,
-                        null, new ParameterizedTypeReference<List<PersonDTO>>() {
-                        });
-
-        assertThat(response.getStatusCode(), equalTo(OK));
-        assertThat(response.getBody(), hasSize(greaterThan(NO_ENTITIES)));
+        assertThatResponseHaveMultipleEntitiesReturned("http://localhost:" + port + "/people", PEOPLE_COUNT);
     }
 
     @Test
@@ -86,12 +77,7 @@ public class PersonControllerIntegrationTest {
 
     @Test
     public void shouldReturnApiErrorResponseWhenPersonIdDoesNotExists() {
-        skipHandleErrorWhenNot404Found();
-
-        ResponseEntity<Object> response = restTemplate.exchange(
-                "http://localhost:" + port + "/person/111", GET, null, Object.class);
-
-        assertApiErrorResponse(response);
+        checkResponseEntityNotFoundException("http://localhost:" + port + "/person/" + ID_NOT_FOUND, GET);
     }
 
     @Test
@@ -157,13 +143,5 @@ public class PersonControllerIntegrationTest {
 
     private void setUpPersonInDatabase() {
         testPersonDTO = personService.savePerson(testPersonDTO);
-    }
-
-    private void skipHandleErrorWhenNot404Found() {
-        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
-            protected boolean hasError(HttpStatus statusCode) {
-                return false;
-            }
-        });
     }
 }

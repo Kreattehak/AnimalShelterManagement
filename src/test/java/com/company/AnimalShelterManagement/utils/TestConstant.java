@@ -3,9 +3,15 @@ package com.company.AnimalShelterManagement.utils;
 public class TestConstant {
     public static final Long ID_VALUE = 10L;
     public static final Long ANOTHER_ID_VALUE = 11L;
+    public static final Long ID_NOT_FOUND = 123123511L;
     public static final Long RANDOM_NUMBER = 12345L;
     public static final int NO_ENTITIES = 0;
+    public static final int ONE_ENTITY = 1;
+    public static final int PEOPLE_COUNT = 7;
+    public static final int ADDRESSES_COUNT_FOR_FIRST_PERSON = 4;
+    public static final int ANIMALS_COUNT = 2;
 
+    public static final String ID = "id";
     public static final String FIRST_NAME = "firstName";
     public static final String PERSON_FIRST_NAME = "Test";
     public static final String ANOTHER_PERSON_FIRST_NAME = "Another";
@@ -36,4 +42,6 @@ public class TestConstant {
     public static final String ANOTHER_DOG_NAME = "AnotherDog";
     public static final String CAT_NAME = "Fluffy";
     public static final String BIRD_NAME = "Papi";
+
+    public static final String STRING_TO_TEST_EQUALITY = ID_NOT_FOUND.toString();
 }

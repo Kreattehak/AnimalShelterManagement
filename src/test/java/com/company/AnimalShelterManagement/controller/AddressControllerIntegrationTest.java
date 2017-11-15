@@ -12,30 +12,27 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-
-import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.assertApiErrorResponse;
+import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertThatResponseHaveMultipleEntitiesReturned;
+import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseEntityNotFoundException;
+import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseProcessUserRequestException;
 import static com.company.AnimalShelterManagement.service.HibernateAddressServiceTest.checkAddressFieldsEquality;
 import static com.company.AnimalShelterManagement.service.HibernateAddressServiceTest.checkAddressFieldsEqualityWithPerson;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @RunWith(SpringRunner.class)
@@ -70,13 +67,8 @@ public class AddressControllerIntegrationTest {
 
     @Test
     public void shouldReturnPersonAddresses() {
-        ResponseEntity<List<Address>> response =
-                restTemplate.exchange("http://localhost:" + port + "/person/1/addresses", GET,
-                        null, new ParameterizedTypeReference<List<Address>>() {
-                        });
-
-        assertThat(response.getStatusCode(), equalTo(OK));
-        assertThat(response.getBody(), hasSize(greaterThan(0)));
+        assertThatResponseHaveMultipleEntitiesReturned("http://localhost:" + port + "/person/1/addresses",
+                ADDRESSES_COUNT_FOR_FIRST_PERSON);
     }
 
     @Test
@@ -84,7 +76,7 @@ public class AddressControllerIntegrationTest {
         setUpAddressInDatabase();
 
         response = restTemplate.getForEntity("http://localhost:" + port + "/person/" + testPerson.getId()
-                        + "/address/" + testAddress.getId(), Address.class);
+                + "/address/" + testAddress.getId(), Address.class);
 
         assertResponse(equalTo(testAddress));
     }
@@ -114,12 +106,7 @@ public class AddressControllerIntegrationTest {
 
     @Test
     public void shouldReturnApiErrorResponseWhenAddressIdDoesNotExists() {
-        skipHandleErrorWhenNot404Found();
-
-        ResponseEntity<Object> response = restTemplate.exchange(
-                "http://localhost:" + port + "/person/1/address/111", GET, null, Object.class);
-
-        assertApiErrorResponse(response);
+        checkResponseEntityNotFoundException("http://localhost:" + port + "/person/1/address/" + ID_NOT_FOUND, GET);
     }
 
     @Test
@@ -164,16 +151,14 @@ public class AddressControllerIntegrationTest {
 
     @Test
     public void shouldNotDeleteMainAddress() {
-        skipHandleErrorWhenNot404Found();
         setUpAddressInDatabase();
         long countBeforeDelete = addressRepository.count();
+        String url = "http://localhost:" + port + "/person/" + testPerson.getId() + "/address/" + testAddress.getId();
+        String message = "Request could not be processed for ADDRESS, " + "for parameters: {address_id="
+                + testAddress.getId() + ", person_id=" + testPerson.getId() + '}';
 
-        ResponseEntity<Object> response = restTemplate.exchange("http://localhost:" + port + "/person/"
-                + testPerson.getId() + "/address/" + testAddress.getId(), DELETE, null, Object.class);
+        checkResponseProcessUserRequestException(url, DELETE, message);
 
-        assertThat(response.getStatusCode(), equalTo(UNPROCESSABLE_ENTITY));
-        assertThat(response.getBody().toString(), containsString("Request could not be processed for ADDRESS, "
-                + "for parameters: {address_id=" + testAddress.getId() + ", person_id=" + testPerson.getId() + '}'));
         assertEquals(addressRepository.count(), countBeforeDelete);
     }
 
@@ -204,13 +189,5 @@ public class AddressControllerIntegrationTest {
         addressService.saveAddress(anotherTestAddress, testPerson.getId());
 
         return anotherTestAddress.getId();
-    }
-
-    private void skipHandleErrorWhenNot404Found() {
-        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
-            protected boolean hasError(HttpStatus statusCode) {
-                return false;
-            }
-        });
     }
 }

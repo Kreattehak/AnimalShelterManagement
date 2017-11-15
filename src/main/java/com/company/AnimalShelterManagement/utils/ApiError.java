@@ -47,4 +47,13 @@ public class ApiError {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    @Override
+    public String toString() {
+        return "ApiError{" +
+                "timestamp=" + timestamp +
+                ", status=" + status +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

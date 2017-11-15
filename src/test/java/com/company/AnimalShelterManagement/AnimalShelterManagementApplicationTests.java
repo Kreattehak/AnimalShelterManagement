@@ -10,10 +10,20 @@ import com.company.AnimalShelterManagement.utils.AnimalFactoryTest;
 import com.company.AnimalShelterManagement.utils.AnimalShelterExceptionTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
+import static org.springframework.http.HttpStatus.OK;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         AnimalShelterExceptionTest.class,
+        RestExceptionHandlerTest.class,
         AnimalFactoryTest.class,
         AddressRepositoryTest.class,
         AnimalRepositoryTest.class,
@@ -24,8 +34,14 @@ import org.junit.runners.Suite;
         PersonControllerIntegrationTest.class,
         AddressControllerTest.class,
         AddressControllerIntegrationTest.class,
-        AnimalControllerTest.class
+        AnimalControllerTest.class,
+        AnimalControllerIntegrationTest.class
 })
 public class AnimalShelterManagementApplicationTests {
-    //intentionally empty
+    public static void assertThatResponseHaveMultipleEntitiesReturned(String url, int count) {
+        ResponseEntity<List> response = new RestTemplate().getForEntity(url, List.class);
+
+        assertThat(response.getStatusCode(), equalTo(OK));
+        assertEquals(count, response.getBody().size());
+    }
 }
