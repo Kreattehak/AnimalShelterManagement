@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class HibernateDogService extends CommonDTOService<Dog, DogDTO, DogRepository> implements DogService {
+public class HibernateDogService extends HibernateCommonDTOService<Dog, DogDTO, DogRepository>
+        implements DogService {
 
     @Autowired
     public HibernateDogService(DogRepository dogRepository, ModelMapper modelMapper) {

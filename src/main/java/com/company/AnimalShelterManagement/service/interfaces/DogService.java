@@ -3,7 +3,7 @@ package com.company.AnimalShelterManagement.service.interfaces;
 import com.company.AnimalShelterManagement.model.Dog;
 import com.company.AnimalShelterManagement.model.dto.DogDTO;
 
-public interface DogService {
+public interface DogService extends CommonDTOService<Dog, DogDTO> {
 
     Iterable<DogDTO> returnDogs();
 
@@ -14,4 +14,6 @@ public interface DogService {
     DogDTO updateDog(DogDTO dogDTO);
 
     void deleteDog(Long dogId);
+
+
 }

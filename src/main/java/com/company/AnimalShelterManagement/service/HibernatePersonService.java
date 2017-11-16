@@ -11,7 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class HibernatePersonService extends CommonDTOService<Person, PersonDTO, PersonRepository> implements PersonService {
+public class HibernatePersonService extends HibernateCommonDTOService<Person, PersonDTO, PersonRepository>
+        implements PersonService {
 
     @Autowired
     public HibernatePersonService(PersonRepository personRepository, ModelMapper modelMapper) {

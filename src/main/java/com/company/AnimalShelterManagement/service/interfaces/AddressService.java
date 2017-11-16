@@ -2,7 +2,7 @@ package com.company.AnimalShelterManagement.service.interfaces;
 
 import com.company.AnimalShelterManagement.model.Address;
 
-public interface AddressService {
+public interface AddressService extends CommonService<Address> {
 
     Iterable<Address> returnPersonAddresses(Long personId);
 

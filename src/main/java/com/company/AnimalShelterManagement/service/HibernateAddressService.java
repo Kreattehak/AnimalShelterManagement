@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class HibernateAddressService extends CommonService<Address, AddressRepository> implements AddressService {
+public class HibernateAddressService extends HibernateCommonService<Address, AddressRepository>
+        implements AddressService {
 
     private final PersonService personService;
 
