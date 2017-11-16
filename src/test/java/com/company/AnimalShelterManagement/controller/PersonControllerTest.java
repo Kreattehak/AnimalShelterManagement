@@ -48,10 +48,12 @@ public class PersonControllerTest {
         Person testPerson = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
 
         when(personService.returnPerson(anyLong())).thenReturn(testPerson);
+        when(personService.mapToDTO(any(Person.class))).thenReturn(testPersonDTO);
 
         personController.returnPerson(ID_VALUE);
 
         verify(personService).returnPerson(anyLong());
+        verify(personService).mapToDTO(any(Person.class));
         verifyNoMoreInteractions(personService);
     }
 

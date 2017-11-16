@@ -3,7 +3,6 @@ package com.company.AnimalShelterManagement.controller;
 import com.company.AnimalShelterManagement.model.Dog;
 import com.company.AnimalShelterManagement.model.dto.DogDTO;
 import com.company.AnimalShelterManagement.service.interfaces.DogService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,12 +14,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 public class DogController {
 
     private final DogService dogService;
-    private final ModelMapper modelMapper;
 
     @Autowired
-    public DogController(DogService dogService, ModelMapper modelMapper) {
+    public DogController(DogService dogService) {
         this.dogService = dogService;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping(value = "${rest.dog.getDogs}", produces = APPLICATION_JSON_UTF8_VALUE)
@@ -42,7 +39,6 @@ public class DogController {
     @PutMapping(value = "${rest.dog.putDog}", consumes = APPLICATION_JSON_UTF8_VALUE,
             produces = APPLICATION_JSON_UTF8_VALUE)
     public DogDTO updateDog(@RequestBody DogDTO dogDTO) {
-        System.out.println(dogDTO);
         return dogService.updateDog(dogDTO);
     }
 
@@ -52,6 +48,6 @@ public class DogController {
     }
 
     private DogDTO mapToDTO(Dog dog) {
-        return modelMapper.map(dog, DogDTO.class);
+        return dogService.mapToDTO(dog);
     }
 }

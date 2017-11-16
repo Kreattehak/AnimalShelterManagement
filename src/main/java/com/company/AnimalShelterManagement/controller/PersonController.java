@@ -3,7 +3,6 @@ package com.company.AnimalShelterManagement.controller;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,12 +14,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 public class PersonController {
 
     private final PersonService personService;
-    private final ModelMapper modelMapper;
 
     @Autowired
-    public PersonController(PersonService personService, ModelMapper modelMapper) {
+    public PersonController(PersonService personService) {
         this.personService = personService;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping(value = "${rest.person.getPeople}", produces = APPLICATION_JSON_UTF8_VALUE)
@@ -51,6 +48,6 @@ public class PersonController {
     }
 
     private PersonDTO mapToDTO(Person person) {
-        return modelMapper.map(person, PersonDTO.class);
+        return personService.mapToDTO(person);
     }
 }
