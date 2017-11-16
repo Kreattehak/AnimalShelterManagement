@@ -13,11 +13,15 @@ import org.junit.runners.Suite;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import static java.lang.reflect.Modifier.isPrivate;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.http.HttpStatus.OK;
 
 @RunWith(Suite.class)
@@ -43,5 +47,11 @@ public class AnimalShelterManagementApplicationTests {
 
         assertThat(response.getStatusCode(), equalTo(OK));
         assertEquals(count, response.getBody().size());
+    }
+
+    public static <T> void testConstructorIsPrivate(Class<T> clazz) throws NoSuchMethodException, IllegalAccessException,
+            InvocationTargetException, InstantiationException {
+        Constructor<T> constructor = clazz.getDeclaredConstructor();
+        assertTrue(isPrivate(constructor.getModifiers()));
     }
 }
