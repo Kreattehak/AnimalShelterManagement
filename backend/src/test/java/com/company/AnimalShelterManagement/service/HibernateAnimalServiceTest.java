@@ -1,6 +1,7 @@
 package com.company.AnimalShelterManagement.service;
 
 import com.company.AnimalShelterManagement.model.Animal;
+import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.repository.AnimalRepository;
 import org.hamcrest.Matcher;
 import org.junit.Test;
@@ -47,6 +48,16 @@ public class HibernateAnimalServiceTest {
     }
 
     @Test
+    public void shouldPerformReturnPreviousOwner() {
+        when(animalRepository.findPersonByAnimalId(anyLong())).thenReturn(new Person());
+
+        hibernateAnimalService.returnPreviousOwner(ID_VALUE);
+
+        verify(animalRepository).findPersonByAnimalId(anyLong());
+        verifyNoMoreInteractions(animalRepository);
+    }
+
+    @Test
     public void shouldPerformReturnAnimalsCount() {
         when(animalRepository.count()).thenReturn(RANDOM_NUMBER);
 
@@ -59,8 +70,8 @@ public class HibernateAnimalServiceTest {
     public static Matcher<Animal> checkAnimalFieldsEquality(
             String animalName, Animal.Type animalType, LocalDate dateOfBirth) {
         return allOf(
-                hasProperty(ANIMAL_NAME, is(animalName)),
-                hasProperty(ANIMAL_TYPE, is(animalType)),
+                hasProperty(NAME, is(animalName)),
+                hasProperty(TYPE, is(animalType)),
                 hasProperty(DATE_OF_BIRTH, is(dateOfBirth)));
     }
 }

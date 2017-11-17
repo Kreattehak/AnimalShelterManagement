@@ -1,5 +1,6 @@
 package com.company.AnimalShelterManagement.controller;
 
+import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 
+import static com.company.AnimalShelterManagement.utils.TestConstant.ID_VALUE;
 import static com.company.AnimalShelterManagement.utils.TestConstant.RANDOM_NUMBER;
 import static org.mockito.Mockito.*;
 
@@ -42,6 +44,16 @@ public class AnimalControllerTest {
         animalController.returnAnimalsAvailableForAdoption();
 
         verify(animalService).returnAnimalsAvailableForAdoption();
+        verifyNoMoreInteractions(animalService);
+    }
+
+    @Test
+    public void shouldPerformReturnPreviousOwner() {
+        when(animalService.returnPreviousOwner(anyLong())).thenReturn(new Person());
+
+        animalController.returnPreviousOwner(ID_VALUE);
+
+        verify(animalService).returnPreviousOwner(anyLong());
         verifyNoMoreInteractions(animalService);
     }
 

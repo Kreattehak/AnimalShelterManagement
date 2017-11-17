@@ -52,24 +52,29 @@ public class PersonControllerIntegrationTest {
     @Autowired
     private PersonController personController;
 
+    private String home = "http://localhost:";
+    private String apiForPeople = "/api/people/";
+    private String apiForPerson = "/api/person/";
+
     @Before
     public void setUp() {
         testPersonDTO = new PersonDTO(ID_VALUE, PERSON_FIRST_NAME, PERSON_LAST_NAME);
         restTemplate = new RestTemplate();
         httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(APPLICATION_JSON);
+        home += port;
     }
 
     @Test
     public void shouldReturnPeople() {
-        assertThatResponseHaveMultipleEntitiesReturned("http://localhost:" + port + "/people", PEOPLE_COUNT);
+        assertThatResponseHaveMultipleEntitiesReturned(home + apiForPeople, PEOPLE_COUNT);
     }
 
     @Test
     public void shouldReturnPerson() {
         setUpPersonInDatabase();
 
-        response = restTemplate.getForEntity("http://localhost:" + port + "/person/" + testPersonDTO.getId(),
+        response = restTemplate.getForEntity(home + apiForPerson + testPersonDTO.getId(),
                 PersonDTO.class);
 
         assertResponse(equalTo(testPersonDTO));
@@ -77,7 +82,7 @@ public class PersonControllerIntegrationTest {
 
     @Test
     public void shouldReturnApiErrorResponseWhenPersonIdDoesNotExists() {
-        checkResponseEntityNotFoundException("http://localhost:" + port + "/person/" + ID_NOT_FOUND, GET);
+        checkResponseEntityNotFoundException(home + apiForPerson + ID_NOT_FOUND, GET);
     }
 
     @Test
@@ -93,7 +98,7 @@ public class PersonControllerIntegrationTest {
         HttpEntity<PersonDTO> entity = new HttpEntity<>(testPersonDTO, httpHeaders);
 
         response = restTemplate
-                .postForEntity("http://localhost:" + port + "/people", entity, PersonDTO.class);
+                .postForEntity(home + apiForPeople, entity, PersonDTO.class);
 
         assertResponse(is(checkPersonDtoFieldsEquality(PERSON_FIRST_NAME, PERSON_LAST_NAME)));
     }
@@ -115,8 +120,8 @@ public class PersonControllerIntegrationTest {
         changePersonData();
         HttpEntity<PersonDTO> entity = new HttpEntity<>(testPersonDTO, httpHeaders);
 
-        response = restTemplate.exchange("http://localhost:" + port + "/person/" + testPersonDTO.getId(),
-                PUT, entity, PersonDTO.class);
+        response = restTemplate.exchange(home + apiForPerson + testPersonDTO.getId(), PUT,
+                entity, PersonDTO.class);
 
         assertResponse(is(checkPersonDtoFieldsEquality(ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME)));
     }
@@ -126,7 +131,7 @@ public class PersonControllerIntegrationTest {
         setUpPersonInDatabase();
         long countAfterDeletion = personRepository.count() - 1;
 
-        restTemplate.delete("http://localhost:" + port + "/person/" + testPersonDTO.getId());
+        restTemplate.delete(home + apiForPerson + testPersonDTO.getId());
 
         assertEquals(personRepository.count(), countAfterDeletion);
     }

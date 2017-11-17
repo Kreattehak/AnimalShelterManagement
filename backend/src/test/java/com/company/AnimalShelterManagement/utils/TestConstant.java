@@ -6,10 +6,10 @@ public class TestConstant {
     public static final Long ID_NOT_FOUND = 123123511L;
     public static final Long RANDOM_NUMBER = 12345L;
     public static final int NO_ENTITIES = 0;
-    public static final int ONE_ENTITY = 1;
     public static final int PEOPLE_COUNT = 7;
-    public static final int ADDRESSES_COUNT_FOR_FIRST_PERSON = 4;
-    public static final int ANIMALS_COUNT = 2;
+    public static final int EXPECTED_ADDRESS_COUNT = 2;
+    public static final int EXPECTED_ANIMALS_FOR_ADOPTION_COUNT = 3;
+    public static final int EXPECTED_ANIMALS_COUNT = 4;
 
     public static final String ID = "id";
     public static final String FIRST_NAME = "firstName";
@@ -32,8 +32,8 @@ public class TestConstant {
     public static final String ANOTHER_ADDRESS_ZIP_CODE = "99-999";
     public static final String PERSON = "person";
 
-    public static final String ANIMAL_NAME = "animalName";
-    public static final String ANIMAL_TYPE = "animalType";
+    public static final String NAME = "name";
+    public static final String TYPE = "type";
     public static final String DATE_OF_BIRTH = "dateOfBirth";
     public static final String ANIMAL_BEHAVIOUR_DESCRIPTION = "Good boy";
     public static final String ANIMAL_IDENTIFIER_PATTERN = "00170010";

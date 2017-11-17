@@ -49,6 +49,11 @@ public class AddressControllerIntegrationTest {
     private Person testPerson;
     private ResponseEntity<Address> response;
 
+    private String home = "http://localhost:";
+    private String apiForPerson = "/api/person/";
+    private String addresses = "/addresses";
+    private String address = "/address/";
+
     @Autowired
     private AddressService addressService;
     @Autowired
@@ -63,20 +68,23 @@ public class AddressControllerIntegrationTest {
         restTemplate = new RestTemplate();
         httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(APPLICATION_JSON);
+        home += port;
     }
 
     @Test
     public void shouldReturnPersonAddresses() {
-        assertThatResponseHaveMultipleEntitiesReturned("http://localhost:" + port + "/person/1/addresses",
-                ADDRESSES_COUNT_FOR_FIRST_PERSON);
+        setUpTwoAddressesInDatabase();
+
+        assertThatResponseHaveMultipleEntitiesReturned(home + apiForPerson + testPerson.getId() + addresses,
+                EXPECTED_ADDRESS_COUNT);
     }
 
     @Test
     public void shouldReturnAddress() {
         setUpAddressInDatabase();
 
-        response = restTemplate.getForEntity("http://localhost:" + port + "/person/" + testPerson.getId()
-                + "/address/" + testAddress.getId(), Address.class);
+        response = restTemplate.getForEntity(home + apiForPerson + testPerson.getId() + address
+                + testAddress.getId(), Address.class);
 
         assertResponse(equalTo(testAddress));
     }
@@ -98,15 +106,17 @@ public class AddressControllerIntegrationTest {
         HttpEntity<Address> entity = new HttpEntity<>(testAddress, httpHeaders);
         setUpPersonInDatabase();
 
-        response = restTemplate.postForEntity("http://localhost:" + port + "/person/" + testPerson.getId()
-                + "/addresses", entity, Address.class);
+        response = restTemplate.postForEntity(home + apiForPerson + testPerson.getId()
+                + addresses, entity, Address.class);
 
         assertResponse(is(checkAddressFieldsEquality(ADDRESS_STREET_NAME, ADDRESS_CITY_NAME, ADDRESS_ZIP_CODE)));
     }
 
     @Test
     public void shouldReturnApiErrorResponseWhenAddressIdDoesNotExists() {
-        checkResponseEntityNotFoundException("http://localhost:" + port + "/person/1/address/" + ID_NOT_FOUND, GET);
+        setUpPersonInDatabase();
+
+        checkResponseEntityNotFoundException(home + apiForPerson + testPerson.getId() + address + ID_NOT_FOUND, GET);
     }
 
     @Test
@@ -118,8 +128,8 @@ public class AddressControllerIntegrationTest {
 
         HttpEntity<Address> entity = new HttpEntity<>(anotherTestAddress, httpHeaders);
 
-        restTemplate.put("http://localhost:" + port + "/person/" + testPerson.getId()
-                + "/address/" + testAddress.getId(), entity, Address.class);
+        restTemplate.put(home + apiForPerson + testPerson.getId() + address + testAddress.getId(),
+                entity, Address.class);
 
         assertThat(addressService.returnAddress(testAddress.getId()), is(checkAddressFieldsEqualityWithPerson(
                 ANOTHER_ADDRESS_STREET_NAME, ANOTHER_ADDRESS_CITY_NAME, ANOTHER_ADDRESS_ZIP_CODE, testPerson)));
@@ -132,8 +142,8 @@ public class AddressControllerIntegrationTest {
 
         HttpEntity<Address> entity = new HttpEntity<>(testAddress, httpHeaders);
 
-        response = restTemplate.exchange("http://localhost:" + port + "/person/" + testPerson.getId()
-                + "/address/" + testAddress.getId(), PUT, entity, Address.class);
+        response = restTemplate.exchange(home + apiForPerson + testPerson.getId() + address + testAddress.getId(),
+                PUT, entity, Address.class);
 
         assertResponse(is(checkAddressFieldsEquality(ANOTHER_ADDRESS_STREET_NAME, ANOTHER_ADDRESS_CITY_NAME,
                 ANOTHER_ADDRESS_ZIP_CODE)));
@@ -144,7 +154,7 @@ public class AddressControllerIntegrationTest {
         long addressId = setUpTwoAddressesInDatabase();
         long countAfterDeletion = addressRepository.count() - 1;
 
-        restTemplate.delete("http://localhost:" + port + "/person/" + testPerson.getId() + "/address/" + addressId);
+        restTemplate.delete(home + apiForPerson + testPerson.getId() + address + addressId);
 
         assertEquals(addressRepository.count(), countAfterDeletion);
     }
@@ -153,7 +163,7 @@ public class AddressControllerIntegrationTest {
     public void shouldNotDeleteMainAddress() {
         setUpAddressInDatabase();
         long countBeforeDelete = addressRepository.count();
-        String url = "http://localhost:" + port + "/person/" + testPerson.getId() + "/address/" + testAddress.getId();
+        String url = home + apiForPerson + testPerson.getId() + address + testAddress.getId();
         String message = "Request could not be processed for ADDRESS, " + "for parameters: {address_id="
                 + testAddress.getId() + ", person_id=" + testPerson.getId() + '}';
 
