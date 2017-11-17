@@ -5,30 +5,40 @@ import com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption;
 
 import java.time.LocalDate;
 
-public class AnimalDTO extends BaseDTO {
-    private String animalName;
-    private Animal.Type animalType;
+public abstract class AnimalDTO extends BaseDTO {
+
+    private String name;
+    private Animal.Type type;
+    private String behaviourDescription;
     private AvailableForAdoption availableForAdoption;
     private String animalIdentifier;
     private LocalDate dateOfBirth;
 
-    public AnimalDTO() {
+    AnimalDTO() {
     }
 
-    public String getAnimalName() {
-        return animalName;
+    public String getName() {
+        return name;
     }
 
-    public void setAnimalName(String animalName) {
-        this.animalName = animalName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Animal.Type getAnimalType() {
-        return animalType;
+    public Animal.Type getType() {
+        return type;
     }
 
-    public void setAnimalType(Animal.Type animalType) {
-        this.animalType = animalType;
+    public void setType(Animal.Type type) {
+        this.type = type;
+    }
+
+    public String getBehaviourDescription() {
+        return behaviourDescription;
+    }
+
+    public void setBehaviourDescription(String behaviourDescription) {
+        this.behaviourDescription = behaviourDescription;
     }
 
     public AvailableForAdoption getAvailableForAdoption() {

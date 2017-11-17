@@ -45,7 +45,7 @@ public class HibernateDogService extends HibernateCommonDTOService<Dog, DogDTO, 
     @Override
     public DogDTO updateDog(DogDTO dogDTO) {
         Dog dog = returnDog(dogDTO.getId());
-        dog.setAnimalName(dogDTO.getAnimalName());
+        dog.setName(dogDTO.getName());
         dog.setDateOfBirth(dogDTO.getDateOfBirth());
         dog.setAvailableForAdoption(dogDTO.getAvailableForAdoption());
 

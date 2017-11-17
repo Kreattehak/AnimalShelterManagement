@@ -87,16 +87,16 @@ public class AnimalFactoryTest {
 
     private void checkEqualityOfCommonDogFields(Dog dog, Dog.Race dogRace,
                                                 Animal.AvailableForAdoption availability) {
-        assertEquals(dog.getAnimalType(), DOG);
-        assertEquals(dog.getAnimalName(), DOG_NAME);
+        assertEquals(dog.getType(), DOG);
+        assertEquals(dog.getName(), DOG_NAME);
         assertEquals(dog.getDogRace(), dogRace);
         assertEquals(dog.getAvailableForAdoption(), availability);
     }
 
     private void checkEqualityOfCommonCatFields(Cat cat, Cat.Race catRace,
                                                 Animal.AvailableForAdoption availability) {
-        assertEquals(cat.getAnimalType(), CAT);
-        assertEquals(cat.getAnimalName(), CAT_NAME);
+        assertEquals(cat.getType(), CAT);
+        assertEquals(cat.getName(), CAT_NAME);
         assertEquals(cat.getCatRace(), catRace);
         assertEquals(cat.getAvailableForAdoption(), availability);
     }

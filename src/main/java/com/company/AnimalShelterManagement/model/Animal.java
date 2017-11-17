@@ -12,15 +12,15 @@ import java.time.LocalDate;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Animal extends BaseEntity {
 
-    @Column(name = "animal_name", nullable = false, length = 25)
+    @Column(name = "name", nullable = false, length = 25)
     @Length(min = 3, message = "{validation.minLength}")
     @NotNull
-    private String animalName;
+    private String name;
 
-    @Column(name = "animal_type", nullable = false, length = 15)
+    @Column(name = "type", nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
     @NotNull
-    private Type animalType;
+    private Type type;
 
     @Column(name = "behaviour_description", length = 500)
     @Length(min = 3, message = "{validation.minLength}")
@@ -31,9 +31,9 @@ public class Animal extends BaseEntity {
     @NotNull
     private AvailableForAdoption availableForAdoption;
 
-    @Column(name = "animal_identifier", length = 8)
+    @Column(name = "animal_identifier", length = 8, unique = true)
     @Pattern(regexp = "\\d{8}", message = "{validation.animalIdentifierPattern}")
-    //first two letters - animal animalType, second two letters - year of birth, third four letters - unique id
+    //first two letters - animal type, second two letters - year of birth, third four letters - unique id
     //animalIdentifier is print on dog id tag
     private String animalIdentifier;
 
@@ -46,20 +46,20 @@ public class Animal extends BaseEntity {
     Animal() {
     }
 
-    public String getAnimalName() {
-        return animalName;
+    public String getName() {
+        return name;
     }
 
-    public void setAnimalName(String animalName) {
-        this.animalName = animalName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Type getAnimalType() {
-        return animalType;
+    public Type getType() {
+        return type;
     }
 
-    public void setAnimalType(Type animalType) {
-        this.animalType = animalType;
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public String getBehaviourDescription() {
@@ -140,8 +140,8 @@ public class Animal extends BaseEntity {
     @Override
     public String toString() {
         return "Animal{" +
-                "animalName='" + animalName + '\'' +
-                ", animalType=" + animalType +
+                "name='" + name + '\'' +
+                ", type=" + type +
                 ", behaviourDescription='" + behaviourDescription + '\'' +
                 ", availableForAdoption=" + availableForAdoption +
                 ", animalIdentifier='" + animalIdentifier + '\'' +

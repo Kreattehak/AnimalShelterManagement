@@ -16,7 +16,11 @@ INSERT INTO `person_address` VALUES (1, 1), (1, 2), (1, 11), (1, 12), (2, 5), (2
 
 INSERT INTO `person_main_address` VALUES (1, 1), (3, 3), (5, 2), (7, 5), (9, 6), (10, 7);
 
-INSERT INTO `animal` VALUES (1, '00150001', 'Frank', 'DOG', 'BEFORE_VACCINATION', 'Good boy', CURDATE(), 1),
-  (2, '00150002', 'Dino', 'DOG', 'AVAILABLE', 'Good boy', CURDATE(), 3);
+INSERT INTO `animal` VALUES (1, '00150001', 'BEFORE_VACCINATION', 'Good boy', CURDATE(), 'Frank', 'DOG', 1),
+  (2, '00150002', 'AVAILABLE', 'Good boy', CURDATE(), 'Dino', 'DOG', 3),
+  (3, '00150003', 'AVAILABLE', 'Sleeps all day', CURDATE(), 'Puffy', 'CAT', 2),
+  (4, '00150004', 'AVAILABLE', 'Active at night', CURDATE(), 'Loco', 'CAT', 4);
 
 INSERT INTO `dog` VALUES ('GERMAN_SHEPERD', 1), ('CROSSBREAD', 2);
+
+INSERT INTO `cat` VALUES ('PERSIAN', 3), ('ROOFLANDER', 4);
