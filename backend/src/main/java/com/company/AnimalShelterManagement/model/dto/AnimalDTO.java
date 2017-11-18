@@ -14,8 +14,6 @@ public abstract class AnimalDTO extends BaseDTO {
     private String animalIdentifier;
     private LocalDate dateOfBirth;
 
-    AnimalDTO() {
-    }
 
     public String getName() {
         return name;

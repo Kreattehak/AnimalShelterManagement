@@ -3,6 +3,7 @@ package com.company.AnimalShelterManagement.service;
 import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.repository.AnimalRepository;
+import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,13 +26,13 @@ public class HibernateAnimalServiceTest {
     @MockBean
     private AnimalRepository animalRepository;
     @Autowired
-    private HibernateAnimalService hibernateAnimalService;
+    private AnimalService animalService;
 
     @Test
     public void shouldPerformReturnAnimals() {
         when(animalRepository.findAll()).thenReturn(new ArrayList<>());
 
-        hibernateAnimalService.returnAnimals();
+        animalService.returnAnimals();
 
         verify(animalRepository).findAll();
         verifyNoMoreInteractions(animalRepository);
@@ -41,7 +42,7 @@ public class HibernateAnimalServiceTest {
     public void shouldPerformReturnAnimalsAvailableForAdoption() {
         when(animalRepository.findAnimalByAvailableForAdoption()).thenReturn(new ArrayList<>());
 
-        hibernateAnimalService.returnAnimalsAvailableForAdoption();
+        animalService.returnAnimalsAvailableForAdoption();
 
         verify(animalRepository).findAnimalByAvailableForAdoption();
         verifyNoMoreInteractions(animalRepository);
@@ -51,7 +52,7 @@ public class HibernateAnimalServiceTest {
     public void shouldPerformReturnPreviousOwner() {
         when(animalRepository.findPersonByAnimalId(anyLong())).thenReturn(new Person());
 
-        hibernateAnimalService.returnPreviousOwner(ID_VALUE);
+        animalService.returnPreviousOwner(ID_VALUE);
 
         verify(animalRepository).findPersonByAnimalId(anyLong());
         verifyNoMoreInteractions(animalRepository);
@@ -61,7 +62,7 @@ public class HibernateAnimalServiceTest {
     public void shouldPerformReturnAnimalsCount() {
         when(animalRepository.count()).thenReturn(RANDOM_NUMBER);
 
-        hibernateAnimalService.countAnimals();
+        animalService.countAnimals();
 
         verify(animalRepository).count();
         verifyNoMoreInteractions(animalRepository);

@@ -76,7 +76,7 @@ public class AnimalFactoryTest {
 
         generateAnimalIdentifier(d);
 
-        assertEquals(d.getAnimalIdentifier(), ANIMAL_IDENTIFIER_PATTERN);
+        assertEquals(ANIMAL_IDENTIFIER_PATTERN, d.getAnimalIdentifier());
     }
 
     @Test

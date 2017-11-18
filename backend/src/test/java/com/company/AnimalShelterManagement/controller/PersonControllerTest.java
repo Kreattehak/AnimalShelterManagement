@@ -21,12 +21,12 @@ import static org.mockito.Mockito.*;
 @WebMvcTest(PersonController.class)
 public class PersonControllerTest {
 
-    private PersonDTO testPersonDTO;
-
     @MockBean
     private PersonService personService;
     @Autowired
     private PersonController personController;
+
+    private PersonDTO testPersonDTO;
 
     @Before
     public void setUp() {

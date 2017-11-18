@@ -3,6 +3,7 @@ package com.company.AnimalShelterManagement.service;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.repository.PersonRepository;
+import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import com.company.AnimalShelterManagement.utils.EntityNotFoundException;
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -31,7 +32,7 @@ public class HibernatePersonServiceTest {
     @MockBean
     private PersonRepository personRepository;
     @Autowired
-    private HibernatePersonService hibernatePersonService;
+    private PersonService personService;
 
     //TODO: Should I extract it to some class instead of creating this fields in almost every test class?
     private Person testPerson;
@@ -48,7 +49,7 @@ public class HibernatePersonServiceTest {
     public void shouldPerformReturnPeople() {
         when(personRepository.findAll()).thenReturn(new ArrayList<>());
 
-        hibernatePersonService.returnPeople();
+        personService.returnPeople();
 
         verify(personRepository).findAll();
         verifyNoMoreInteractions(personRepository);
@@ -58,7 +59,7 @@ public class HibernatePersonServiceTest {
     public void shouldPerformReturnPerson() {
         when(personRepository.findOne(anyLong())).thenReturn(testPerson);
 
-        hibernatePersonService.returnPerson(ID_VALUE);
+        personService.returnPerson(ID_VALUE);
 
         verify(personRepository).findOne(anyLong());
         verifyNoMoreInteractions(personRepository);
@@ -70,14 +71,14 @@ public class HibernatePersonServiceTest {
 
         expectedException.expect(EntityNotFoundException.class);
         expectedException.expectMessage("was not found");
-        hibernatePersonService.returnPerson(ID_VALUE);
+        personService.returnPerson(ID_VALUE);
     }
 
     @Test
     public void shouldPerformSavePerson() {
         when(personRepository.save(any(Person.class))).thenReturn(testPerson);
 
-        hibernatePersonService.savePerson(new PersonDTO(ID_VALUE, PERSON_FIRST_NAME, PERSON_LAST_NAME));
+        personService.savePerson(new PersonDTO(ID_VALUE, PERSON_FIRST_NAME, PERSON_LAST_NAME));
 
         verify(personRepository).save(any(Person.class));
         verifyNoMoreInteractions(personRepository);
@@ -91,7 +92,7 @@ public class HibernatePersonServiceTest {
         when(personRepository.findOne(anyLong())).thenReturn(testPerson);
         when(personRepository.save(any(Person.class))).thenReturn(testPerson);
 
-        hibernatePersonService.updatePerson(anotherPersonDTO);
+        personService.updatePerson(anotherPersonDTO);
 
         //updatePerson() operates on reference returned by findOne()
         assertThat(testPerson, is(checkPersonFieldsEquality(
@@ -106,7 +107,7 @@ public class HibernatePersonServiceTest {
     public void shouldPerformDeletePerson() {
         when(personRepository.findOne(anyLong())).thenReturn(testPerson);
 
-        hibernatePersonService.deletePerson(ID_VALUE);
+        personService.deletePerson(ID_VALUE);
 
         verify(personRepository).findOne(anyLong());
         verify(personRepository).delete(any(Person.class));

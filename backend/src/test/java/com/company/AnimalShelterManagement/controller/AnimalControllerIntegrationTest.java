@@ -34,16 +34,15 @@ public class AnimalControllerIntegrationTest {
 
     @Value("${local.server.port}")
     private int port;
-
-    private RestTemplate restTemplate;
-    private Animal testAnimal;
-
     @Autowired
     private PersonRepository personRepository;
     @Autowired
     private AnimalRepository animalRepository;
     @Autowired
     private AnimalController animalController;
+
+    private RestTemplate restTemplate;
+    private Animal testAnimal;
 
     private String home = "http://localhost:";
     private String apiForAnimals = "/api/animals";
@@ -59,7 +58,7 @@ public class AnimalControllerIntegrationTest {
 
     @Test
     public void shouldReturnAnimals() {
-        assertThatResponseHaveMultipleEntitiesReturned(home + apiForAnimals , EXPECTED_ANIMALS_COUNT);
+        assertThatResponseHaveMultipleEntitiesReturned(home + apiForAnimals, EXPECTED_ANIMALS_COUNT);
     }
 
     @Test
@@ -87,7 +86,7 @@ public class AnimalControllerIntegrationTest {
 
     private void setUpAnimalWithPersonInDatabase() {
         Person person = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
-        person =  personRepository.save(person);
+        person = personRepository.save(person);
         testAnimal = AnimalFactory.newAvailableForAdoptionDog(DOG_NAME, GERMAN_SHEPERD);
         testAnimal.setPreviousOwner(person);
         animalRepository.save(testAnimal);

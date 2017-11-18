@@ -3,6 +3,7 @@ package com.company.AnimalShelterManagement.service;
 import com.company.AnimalShelterManagement.model.Address;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.repository.AddressRepository;
+import com.company.AnimalShelterManagement.service.interfaces.AddressService;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import com.company.AnimalShelterManagement.utils.EntityNotFoundException;
 import com.company.AnimalShelterManagement.utils.ProcessUserRequestException;
@@ -36,7 +37,7 @@ public class HibernateAddressServiceTest {
     @MockBean
     private PersonService personService;
     @Autowired
-    private HibernateAddressService hibernateAddressService;
+    private AddressService addressService;
 
     private Person testPerson;
     private Address testAddress;
@@ -54,7 +55,7 @@ public class HibernateAddressServiceTest {
     public void shouldReturnPersonAddresses() {
         when(addressRepository.findAddressesByPersonId(anyLong())).thenReturn(new ArrayList<>());
 
-        hibernateAddressService.returnPersonAddresses(ID_VALUE);
+        addressService.returnPersonAddresses(ID_VALUE);
 
         verify(addressRepository).findAddressesByPersonId(anyLong());
         verifyNoMoreInteractions(addressRepository);
@@ -64,7 +65,7 @@ public class HibernateAddressServiceTest {
     public void shouldReturnAddress() {
         when(addressRepository.findOne(anyLong())).thenReturn(testAddress);
 
-        hibernateAddressService.returnAddress(ID_VALUE);
+        addressService.returnAddress(ID_VALUE);
 
         verify(addressRepository).findOne(anyLong());
         verifyNoMoreInteractions(addressRepository);
@@ -76,7 +77,7 @@ public class HibernateAddressServiceTest {
 
         expectedException.expect(EntityNotFoundException.class);
         expectedException.expectMessage("was not found");
-        hibernateAddressService.returnAddress(ID_VALUE);
+        addressService.returnAddress(ID_VALUE);
     }
 
     @Test
@@ -84,7 +85,7 @@ public class HibernateAddressServiceTest {
         when(addressRepository.save(any(Address.class))).thenReturn(testAddress);
         when(personService.returnPerson(anyLong())).thenReturn(testPerson);
 
-        hibernateAddressService.saveAddress(testAddress, ID_VALUE);
+        addressService.saveAddress(testAddress, ID_VALUE);
 
         assertThat(testPerson.getAddress(), contains(equalTo(testAddress)));
         assertThat(testPerson.getMainAddress(), equalTo(testAddress));
@@ -103,7 +104,7 @@ public class HibernateAddressServiceTest {
         when(addressRepository.findOne(anyLong())).thenReturn(testAddress);
         when(addressRepository.save(any(Address.class))).thenReturn(testAddress);
 
-        hibernateAddressService.updateAddress(anotherTestAddress);
+        addressService.updateAddress(anotherTestAddress);
 
         assertThat(testAddress, is(checkAddressFieldsEquality(ANOTHER_ADDRESS_STREET_NAME,
                 ANOTHER_ADDRESS_CITY_NAME, ANOTHER_ADDRESS_ZIP_CODE)));
@@ -120,7 +121,7 @@ public class HibernateAddressServiceTest {
         when(personService.returnPerson(anyLong())).thenReturn(testPerson);
         when(addressRepository.findOne(anyLong())).thenReturn(anotherTestAddress);
 
-        hibernateAddressService.deleteAddress(ID_VALUE, ID_VALUE);
+        addressService.deleteAddress(ID_VALUE, ID_VALUE);
 
         assertThat(testPerson.getAddress(), contains(equalTo(testAddress)));
         assertThat(testAddress.getPerson(), equalTo(testPerson));
@@ -141,7 +142,7 @@ public class HibernateAddressServiceTest {
 
         expectedException.expect(ProcessUserRequestException.class);
         expectedException.expectMessage("{address_id=" + ID_VALUE + ", person_id=" + ID_VALUE + '}');
-        hibernateAddressService.deleteAddress(ID_VALUE, ID_VALUE);
+        addressService.deleteAddress(ID_VALUE, ID_VALUE);
     }
 
     public static Matcher<Address> checkAddressFieldsEquality(

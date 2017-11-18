@@ -6,9 +6,6 @@ public class DogDTO extends AnimalDTO {
 
     private Dog.Race dogRace;
 
-    public DogDTO() {
-    }
-
     public Dog.Race getDogRace() {
         return dogRace;
     }

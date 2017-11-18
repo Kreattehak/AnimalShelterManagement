@@ -5,6 +5,7 @@ import com.company.AnimalShelterManagement.repository.AddressRepositoryTest;
 import com.company.AnimalShelterManagement.repository.AnimalRepositoryTest;
 import com.company.AnimalShelterManagement.service.HibernateAddressServiceTest;
 import com.company.AnimalShelterManagement.service.HibernateAnimalServiceTest;
+import com.company.AnimalShelterManagement.service.HibernateDogServiceTest;
 import com.company.AnimalShelterManagement.service.HibernatePersonServiceTest;
 import com.company.AnimalShelterManagement.utils.AnimalFactoryTest;
 import com.company.AnimalShelterManagement.utils.AnimalShelterExceptionTest;
@@ -34,12 +35,15 @@ import static org.springframework.http.HttpStatus.OK;
         HibernatePersonServiceTest.class,
         HibernateAddressServiceTest.class,
         HibernateAnimalServiceTest.class,
+        HibernateDogServiceTest.class,
         PersonControllerTest.class,
         PersonControllerIntegrationTest.class,
         AddressControllerTest.class,
         AddressControllerIntegrationTest.class,
         AnimalControllerTest.class,
-        AnimalControllerIntegrationTest.class
+        AnimalControllerIntegrationTest.class,
+        DogControllerTest.class,
+        DogControllerIntegrationTest.class
 })
 public class AnimalShelterManagementApplicationTests {
     public static void assertThatResponseHaveMultipleEntitiesReturned(String url, int count) {
@@ -55,3 +59,5 @@ public class AnimalShelterManagementApplicationTests {
         assertTrue(isPrivate(constructor.getModifiers()));
     }
 }
+
+

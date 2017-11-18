@@ -6,7 +6,6 @@ public class PersonDTO extends BaseDTO {
     private String lastName;
 
     public PersonDTO() {
-
     }
 
     public PersonDTO(Long personId, String firstName, String lastName) {

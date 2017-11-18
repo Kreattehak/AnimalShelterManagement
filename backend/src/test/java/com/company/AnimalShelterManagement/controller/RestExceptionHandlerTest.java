@@ -25,11 +25,11 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 @SpringBootTest
 public class RestExceptionHandlerTest {
 
-    private static ResponseEntity<Object> response;
-    private static RestTemplate restTemplate;
-
     @Autowired
     private RestExceptionHandler restExceptionHandler;
+
+    private static ResponseEntity<Object> response;
+    private static RestTemplate restTemplate;
 
     @Test
     public void shouldReturnProperlyFormattedApiErrorResponse() throws Exception {

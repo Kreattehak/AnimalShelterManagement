@@ -54,6 +54,6 @@ public class HibernateDogService extends HibernateCommonDTOService<Dog, DogDTO, 
 
     @Override
     public void deleteDog(Long dogId) {
-        repository.delete(dogId);
+        repository.delete(returnDog(dogId));
     }
 }

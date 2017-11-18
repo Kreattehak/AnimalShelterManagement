@@ -26,7 +26,6 @@ public class AddressRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
-
     @Autowired
     private AddressRepository addressRepository;
 

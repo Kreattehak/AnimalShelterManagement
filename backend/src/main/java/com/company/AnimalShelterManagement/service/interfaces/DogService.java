@@ -14,6 +14,4 @@ public interface DogService extends CommonDTOService<Dog, DogDTO> {
     DogDTO updateDog(DogDTO dogDTO);
 
     void deleteDog(Long dogId);
-
-
 }

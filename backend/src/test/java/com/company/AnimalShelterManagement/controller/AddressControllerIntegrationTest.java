@@ -42,6 +42,12 @@ public class AddressControllerIntegrationTest {
 
     @Value("${local.server.port}")
     private int port;
+    @Autowired
+    private AddressService addressService;
+    @Autowired
+    private AddressRepository addressRepository;
+    @Autowired
+    private PersonRepository personRepository;
 
     private RestTemplate restTemplate;
     private HttpHeaders httpHeaders;
@@ -53,13 +59,6 @@ public class AddressControllerIntegrationTest {
     private String apiForPerson = "/api/person/";
     private String addresses = "/addresses";
     private String address = "/address/";
-
-    @Autowired
-    private AddressService addressService;
-    @Autowired
-    private AddressRepository addressRepository;
-    @Autowired
-    private PersonRepository personRepository;
 
     @Before
     public void setUp() {

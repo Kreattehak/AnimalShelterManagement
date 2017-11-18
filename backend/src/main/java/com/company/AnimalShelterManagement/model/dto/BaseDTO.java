@@ -5,7 +5,6 @@ public abstract class BaseDTO {
     private Long id;
 
     BaseDTO() {
-
     }
 
     BaseDTO(Long id) {

@@ -1,5 +1,7 @@
 package com.company.AnimalShelterManagement.utils;
 
+import java.time.LocalDate;
+
 public class TestConstant {
     public static final Long ID_VALUE = 10L;
     public static final Long ANOTHER_ID_VALUE = 11L;
@@ -7,10 +9,12 @@ public class TestConstant {
     public static final Long RANDOM_NUMBER = 12345L;
     public static final int NO_ENTITIES = 0;
     public static final int PEOPLE_COUNT = 7;
+    public static final int DOGS_COUNT = 2;
     public static final int EXPECTED_ADDRESS_COUNT = 2;
     public static final int EXPECTED_ANIMALS_FOR_ADOPTION_COUNT = 3;
     public static final int EXPECTED_ANIMALS_COUNT = 4;
 
+    public static final String FILL_UP = "00";
     public static final String ID = "id";
     public static final String FIRST_NAME = "firstName";
     public static final String PERSON_FIRST_NAME = "Test";
@@ -35,8 +39,11 @@ public class TestConstant {
     public static final String NAME = "name";
     public static final String TYPE = "type";
     public static final String DATE_OF_BIRTH = "dateOfBirth";
+    public static final String RACE = "dogRace";
+    public static final String AVAILABLE_FOR_ADOPTION = "availableForAdoption";
     public static final String ANIMAL_BEHAVIOUR_DESCRIPTION = "Good boy";
-    public static final String ANIMAL_IDENTIFIER_PATTERN = "00170010";
+    public static final String ANIMAL_IDENTIFIER_PATTERN = FILL_UP + String.format("%02d", LocalDate.now().getYear() % 100)
+            + FILL_UP + ID_VALUE;
 
     public static final String DOG_NAME = "Sparky";
     public static final String ANOTHER_DOG_NAME = "AnotherDog";

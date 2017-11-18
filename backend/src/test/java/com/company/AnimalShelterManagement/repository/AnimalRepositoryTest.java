@@ -31,7 +31,6 @@ public class AnimalRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
-
     @Autowired
     private AnimalRepository animalRepository;
 

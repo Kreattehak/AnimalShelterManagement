@@ -39,12 +39,6 @@ public class PersonControllerIntegrationTest {
 
     @Value("${local.server.port}")
     private int port;
-
-    private RestTemplate restTemplate;
-    private HttpHeaders httpHeaders;
-    private PersonDTO testPersonDTO;
-    private ResponseEntity<PersonDTO> response;
-
     @Autowired
     private PersonService personService;
     @Autowired
@@ -52,8 +46,13 @@ public class PersonControllerIntegrationTest {
     @Autowired
     private PersonController personController;
 
+    private RestTemplate restTemplate;
+    private HttpHeaders httpHeaders;
+    private PersonDTO testPersonDTO;
+    private ResponseEntity<PersonDTO> response;
+
     private String home = "http://localhost:";
-    private String apiForPeople = "/api/people/";
+    private String apiForPeople = "/api/people";
     private String apiForPerson = "/api/person/";
 
     @Before
@@ -87,9 +86,9 @@ public class PersonControllerIntegrationTest {
 
     @Test
     public void shouldSavePerson() {
-        personController.savePerson(testPersonDTO);
+        PersonDTO personDTO = personController.savePerson(testPersonDTO);
 
-        assertThat(personRepository.findOne(testPersonDTO.getId()), checkPersonFieldsEquality(PERSON_FIRST_NAME,
+        assertThat(personRepository.findOne(personDTO.getId()), checkPersonFieldsEquality(PERSON_FIRST_NAME,
                 PERSON_LAST_NAME));
     }
 

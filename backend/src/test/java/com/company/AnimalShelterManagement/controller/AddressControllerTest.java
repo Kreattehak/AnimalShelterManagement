@@ -20,12 +20,12 @@ import static org.mockito.Mockito.*;
 @WebMvcTest(AddressController.class)
 public class AddressControllerTest {
 
-    private Address testAddress;
-
     @MockBean
     private AddressService addressService;
     @Autowired
     private AddressController addressController;
+
+    private Address testAddress;
 
     @Before
     public void setUp() {

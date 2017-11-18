@@ -45,9 +45,8 @@ public class HibernatePersonService extends HibernateCommonDTOService<Person, Pe
         Person person = returnPerson(personDTO.getId());
         person.setFirstName(personDTO.getFirstName());
         person.setLastName(personDTO.getLastName());
-        person = repository.save(person);
 
-        return mapToDTO(person);
+        return mapToDTO(repository.save(person));
     }
 
     @Override
