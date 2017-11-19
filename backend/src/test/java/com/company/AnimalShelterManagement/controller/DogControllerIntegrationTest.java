@@ -16,6 +16,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,6 +43,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ActiveProfiles("test")
+@Sql("classpath:data-test.sql")
 public class DogControllerIntegrationTest {
 
     @Value("${local.server.port}")
@@ -116,7 +118,7 @@ public class DogControllerIntegrationTest {
         dogController.updateDog(mapper.map(testDog, DogDTO.class));
 
         assertThat(dogRepository.findOne(testDog.getId()), is(checkDogFieldsEquality(ANOTHER_DOG_NAME,
-                GERMAN_SHEPERD, LocalDate.of(1999, 11, 05), UNDER_VETERINARY_CARE)));
+                GERMAN_SHEPERD, LocalDate.of(1999, 11, 5), UNDER_VETERINARY_CARE)));
     }
 
     @Test
@@ -128,7 +130,7 @@ public class DogControllerIntegrationTest {
         response = restTemplate.exchange(home + apiForDog + testDog.getId(), PUT, entity, DogDTO.class);
 
         assertResponse(is(checkDogDtoFieldsEquality(ANOTHER_DOG_NAME, GERMAN_SHEPERD,
-                LocalDate.of(1999, 11, 05), UNDER_VETERINARY_CARE)));
+                LocalDate.of(1999, 11, 5), UNDER_VETERINARY_CARE)));
     }
 
     @Test
@@ -148,7 +150,7 @@ public class DogControllerIntegrationTest {
 
     private void changeDogData() {
         testDog.setName(ANOTHER_DOG_NAME);
-        testDog.setDateOfBirth(LocalDate.of(1999, 11, 05));
+        testDog.setDateOfBirth(LocalDate.of(1999, 11, 5));
         testDog.setAvailableForAdoption(UNDER_VETERINARY_CARE);
     }
 

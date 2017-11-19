@@ -57,6 +57,8 @@ public class AnimalShelterManagementApplicationTests {
             InvocationTargetException, InstantiationException {
         Constructor<T> constructor = clazz.getDeclaredConstructor();
         assertTrue(isPrivate(constructor.getModifiers()));
+        constructor.setAccessible(true);
+        constructor.newInstance();
     }
 }
 
