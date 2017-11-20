@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description"
+        content="Our shelter always have a dog that you would like to adopt.">
+  <title>AnimalShelter</title>
+</head>
+<body>
+<header>
+  <nav>
+    <div class="row">
+      <!--<img src="resources/img/logo-white.png" alt="Animal Shelter Logo" class="logo">-->
+      <!--<img src="resources/img/logo.png" alt="Animal Shelter Logo" class="logo-black">-->
+      <ul class="main-nav">
+        <li><a [routerLink]="['/animals']">Animals</a></li>
+        <li><a href="#aboutUs">About Us</a></li>
+        <li><a href="#contactUs">Contact Us</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="main-text">
+    <h1>Visit<br>Adopt<br>Love<br>Forever.</h1>
+    <a href="#aboutUs"><i class="ion-chevron-down icon-big"></i></a>
+  </div>
+</header>
+
+<section class="about" id="aboutUs">
+  <div class="row">
+    <h2>About us</h2>
+    <p class="long-copy">
+      The Animal Shelter and Adoption Center is committed to providing compassionate and humane care for abandoned,
+      abused and relinquished animals and to find them homes through rehabilitation, foster care,
+      adoption, and rescue organizations.
+    </p>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-4">
+      <i class="ion-ios-calendar-outline icon-big icon-color"></i>
+      <h3>Up to 365 days/year</h3>
+      <p>Animals in our shelter needs to be looked after during the whole year. That means you can
+        visit us every day,
+        especially in weekends.<br>We are open from 8:00 a.m to 8:00 p.m.</p>
+    </div>
+    <div class="col-sm-12 col-md-4">
+      <i class="ion-ios-stopwatch-outline icon-big icon-color"></i>
+      <h3>Ready in 20 minutes</h3>
+      <p>You only need 20 minutes to fill all adoption papers.</p>
+    </div>
+    <div class="col-sm-12 col-md-4">
+      <i class="ion-ios-nutrition-outline icon-big icon-color"></i>
+      <h3>100% free</h3>
+      <p>Adoption is and always will be free!</p>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contactUs"> <!-- Use for sticky nav activation -->
+  <div class="row">
+    <h2>Contact Us</h2>
+    <p class="long-copy">
+      Whether you’re looking for answers, would like to solve a problem with adopted animal, or just want to let us know
+      how we did, you’ll find many ways to contact us right here. We’ll help you resolve your issues quickly and easily.
+    </p>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-4">
+      <i class="ion-ios-telephone icon-big icon-color"></i>
+      <p>22 222 222 222</p>
+      <p>33 333 333 333</p>
+      <p>44 444 444 444</p>
+    </div>
+    <div class="col-sm-12 col-md-4">
+      <i class="ion-ios-email icon-big icon-color"></i>
+      <p>animal@shelter.com</p>
+    </div>
+    <div class="col-sm-12 col-md-4">
+      <i class="ion-social-github icon-big icon-color"></i>
+      <p>Kreattehak</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="row">
+    <p>Copyright &copy; 2017 by AnimalShelter. All rights reserved.</p>
+  </div>
+</footer>
+</body>
+</html>

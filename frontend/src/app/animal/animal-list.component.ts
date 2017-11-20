@@ -5,7 +5,6 @@ import {AnimalService} from './animal.service';
 import 'rxjs/add/operator/takeUntil';
 
 @Component({
-  selector: 'app-animal-list',
   templateUrl: './animal-list.component.html',
   styleUrls: ['./animal-list.component.css']
 })
@@ -31,5 +30,4 @@ export class AnimalListComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
-
 }

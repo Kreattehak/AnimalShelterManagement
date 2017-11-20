@@ -1,9 +1,12 @@
 <section class="container">
   <div class="row">
-    <div class="col-sm-1 col-md-6" *ngFor="let animal of filteredAnimals">
+    <div class="col-sm-12 col-md-6" *ngFor="let animal of filteredAnimals">
       <div class="thumbnail">
         <div class="caption">
-          <img class="animal-photo" src="https://static.pexels.com/photos/104827/cat-pet-animal-domestic-104827.jpeg"/>
+          <a [routerLink]="['/animals/', animal.id, 'details']">
+            <img class="animal-photo"
+                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnq9D9hjZWUiDZucUj5aVt_dGjEultANyKEHLWI3JHlWh_biFP"/>
+          </a>
           <h3>Name: {{animal.name}}</h3>
           <p>Behaviour description: {{animal.behaviourDescription}}</p>
           <p>Date of birth: {{animal.dateOfBirth}}</p>
