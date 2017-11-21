@@ -1,14 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Animal} from './animal';
+import {Animal} from '../../shared/animal';
 import {Subject} from 'rxjs/Subject';
-import {AnimalService} from './animal.service';
+import {AnimalService} from '../../shared/animal.service';
 import 'rxjs/add/operator/takeUntil';
 
 @Component({
-  templateUrl: './animal-list.component.html',
-  styleUrls: ['./animal-list.component.css']
+  templateUrl: './available-animals-list.component.html',
+  styleUrls: ['./available-animals-list.component.css']
 })
-export class AnimalListComponent implements OnInit, OnDestroy {
+export class AvailableAnimalsListComponent implements OnInit, OnDestroy {
 
   private animals: Animal[];
   private filteredAnimals: Animal[];

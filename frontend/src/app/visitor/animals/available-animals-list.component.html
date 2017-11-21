@@ -3,7 +3,7 @@
     <div class="col-sm-12 col-md-6" *ngFor="let animal of filteredAnimals">
       <div class="thumbnail">
         <div class="caption">
-          <a [routerLink]="['/animals/', animal.id, 'details']">
+          <a [routerLink]="['/availableAnimals', animal.id, 'details']">
             <img class="animal-photo"
                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnq9D9hjZWUiDZucUj5aVt_dGjEultANyKEHLWI3JHlWh_biFP"/>
           </a>
