@@ -41,6 +41,18 @@ export class ValidationService {
     'type': {
       'required': 'Animal type is required.',
     },
+    'subType': {
+      'required': 'Animal subtype is required.',
+    },
+    'behaviorDescription': {
+      'minlength': 'Description must be at least 10 characters long.',
+    },
+    'availabilityType': {
+      'required': 'Animal must has specified availability for adoption.',
+    },
+    'dateOfBirth': {
+      'pattern': 'Please provide date of birth in the following way Year-Month-Day',
+    },
   };
 
   constructor() {

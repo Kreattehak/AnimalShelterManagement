@@ -11,20 +11,22 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class AnimalDetailComponent implements OnInit, OnDestroy {
 
-
   public activeAnimal: Animal;
   public isNewAnimal: boolean;
   public animalForm: FormGroup;
   public submitted: boolean;
-  public types: string[] = ['DOG', 'CAT', 'BIRD'];
+  public selectedValue: string;
   public formErrors = {
     'name': '',
-    'type': ''
+    'type': '',
+    'behaviorDescription': '',
+    'availableForAdoption': '',
+    'dateOfBirth': ''
   };
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
-  constructor(private _animalService: AnimalService,
+  constructor(public _animalService: AnimalService,
               private _validationService: ValidationService,
               private _route: ActivatedRoute, private _router: Router) {
   }
@@ -114,13 +116,25 @@ export class AnimalDetailComponent implements OnInit, OnDestroy {
     const id = new FormControl();
     const name = new FormControl(this.activeAnimal.name,
       [Validators.required, Validators.minLength(3)]);
-    const type = new FormControl(this.activeAnimal.type,
+    const type = new FormControl(this.activeAnimal.type, [Validators.required]);
+    const subType = new FormControl(this.activeAnimal.subType, [Validators.required]);
+    const behaviorDescription = new FormControl(this.activeAnimal.behaviorDescription
+      || 'No behavior description provided.', [Validators.minLength(10)]);
+    const availableForAdoption = new FormControl(this.activeAnimal.availableForAdoption,
       [Validators.required]);
+    const animalIdentifier = new FormControl();
+    const dateOfBirth = new FormControl(this.activeAnimal.animalIdentifier,
+      [Validators.pattern(/\d{4}-\d{2}-\d{2}/i)]);
 
     this.animalForm = new FormGroup({
       id: id,
       name: name,
-      type: type
+      type: type,
+      subType: subType,
+      behaviorDescription: behaviorDescription,
+      availableForAdoption: availableForAdoption,
+      animalIdentifier: animalIdentifier,
+      dateOfBirth: dateOfBirth
     });
   }
 }
