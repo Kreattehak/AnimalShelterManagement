@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 @RestController
+@RequestMapping("/api")
 public class DogController {
 
     private final DogService dogService;
@@ -32,6 +34,7 @@ public class DogController {
 
     @PostMapping(value = "${rest.dog.postDog}", consumes = APPLICATION_JSON_UTF8_VALUE,
             produces = APPLICATION_JSON_UTF8_VALUE)
+    @ResponseStatus(CREATED)
     public DogDTO saveDog(@Valid @RequestBody DogDTO dog) {
         return dogService.saveDog(dog);
     }

@@ -31,12 +31,12 @@ public class AnimalFactory {
     }
 
     public static Dog newGaveUpDog(String dogName, Dog.Race dogRace, LocalDate dateOfBirth,
-                                   Person previousOwner, String behaviourDescription) {
+                                   Person previousOwner, String behaviorDescription) {
         Dog d = createNewDog(dogName, dogRace);
         d.setDateOfBirth(dateOfBirth);
         d.setPreviousOwner(previousOwner);
         d.setAvailableForAdoption(AVAILABLE);
-        d.setBehaviourDescription(behaviourDescription);
+        d.setBehaviorDescription(behaviorDescription);
 
         return d;
     }
@@ -75,7 +75,7 @@ public class AnimalFactory {
         Dog d = new Dog();
         d.setType(Animal.Type.DOG);
         d.setName(dogName);
-        d.setDogRace(dogRace);
+        d.setSubType(dogRace);
 
         return d;
     }
@@ -84,7 +84,7 @@ public class AnimalFactory {
         Cat c = new Cat();
         c.setType(Animal.Type.CAT);
         c.setName(dogName);
-        c.setCatRace(catRace);
+        c.setSubType(catRace);
 
         return c;
     }

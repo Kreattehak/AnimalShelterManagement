@@ -13,7 +13,7 @@
 --   `id` bigint(20) NOT NULL AUTO_INCREMENT,
 --   `animal_identifier` varchar(8) DEFAULT NULL,
 --   `available_for_adoption` varchar(25) NOT NULL,
---   `behaviour_description` varchar(500) DEFAULT NULL,
+--   `behavior_description` varchar(500) DEFAULT NULL,
 --   `date_of_birth` date DEFAULT NULL,
 --   `name` varchar(25) NOT NULL,
 --   `type` varchar(15) NOT NULL,

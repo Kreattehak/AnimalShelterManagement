@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
@@ -30,6 +31,7 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
@@ -78,7 +80,7 @@ public class PersonControllerIntegrationTest {
         response = restTemplate.getForEntity(home + apiForPerson + testPersonDTO.getId(),
                 PersonDTO.class);
 
-        assertResponse(equalTo(testPersonDTO));
+        assertResponse(OK, equalTo(testPersonDTO));
     }
 
     @Test
@@ -101,7 +103,7 @@ public class PersonControllerIntegrationTest {
         response = restTemplate
                 .postForEntity(home + apiForPeople, entity, PersonDTO.class);
 
-        assertResponse(is(checkPersonDtoFieldsEquality(PERSON_FIRST_NAME, PERSON_LAST_NAME)));
+        assertResponse(CREATED, is(checkPersonDtoFieldsEquality(PERSON_FIRST_NAME, PERSON_LAST_NAME)));
     }
 
     @Test
@@ -124,7 +126,7 @@ public class PersonControllerIntegrationTest {
         response = restTemplate.exchange(home + apiForPerson + testPersonDTO.getId(), PUT,
                 entity, PersonDTO.class);
 
-        assertResponse(is(checkPersonDtoFieldsEquality(ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME)));
+        assertResponse(OK, is(checkPersonDtoFieldsEquality(ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME)));
     }
 
     @Test
@@ -137,8 +139,8 @@ public class PersonControllerIntegrationTest {
         assertEquals(personRepository.count(), countAfterDeletion);
     }
 
-    private void assertResponse(Matcher<PersonDTO> matcher) {
-        assertThat(response.getStatusCode(), equalTo(OK));
+    private void assertResponse(HttpStatus status, Matcher<PersonDTO> matcher) {
+        assertThat(response.getStatusCode(), equalTo(status));
         assertThat(response.getBody(), matcher);
     }
 

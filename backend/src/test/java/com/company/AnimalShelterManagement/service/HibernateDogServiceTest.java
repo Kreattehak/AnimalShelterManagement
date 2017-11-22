@@ -132,7 +132,7 @@ public class HibernateDogServiceTest {
         return allOf(
                 hasProperty(TYPE, is(Animal.Type.DOG)),
                 hasProperty(NAME, is(name)),
-                hasProperty(RACE, is(race)),
+                hasProperty(SUB_TYPE, is(race)),
                 hasProperty(DATE_OF_BIRTH, is(dateOfBirth)),
                 hasProperty(AVAILABLE_FOR_ADOPTION, is(availableForAdoption)));
     }
@@ -142,7 +142,7 @@ public class HibernateDogServiceTest {
         return allOf(
                 hasProperty(TYPE, is(Animal.Type.DOG)),
                 hasProperty(NAME, is(name)),
-                hasProperty(RACE, is(race)),
+                hasProperty(SUB_TYPE, is(race)),
                 hasProperty(DATE_OF_BIRTH, is(dateOfBirth)),
                 hasProperty(AVAILABLE_FOR_ADOPTION, is(availableForAdoption)));
     }

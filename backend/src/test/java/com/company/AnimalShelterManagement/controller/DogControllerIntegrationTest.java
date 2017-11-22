@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
@@ -37,6 +38,7 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
@@ -85,7 +87,7 @@ public class DogControllerIntegrationTest {
 
         response = restTemplate.getForEntity(home + apiForDog + testDog.getId(), DogDTO.class);
 
-        assertResponse(equalTo(mapper.map(testDog, DogDTO.class)));
+        assertResponse(OK, equalTo(mapper.map(testDog, DogDTO.class)));
     }
 
     @Test
@@ -107,7 +109,7 @@ public class DogControllerIntegrationTest {
 
         response = restTemplate.postForEntity(home + apiForDogs, entity, DogDTO.class);
 
-        assertResponse(is(checkDogDtoFieldsEquality(DOG_NAME, GERMAN_SHEPERD, LocalDate.now(), AVAILABLE)));
+        assertResponse(CREATED, is(checkDogDtoFieldsEquality(DOG_NAME, GERMAN_SHEPERD, LocalDate.now(), AVAILABLE)));
     }
 
     @Test
@@ -129,7 +131,7 @@ public class DogControllerIntegrationTest {
 
         response = restTemplate.exchange(home + apiForDog + testDog.getId(), PUT, entity, DogDTO.class);
 
-        assertResponse(is(checkDogDtoFieldsEquality(ANOTHER_DOG_NAME, GERMAN_SHEPERD,
+        assertResponse(OK, is(checkDogDtoFieldsEquality(ANOTHER_DOG_NAME, GERMAN_SHEPERD,
                 LocalDate.of(1999, 11, 5), UNDER_VETERINARY_CARE)));
     }
 
@@ -143,8 +145,8 @@ public class DogControllerIntegrationTest {
         assertEquals(countAfterDeletion, dogRepository.count());
     }
 
-    private void assertResponse(Matcher<DogDTO> matcher) {
-        assertThat(response.getStatusCode(), equalTo(OK));
+    private void assertResponse(HttpStatus status, Matcher<DogDTO> matcher) {
+        assertThat(response.getStatusCode(), equalTo(status));
         assertThat(response.getBody(), matcher);
     }
 

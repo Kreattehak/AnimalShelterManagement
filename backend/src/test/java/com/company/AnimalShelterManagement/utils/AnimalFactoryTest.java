@@ -44,7 +44,7 @@ public class AnimalFactoryTest {
         checkEqualityOfCommonDogFields(d, HUSKY, AVAILABLE);
         assertEquals(d.getDateOfBirth(), LocalDate.now());
         assertEquals(d.getPreviousOwner(), p);
-        assertEquals(d.getBehaviourDescription(), ANIMAL_BEHAVIOUR_DESCRIPTION);
+        assertEquals(d.getBehaviorDescription(), ANIMAL_BEHAVIOUR_DESCRIPTION);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class AnimalFactoryTest {
                                                 Animal.AvailableForAdoption availability) {
         assertEquals(dog.getType(), DOG);
         assertEquals(dog.getName(), DOG_NAME);
-        assertEquals(dog.getDogRace(), dogRace);
+        assertEquals(dog.getSubType(), dogRace);
         assertEquals(dog.getAvailableForAdoption(), availability);
     }
 
@@ -97,7 +97,7 @@ public class AnimalFactoryTest {
                                                 Animal.AvailableForAdoption availability) {
         assertEquals(cat.getType(), CAT);
         assertEquals(cat.getName(), CAT_NAME);
-        assertEquals(cat.getCatRace(), catRace);
+        assertEquals(cat.getSubType(), catRace);
         assertEquals(cat.getAvailableForAdoption(), availability);
     }
 }

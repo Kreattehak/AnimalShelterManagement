@@ -22,9 +22,9 @@ public class Animal extends BaseEntity {
     @NotNull
     private Type type;
 
-    @Column(name = "behaviour_description", length = 500)
+    @Column(name = "behavior_description", length = 500)
     @Length(min = 3, message = "{validation.minLength}")
-    private String behaviourDescription;
+    private String behaviorDescription;
 
     @Column(name = "available_for_adoption", nullable = false, length = 25)
     @Enumerated(EnumType.STRING)
@@ -62,12 +62,12 @@ public class Animal extends BaseEntity {
         this.type = type;
     }
 
-    public String getBehaviourDescription() {
-        return behaviourDescription;
+    public String getBehaviorDescription() {
+        return behaviorDescription;
     }
 
-    public void setBehaviourDescription(String behaviourDescription) {
-        this.behaviourDescription = behaviourDescription;
+    public void setBehaviorDescription(String behaviorDescription) {
+        this.behaviorDescription = behaviorDescription;
     }
 
     public AvailableForAdoption getAvailableForAdoption() {
@@ -142,7 +142,7 @@ public class Animal extends BaseEntity {
         return "Animal{" +
                 "name='" + name + '\'' +
                 ", type=" + type +
-                ", behaviourDescription='" + behaviourDescription + '\'' +
+                ", behaviorDescription='" + behaviorDescription + '\'' +
                 ", availableForAdoption=" + availableForAdoption +
                 ", animalIdentifier='" + animalIdentifier + '\'' +
                 ", dateOfBirth=" + dateOfBirth +

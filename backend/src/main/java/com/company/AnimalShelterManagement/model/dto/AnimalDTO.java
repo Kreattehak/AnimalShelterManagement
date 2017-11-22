@@ -9,7 +9,7 @@ public abstract class AnimalDTO extends BaseDTO {
 
     private String name;
     private Animal.Type type;
-    private String behaviourDescription;
+    private String behaviorDescription;
     private AvailableForAdoption availableForAdoption;
     private String animalIdentifier;
     private LocalDate dateOfBirth;
@@ -31,12 +31,12 @@ public abstract class AnimalDTO extends BaseDTO {
         this.type = type;
     }
 
-    public String getBehaviourDescription() {
-        return behaviourDescription;
+    public String getBehaviorDescription() {
+        return behaviorDescription;
     }
 
-    public void setBehaviourDescription(String behaviourDescription) {
-        this.behaviourDescription = behaviourDescription;
+    public void setBehaviorDescription(String behaviorDescription) {
+        this.behaviorDescription = behaviorDescription;
     }
 
     public AvailableForAdoption getAvailableForAdoption() {

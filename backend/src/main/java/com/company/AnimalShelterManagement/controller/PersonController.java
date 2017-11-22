@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 @RestController
+@RequestMapping("/api")
 public class PersonController {
 
     private final PersonService personService;
@@ -32,6 +34,7 @@ public class PersonController {
 
     @PostMapping(value = "${rest.person.postPerson}", consumes = APPLICATION_JSON_UTF8_VALUE,
             produces = APPLICATION_JSON_UTF8_VALUE)
+    @ResponseStatus(CREATED)
     public PersonDTO savePerson(@Valid @RequestBody PersonDTO personDTO) {
         return personService.savePerson(personDTO);
     }

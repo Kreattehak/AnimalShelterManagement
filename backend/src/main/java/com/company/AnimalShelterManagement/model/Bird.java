@@ -8,20 +8,20 @@ import javax.validation.constraints.NotNull;
 public class Bird extends Animal {
 
     //TODO: Update length to the longest enum
-    @Column(name = "bird_species", nullable = false, length = 15)
+    @Column(name = "bird_species", nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
     @NotNull
-    private Species birdSpecies;
+    private Species subType;
 
     public Bird() {
     }
 
-    public Species getBirdSpecies() {
-        return birdSpecies;
+    public Species getSubType() {
+        return subType;
     }
 
-    public void setBirdSpecies(Species birdSpecies) {
-        this.birdSpecies = birdSpecies;
+    public void setSubType(Species subType) {
+        this.subType = subType;
     }
 
     public enum Species {
@@ -30,7 +30,7 @@ public class Bird extends Animal {
 
     @Override
     public String toString() {
-        return super.toString() + ", birdSpecies=" + birdSpecies + '}';
+        return super.toString() + ", subType=" + subType + '}';
     }
 }
 

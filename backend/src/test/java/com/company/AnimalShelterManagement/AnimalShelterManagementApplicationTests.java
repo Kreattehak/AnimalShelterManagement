@@ -61,5 +61,3 @@ public class AnimalShelterManagementApplicationTests {
         constructor.newInstance();
     }
 }
-
-

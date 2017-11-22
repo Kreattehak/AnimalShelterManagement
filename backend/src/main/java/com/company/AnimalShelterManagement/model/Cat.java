@@ -7,20 +7,20 @@ import javax.validation.constraints.NotNull;
 @Table(name = "cat")
 public class Cat extends Animal {
 
-    @Column(name = "cat_race", nullable = false, length = 15)
+    @Column(name = "cat_race", nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
     @NotNull
-    private Race catRace;
+    private Race subType;
 
     public Cat() {
     }
 
-    public Race getCatRace() {
-        return catRace;
+    public Race getSubType() {
+        return subType;
     }
 
-    public void setCatRace(Race catRace) {
-        this.catRace = catRace;
+    public void setSubType(Race subType) {
+        this.subType = subType;
     }
 
     public enum Race {
@@ -29,6 +29,6 @@ public class Cat extends Animal {
 
     @Override
     public String toString() {
-        return super.toString() + ", catRace=" + catRace + '}';
+        return super.toString() + ", subType=" + subType + '}';
     }
 }

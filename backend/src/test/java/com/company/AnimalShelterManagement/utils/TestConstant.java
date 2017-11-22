@@ -39,7 +39,7 @@ public class TestConstant {
     public static final String NAME = "name";
     public static final String TYPE = "type";
     public static final String DATE_OF_BIRTH = "dateOfBirth";
-    public static final String RACE = "dogRace";
+    public static final String SUB_TYPE = "subType";
     public static final String AVAILABLE_FOR_ADOPTION = "availableForAdoption";
     public static final String ANIMAL_BEHAVIOUR_DESCRIPTION = "Good boy";
     public static final String ANIMAL_IDENTIFIER_PATTERN = FILL_UP + String.format("%02d", LocalDate.now().getYear() % 100)

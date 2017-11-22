@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
@@ -33,6 +34,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpMethod.*;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
@@ -87,7 +89,7 @@ public class AddressControllerIntegrationTest {
         response = restTemplate.getForEntity(home + apiForPerson + testPerson.getId() + address
                 + testAddress.getId(), Address.class);
 
-        assertResponse(equalTo(testAddress));
+        assertResponse(OK, equalTo(testAddress));
     }
 
     @Test
@@ -110,7 +112,7 @@ public class AddressControllerIntegrationTest {
         response = restTemplate.postForEntity(home + apiForPerson + testPerson.getId()
                 + addresses, entity, Address.class);
 
-        assertResponse(is(checkAddressFieldsEquality(ADDRESS_STREET_NAME, ADDRESS_CITY_NAME, ADDRESS_ZIP_CODE)));
+        assertResponse(CREATED, is(checkAddressFieldsEquality(ADDRESS_STREET_NAME, ADDRESS_CITY_NAME, ADDRESS_ZIP_CODE)));
     }
 
     @Test
@@ -146,7 +148,7 @@ public class AddressControllerIntegrationTest {
         response = restTemplate.exchange(home + apiForPerson + testPerson.getId() + address + testAddress.getId(),
                 PUT, entity, Address.class);
 
-        assertResponse(is(checkAddressFieldsEquality(ANOTHER_ADDRESS_STREET_NAME, ANOTHER_ADDRESS_CITY_NAME,
+        assertResponse(OK, is(checkAddressFieldsEquality(ANOTHER_ADDRESS_STREET_NAME, ANOTHER_ADDRESS_CITY_NAME,
                 ANOTHER_ADDRESS_ZIP_CODE)));
     }
 
@@ -173,8 +175,8 @@ public class AddressControllerIntegrationTest {
         assertEquals(addressRepository.count(), countBeforeDelete);
     }
 
-    private void assertResponse(Matcher<Address> matcher) {
-        assertThat(response.getStatusCode(), equalTo(OK));
+    private void assertResponse(HttpStatus status, Matcher<Address> matcher) {
+        assertThat(response.getStatusCode(), equalTo(status));
         assertThat(response.getBody(), matcher);
     }
 

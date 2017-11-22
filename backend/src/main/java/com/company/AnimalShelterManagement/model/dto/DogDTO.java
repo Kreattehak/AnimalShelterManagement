@@ -4,13 +4,13 @@ import com.company.AnimalShelterManagement.model.Dog;
 
 public class DogDTO extends AnimalDTO {
 
-    private Dog.Race dogRace;
+    private Dog.Race subType;
 
-    public Dog.Race getDogRace() {
-        return dogRace;
+    public Dog.Race getSubType() {
+        return subType;
     }
 
-    public void setDogRace(Dog.Race dogRace) {
-        this.dogRace = dogRace;
+    public void setSubType(Dog.Race subType) {
+        this.subType = subType;
     }
 }
