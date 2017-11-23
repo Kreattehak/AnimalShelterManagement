@@ -44,6 +44,7 @@ public class Animal extends BaseEntity {
     private LocalDate dateOfBirth;
 
     @OneToOne
+    @JoinColumn(name = "previous_owner_id", referencedColumnName = "id")
     private Person previousOwner;
 
     Animal() {
