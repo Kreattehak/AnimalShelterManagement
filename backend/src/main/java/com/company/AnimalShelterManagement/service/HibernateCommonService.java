@@ -4,6 +4,8 @@ import com.company.AnimalShelterManagement.service.interfaces.CommonService;
 import com.company.AnimalShelterManagement.utils.EntityNotFoundException;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Optional;
+
 abstract class HibernateCommonService<T, R extends CrudRepository<T, Long>> implements CommonService<T> {
 
     R repository;
@@ -15,11 +17,7 @@ abstract class HibernateCommonService<T, R extends CrudRepository<T, Long>> impl
 
     @Override
     public T ifExistsReturnEntity(Long id) {
-        T t = repository.findOne(id);
-        if (t == null) {
-            throw new EntityNotFoundException(mapFrom, "id", id.toString());
-        }
-
-        return t;
+        return Optional.ofNullable(repository.findOne(id))
+                .orElseThrow(() -> new EntityNotFoundException(mapFrom, "id", id.toString()));
     }
 }
