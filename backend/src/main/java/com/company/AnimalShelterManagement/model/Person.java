@@ -37,6 +37,10 @@ public class Person extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "address_id"))
     private Address mainAddress;
 
+    @OneToMany(mappedBy = "previousOwner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Animal> animal;
+
     public Person() {
         this.address = new HashSet<>();
         this.dateOfRegistration = LocalDate.now();
@@ -101,6 +105,14 @@ public class Person extends BaseEntity {
         this.mainAddress = mainAddress;
     }
 
+    public Set<Animal> getAnimal() {
+        return animal;
+    }
+
+    public void setAnimal(Set<Animal> animal) {
+        this.animal = animal;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
@@ -110,6 +122,7 @@ public class Person extends BaseEntity {
                 ", address=" + address +
                 ", dateOfRegistration=" + dateOfRegistration +
                 ", mainAddress=" + mainAddress +
+                ", animal=" + animal +
                 '}';
     }
 }

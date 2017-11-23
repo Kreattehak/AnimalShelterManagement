@@ -1,5 +1,6 @@
 package com.company.AnimalShelterManagement.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
@@ -43,8 +44,10 @@ public class Animal extends BaseEntity {
     @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate dateOfBirth;
 
-    @OneToOne
-    @JoinColumn(name = "previous_owner_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinTable(name = "person_animal", joinColumns = @JoinColumn(name = "animal_id"),
+            inverseJoinColumns = @JoinColumn(name = "person_id"))
+    @JsonIgnore
     private Person previousOwner;
 
     Animal() {
@@ -150,7 +153,6 @@ public class Animal extends BaseEntity {
                 ", availableForAdoption=" + availableForAdoption +
                 ", animalIdentifier='" + animalIdentifier + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
-                ", previousOwner=" + previousOwner +
                 '}';
     }
 }
