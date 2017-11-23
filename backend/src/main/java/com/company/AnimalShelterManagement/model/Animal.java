@@ -1,6 +1,7 @@
 package com.company.AnimalShelterManagement.model;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -38,6 +39,8 @@ public class Animal extends BaseEntity {
     private String animalIdentifier;
 
     @Column(name = "date_of_birth")
+//    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate dateOfBirth;
 
     @OneToOne

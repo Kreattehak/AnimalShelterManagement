@@ -2,6 +2,7 @@ package com.company.AnimalShelterManagement.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -28,6 +29,7 @@ public class Person extends BaseEntity {
     private Set<Address> address;
 
     @Column(name = "date_of_registration", nullable = false, updatable = false)
+    @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate dateOfRegistration;
 
     @OneToOne

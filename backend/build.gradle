@@ -35,6 +35,3 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.security:spring-security-test')
 }
-
-// LocalDate and LocalDateTime is converted in v5.1.0+
-ext['hibernate.version'] = '5.2.12.Final'
