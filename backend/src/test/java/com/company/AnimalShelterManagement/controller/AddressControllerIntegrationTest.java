@@ -3,9 +3,6 @@ package com.company.AnimalShelterManagement.controller;
 import com.company.AnimalShelterManagement.model.Address;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.repository.AddressRepository;
-import com.company.AnimalShelterManagement.repository.PersonRepository;
-import com.company.AnimalShelterManagement.service.interfaces.AddressService;
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,13 +11,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertResponse;
 import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertThatResponseHaveMultipleEntitiesReturned;
 import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseEntityNotFoundException;
 import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseProcessUserRequestException;
@@ -29,8 +28,7 @@ import static com.company.AnimalShelterManagement.service.HibernateAddressServic
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpMethod.*;
@@ -41,17 +39,15 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ActiveProfiles("test")
-@Sql("classpath:data-test.sql")
+@Transactional
 public class AddressControllerIntegrationTest {
 
     @Value("${local.server.port}")
     private int port;
     @Autowired
-    private AddressService addressService;
-    @Autowired
     private AddressRepository addressRepository;
     @Autowired
-    private PersonRepository personRepository;
+    private AddressController addressController;
 
     private RestTemplate restTemplate;
     private HttpHeaders httpHeaders;
@@ -67,7 +63,9 @@ public class AddressControllerIntegrationTest {
     @Before
     public void setUp() {
         testAddress = new Address(ADDRESS_STREET_NAME, ADDRESS_CITY_NAME, ADDRESS_ZIP_CODE);
+        testAddress.setId(ID_VALUE);
         testPerson = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
+        testPerson.setId(ID_VALUE);
         restTemplate = new RestTemplate();
         httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(APPLICATION_JSON);
@@ -76,131 +74,108 @@ public class AddressControllerIntegrationTest {
 
     @Test
     public void shouldReturnPersonAddresses() {
-        setUpTwoAddressesInDatabase();
-
-        assertThatResponseHaveMultipleEntitiesReturned(home + apiForPerson + testPerson.getId() + addresses,
+        assertThatResponseHaveMultipleEntitiesReturned(home + apiForPerson + ID_VALUE + addresses,
                 EXPECTED_ADDRESS_COUNT);
     }
 
     @Test
     public void shouldReturnAddress() {
-        setUpAddressInDatabase();
+        response = restTemplate.getForEntity(home + apiForPerson + ID_VALUE + address
+                + ID_VALUE, Address.class);
 
-        response = restTemplate.getForEntity(home + apiForPerson + testPerson.getId() + address
-                + testAddress.getId(), Address.class);
-
-        assertResponse(OK, equalTo(testAddress));
+        assertResponse(response, OK, is(checkAddressFieldsEquality(ADDRESS_STREET_NAME, ADDRESS_CITY_NAME,
+                ADDRESS_ZIP_CODE)));
     }
 
     @Test
-    public void shouldSaveAddress() {
-        setUpPersonInDatabase();
+    public void shouldSaveAddressAsAnotherAddressForPerson() {
+        testAddress.setId(null);
 
-        Address address = addressService.saveAddress(testAddress, testPerson.getId());
+        Address address = addressController.saveAddress(testAddress, ID_VALUE);
 
         assertThat(address, is(checkAddressFieldsEqualityWithPerson(ADDRESS_STREET_NAME, ADDRESS_CITY_NAME,
                 ADDRESS_ZIP_CODE, testPerson)));
         assertThat(address.getPerson(), is(checkPersonFieldsEquality(PERSON_FIRST_NAME, PERSON_LAST_NAME)));
+        assertThat(address.getPerson().getMainAddress(), not(equalTo(address)));
+    }
+
+    @Test
+    public void shouldSaveFirstAddressAsMainAddressForPerson() {
+        testAddress.setId(null);
+
+        Address address = addressController.saveAddress(testAddress, ANOTHER_ID_VALUE);
+
         assertThat(address.getPerson().getMainAddress(), equalTo(address));
     }
 
     @Test
+    @Sql(value = "classpath:data-test.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Commit
     public void shouldResponseWithSavedAddressData() {
+        testAddress.setId(null);
         HttpEntity<Address> entity = new HttpEntity<>(testAddress, httpHeaders);
-        setUpPersonInDatabase();
 
-        response = restTemplate.postForEntity(home + apiForPerson + testPerson.getId()
+        response = restTemplate.postForEntity(home + apiForPerson + ID_VALUE
                 + addresses, entity, Address.class);
 
-        assertResponse(CREATED, is(checkAddressFieldsEquality(ADDRESS_STREET_NAME, ADDRESS_CITY_NAME, ADDRESS_ZIP_CODE)));
+        assertResponse(response, CREATED, is(checkAddressFieldsEquality(
+                ADDRESS_STREET_NAME, ADDRESS_CITY_NAME, ADDRESS_ZIP_CODE)));
     }
 
     @Test
     public void shouldReturnApiErrorResponseWhenAddressIdDoesNotExists() {
-        setUpPersonInDatabase();
-
-        checkResponseEntityNotFoundException(home + apiForPerson + testPerson.getId() + address + ID_NOT_FOUND, GET);
+        checkResponseEntityNotFoundException(home + apiForPerson + ID_VALUE + address + ID_NOT_FOUND, GET);
     }
 
     @Test
     public void shouldUpdateAddress() {
-        setUpAddressInDatabase();
-        Address anotherTestAddress = new Address(ANOTHER_ADDRESS_STREET_NAME, ANOTHER_ADDRESS_CITY_NAME,
-                ANOTHER_ADDRESS_ZIP_CODE);
-        anotherTestAddress.setId(testAddress.getId());
+        changeAddressData();
 
-        HttpEntity<Address> entity = new HttpEntity<>(anotherTestAddress, httpHeaders);
+        addressController.updateAddress(testAddress);
 
-        restTemplate.put(home + apiForPerson + testPerson.getId() + address + testAddress.getId(),
-                entity, Address.class);
-
-        assertThat(addressService.returnAddress(testAddress.getId()), is(checkAddressFieldsEqualityWithPerson(
+        assertThat(addressRepository.findOne(ID_VALUE), is(checkAddressFieldsEqualityWithPerson(
                 ANOTHER_ADDRESS_STREET_NAME, ANOTHER_ADDRESS_CITY_NAME, ANOTHER_ADDRESS_ZIP_CODE, testPerson)));
     }
 
     @Test
+    @Sql(value = "classpath:data-test.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Commit
     public void shouldResponseWithUpdatedAddressData() {
-        setUpAddressInDatabase();
         changeAddressData();
-
         HttpEntity<Address> entity = new HttpEntity<>(testAddress, httpHeaders);
 
-        response = restTemplate.exchange(home + apiForPerson + testPerson.getId() + address + testAddress.getId(),
+        response = restTemplate.exchange(home + apiForPerson + ID_VALUE + address + ID_VALUE,
                 PUT, entity, Address.class);
 
-        assertResponse(OK, is(checkAddressFieldsEquality(ANOTHER_ADDRESS_STREET_NAME, ANOTHER_ADDRESS_CITY_NAME,
-                ANOTHER_ADDRESS_ZIP_CODE)));
+        assertResponse(response, OK, is(checkAddressFieldsEquality(ANOTHER_ADDRESS_STREET_NAME,
+                ANOTHER_ADDRESS_CITY_NAME, ANOTHER_ADDRESS_ZIP_CODE)));
     }
 
     @Test
     public void shouldDeleteAddress() {
-        long addressId = setUpTwoAddressesInDatabase();
         long countAfterDeletion = addressRepository.count() - 1;
 
-        restTemplate.delete(home + apiForPerson + testPerson.getId() + address + addressId);
+        addressController.deleteAddress(ANOTHER_ID_VALUE, ID_VALUE);
 
-        assertEquals(addressRepository.count(), countAfterDeletion);
+        assertEquals(countAfterDeletion, addressRepository.count());
     }
 
     @Test
-    public void shouldNotDeleteMainAddress() {
-        setUpAddressInDatabase();
+    public void shouldThrowProcessUserRequestExceptionWhenTryingToDeleteMainAddress() {
         long countBeforeDelete = addressRepository.count();
-        String url = home + apiForPerson + testPerson.getId() + address + testAddress.getId();
+
+        String url = home + apiForPerson + ID_VALUE + address + ID_VALUE;
         String message = "Request could not be processed for ADDRESS, " + "for parameters: {address_id="
-                + testAddress.getId() + ", person_id=" + testPerson.getId() + '}';
+                + ID_VALUE + ", person_id=" + ID_VALUE + '}';
 
         checkResponseProcessUserRequestException(url, DELETE, message);
 
         assertEquals(addressRepository.count(), countBeforeDelete);
     }
 
-    private void assertResponse(HttpStatus status, Matcher<Address> matcher) {
-        assertThat(response.getStatusCode(), equalTo(status));
-        assertThat(response.getBody(), matcher);
-    }
-
     private void changeAddressData() {
         testAddress.setStreetName(ANOTHER_ADDRESS_STREET_NAME);
         testAddress.setCityName(ANOTHER_ADDRESS_CITY_NAME);
         testAddress.setZipCode(ANOTHER_ADDRESS_ZIP_CODE);
-    }
-
-    private void setUpPersonInDatabase() {
-        personRepository.save(testPerson);
-    }
-
-    private void setUpAddressInDatabase() {
-        setUpPersonInDatabase();
-        addressService.saveAddress(testAddress, testPerson.getId());
-    }
-
-    private Long setUpTwoAddressesInDatabase() {
-        setUpAddressInDatabase();
-        Address anotherTestAddress = new Address(ANOTHER_ADDRESS_STREET_NAME, ANOTHER_ADDRESS_CITY_NAME,
-                ANOTHER_ADDRESS_ZIP_CODE);
-        addressService.saveAddress(anotherTestAddress, testPerson.getId());
-
-        return anotherTestAddress.getId();
     }
 }

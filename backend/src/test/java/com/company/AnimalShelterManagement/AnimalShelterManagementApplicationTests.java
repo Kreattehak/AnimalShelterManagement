@@ -9,8 +9,10 @@ import com.company.AnimalShelterManagement.service.HibernateDogServiceTest;
 import com.company.AnimalShelterManagement.service.HibernatePersonServiceTest;
 import com.company.AnimalShelterManagement.utils.AnimalFactoryTest;
 import com.company.AnimalShelterManagement.utils.AnimalShelterExceptionTest;
+import org.hamcrest.Matcher;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -60,4 +62,10 @@ public class AnimalShelterManagementApplicationTests {
         constructor.setAccessible(true);
         constructor.newInstance();
     }
+
+    public static <T> void assertResponse(ResponseEntity<T> response, HttpStatus status, Matcher<T> matcher) {
+        assertThat(response.getStatusCode(), equalTo(status));
+        assertThat(response.getBody(), matcher);
+    }
 }
+

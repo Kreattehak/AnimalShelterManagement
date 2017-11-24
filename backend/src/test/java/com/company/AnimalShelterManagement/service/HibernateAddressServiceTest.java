@@ -150,8 +150,7 @@ public class HibernateAddressServiceTest {
         return allOf(
                 hasProperty(STREET_NAME, is(streetName)),
                 hasProperty(CITY_NAME, is(cityName)),
-                hasProperty(ZIP_CODE, is(zipCode)),
-                hasProperty(PERSON, nullValue()));
+                hasProperty(ZIP_CODE, is(zipCode)));
     }
 
     public static Matcher<Address> checkAddressFieldsEqualityWithPerson(
