@@ -1,0 +1,46 @@
+<div class="container" *ngIf="filteredPeople && filteredPeople.length !== 0; else emptyTable">
+  <table class="table" id="peopleTable">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>City</th>
+      <th>Animals</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor='let person of filteredPeople; let i = index' (click)="markAsActive(person)"
+        [class.success]="person === activePerson">
+      <th scope="row">{{ person.id }}</th>
+      <td>{{ person.firstName }}</td>
+      <td>{{ person.lastName }}</td>
+      <td>{{ person.mainAddress?.cityName }}</td>
+      <td>{{ animalsCount[i] }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="form-group">
+      <div class="col-lg-4">
+        <button type="button" id="bInfo" class="btn btn-success" (click)="onInfo()">Person Details</button>
+        <button type="button" id="bEditPerson" class="btn btn-info" (click)="onEditPerson()">Edit Person</button>
+        <button type="button" id="bRemove" class="btn btn-danger" (click)="onRemove()">Remove</button>
+      </div>
+      <div class="col-xs-2 col-md-2 pull-right">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Filter people" [(ngModel)]='filter'/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #emptyTable>
+  <div class="container">
+    <div class="jumbotron">
+      <p>{{ errorMessage }}</p>
+    </div>
+  </div>
+</ng-template>

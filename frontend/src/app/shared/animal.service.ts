@@ -7,6 +7,7 @@ import {Animal} from './animal';
 export class AnimalService {
 
   private _getAnimalsCount = '/api/animals/count';
+  private _getAnimalsCountForPeople = '/api/animals/countForPeople';
   private _getAllAnimals = '/api/animals/availableForAdoption';
   private _saveNewAnimal = {
     cat: '/api/cats',
@@ -50,13 +51,17 @@ export class AnimalService {
     return this._http.get<number>(this._getAnimalsCount);
   }
 
+  getAnimalsCountForPeople(): Observable<number[]> {
+    return this._http.get<number[]>(this._getAnimalsCountForPeople);
+  }
+
   getAllAnimals(): Observable<Animal[]> {
     return this._http.get<Animal[]>(this._getAllAnimals);
   }
 
   saveNewAnimal(animal: Animal): Observable<Animal> {
-    const aimalUrlByType = this._saveNewAnimal[animal.type.toLowerCase()];
-    return this._http.post<Animal>(aimalUrlByType, animal, this.requestBearer());
+    const animalUrlByType = this._saveNewAnimal[animal.type.toLowerCase()];
+    return this._http.post<Animal>(animalUrlByType, animal, this.requestBearer());
   }
 
   getAnimalsAvailableForAdoption(): Observable<Animal[]> {

@@ -1,5 +1,8 @@
 <p> Animals count: {{animalsCount}}</p>
 <a (click)="getAllAnimals()">Get All Animals</a>
-<pre>{{animals| json}}</pre>
+<a (click)="getAllPeople()">Get All People</a>
+<pre *ngIf="animals">{{animals | json}}</pre>
+<pre *ngIf="people">{{people | json}}</pre>
 <a [routerLink]="['animals', 'new']">Add new animal</a>
+<a [routerLink]="['people', 'new']">Add new person</a>
 
