@@ -7,9 +7,9 @@ import {ValidationService} from '../../shared/validation-and-locale-messages.ser
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
-  templateUrl: './animal-detail.component.html'
+  templateUrl: './animal-form.component.html'
 })
-export class AnimalDetailComponent implements OnInit, OnDestroy {
+export class AnimalFormComponent implements OnInit, OnDestroy {
 
   public activeAnimal: Animal;
   public isNewAnimal: boolean;

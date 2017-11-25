@@ -12,7 +12,6 @@ export class AuthenticationService {
     return this.isLoggedIn;
   }
 
-
   login(username: string, password: string): void {
     if (username === 'main-page' && password === 'main-page') {
       this.isLoggedIn = true;
