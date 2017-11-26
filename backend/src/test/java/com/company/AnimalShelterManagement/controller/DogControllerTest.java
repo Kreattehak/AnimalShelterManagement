@@ -1,9 +1,7 @@
 package com.company.AnimalShelterManagement.controller;
 
 import com.company.AnimalShelterManagement.model.Dog;
-import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.model.dto.DogDTO;
-import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.service.interfaces.DogService;
 import com.company.AnimalShelterManagement.utils.AnimalFactory;
 import org.junit.Before;

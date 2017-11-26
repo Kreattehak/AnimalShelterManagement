@@ -1,7 +1,6 @@
 package com.company.AnimalShelterManagement.controller;
 
 import com.company.AnimalShelterManagement.model.Person;
-import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,11 +25,12 @@ public class PersonControllerTest {
     @Autowired
     private PersonController personController;
 
-    private PersonDTO testPersonDTO;
+    private Person testPerson;
 
     @Before
     public void setUp() {
-        testPersonDTO = new PersonDTO(ID_VALUE, PERSON_FIRST_NAME, PERSON_LAST_NAME);
+        testPerson = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
+        testPerson.setId(ID_VALUE);
     }
 
     @Test
@@ -48,32 +48,30 @@ public class PersonControllerTest {
         Person testPerson = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
 
         when(personService.returnPerson(anyLong())).thenReturn(testPerson);
-        when(personService.mapToDTO(any(Person.class))).thenReturn(testPersonDTO);
 
         personController.returnPerson(ID_VALUE);
 
         verify(personService).returnPerson(anyLong());
-        verify(personService).mapToDTO(any(Person.class));
         verifyNoMoreInteractions(personService);
     }
 
     @Test
     public void shouldPerformSavePerson() {
-        when(personService.savePerson(any(PersonDTO.class))).thenReturn(testPersonDTO);
+        when(personService.savePerson(any(Person.class))).thenReturn(testPerson);
 
-        personController.savePerson(testPersonDTO);
+        personController.savePerson(testPerson);
 
-        verify(personService).savePerson(any(PersonDTO.class));
+        verify(personService).savePerson(any(Person.class));
         verifyNoMoreInteractions(personService);
     }
 
     @Test
     public void shouldPerformUpdatePerson() {
-        when(personService.updatePerson(any(PersonDTO.class))).thenReturn(testPersonDTO);
+        when(personService.updatePerson(any(Person.class))).thenReturn(testPerson);
 
-        personController.updatePerson(testPersonDTO);
+        personController.updatePerson(testPerson);
 
-        verify(personService).updatePerson(any(PersonDTO.class));
+        verify(personService).updatePerson(any(Person.class));
         verifyNoMoreInteractions(personService);
     }
 

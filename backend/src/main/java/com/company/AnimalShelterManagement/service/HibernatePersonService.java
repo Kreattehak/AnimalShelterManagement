@@ -1,29 +1,27 @@
 package com.company.AnimalShelterManagement.service;
 
 import com.company.AnimalShelterManagement.model.Person;
-import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.repository.PersonRepository;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class HibernatePersonService extends HibernateCommonDTOService<Person, PersonDTO, PersonRepository>
+public class HibernatePersonService extends HibernateCommonService<Person, PersonRepository>
         implements PersonService {
 
     @Autowired
-    public HibernatePersonService(PersonRepository personRepository, ModelMapper modelMapper) {
-        super(modelMapper, Person.class, PersonDTO.class);
+    public HibernatePersonService(PersonRepository personRepository) {
+        super(Person.class);
         this.repository = personRepository;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Iterable<PersonDTO> returnPeople() {
-        return returnMappedEntities();
+    public Iterable<Person> returnPeople() {
+        return repository.findAll();
     }
 
     @Override
@@ -33,20 +31,17 @@ public class HibernatePersonService extends HibernateCommonDTOService<Person, Pe
     }
 
     @Override
-    public PersonDTO savePerson(PersonDTO personDTO) {
-        Person person = mapFromDTO(personDTO);
-        person = repository.save(person);
-
-        return mapToDTO(person);
+    public Person savePerson(Person person) {
+        return repository.save(person);
     }
 
     @Override
-    public PersonDTO updatePerson(PersonDTO personDTO) {
-        Person person = returnPerson(personDTO.getId());
-        person.setFirstName(personDTO.getFirstName());
-        person.setLastName(personDTO.getLastName());
+    public Person updatePerson(Person person) {
+        Person personFromDatabase = returnPerson(person.getId());
+        personFromDatabase.setFirstName(person.getFirstName());
+        personFromDatabase.setLastName(person.getLastName());
 
-        return mapToDTO(repository.save(person));
+        return repository.save(personFromDatabase);
     }
 
     @Override

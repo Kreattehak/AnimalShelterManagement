@@ -1,7 +1,6 @@
 package com.company.AnimalShelterManagement.service;
 
 import com.company.AnimalShelterManagement.model.Person;
-import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.repository.PersonRepository;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import com.company.AnimalShelterManagement.utils.EntityNotFoundException;
@@ -78,7 +77,7 @@ public class HibernatePersonServiceTest {
     public void shouldPerformSavePerson() {
         when(personRepository.save(any(Person.class))).thenReturn(testPerson);
 
-        personService.savePerson(new PersonDTO(ID_VALUE, PERSON_FIRST_NAME, PERSON_LAST_NAME));
+        personService.savePerson(testPerson);
 
         verify(personRepository).save(any(Person.class));
         verifyNoMoreInteractions(personRepository);
@@ -86,13 +85,13 @@ public class HibernatePersonServiceTest {
 
     @Test
     public void shouldPerformUpdatePerson() {
-        PersonDTO anotherPersonDTO = new PersonDTO(
-                ID_VALUE, ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME);
+        Person anotherPerson = new Person(ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME);
+        anotherPerson.setId(ID_VALUE);
 
         when(personRepository.findOne(anyLong())).thenReturn(testPerson);
         when(personRepository.save(any(Person.class))).thenReturn(testPerson);
 
-        personService.updatePerson(anotherPersonDTO);
+        personService.updatePerson(anotherPerson);
 
         //updatePerson() operates on reference returned by findOne()
         assertThat(testPerson, is(checkPersonFieldsEquality(
@@ -112,12 +111,6 @@ public class HibernatePersonServiceTest {
         verify(personRepository).findOne(anyLong());
         verify(personRepository).delete(any(Person.class));
         verifyNoMoreInteractions(personRepository);
-    }
-
-    public static Matcher<PersonDTO> checkPersonDtoFieldsEquality(String firstName, String lastName) {
-        return allOf(
-                hasProperty(FIRST_NAME, is(firstName)),
-                hasProperty(LAST_NAME, is(lastName)));
     }
 
     public static Matcher<Person> checkPersonFieldsEquality(String firstName, String lastName) {

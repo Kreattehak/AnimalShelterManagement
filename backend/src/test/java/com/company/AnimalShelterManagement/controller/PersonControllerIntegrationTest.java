@@ -1,6 +1,6 @@
 package com.company.AnimalShelterManagement.controller;
 
-import com.company.AnimalShelterManagement.model.dto.PersonDTO;
+import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.repository.PersonRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertResponse;
 import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertThatResponseHaveMultipleEntitiesReturned;
 import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseEntityNotFoundException;
-import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonDtoFieldsEquality;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -50,8 +49,8 @@ public class PersonControllerIntegrationTest {
 
     private RestTemplate restTemplate;
     private HttpHeaders httpHeaders;
-    private PersonDTO testPersonDTO;
-    private ResponseEntity<PersonDTO> response;
+    private Person testPerson;
+    private ResponseEntity<Person> response;
 
     private String home = "http://localhost:";
     private String apiForPeople = "/api/people";
@@ -59,7 +58,8 @@ public class PersonControllerIntegrationTest {
 
     @Before
     public void setUp() {
-        testPersonDTO = new PersonDTO(ID_VALUE, PERSON_FIRST_NAME, PERSON_LAST_NAME);
+        testPerson = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
+        testPerson.setId(ID_VALUE);
         restTemplate = new RestTemplate();
         httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(APPLICATION_JSON);
@@ -73,9 +73,9 @@ public class PersonControllerIntegrationTest {
 
     @Test
     public void shouldReturnPerson() {
-        response = restTemplate.getForEntity(home + apiForPerson + ID_VALUE, PersonDTO.class);
+        response = restTemplate.getForEntity(home + apiForPerson + ID_VALUE, Person.class);
 
-        assertResponse(response, OK, equalTo(testPersonDTO));
+        assertResponse(response, OK, equalTo(testPerson));
     }
 
     @Test
@@ -85,7 +85,7 @@ public class PersonControllerIntegrationTest {
 
     @Test
     public void shouldSavePerson() {
-        personController.savePerson(testPersonDTO);
+        personController.savePerson(testPerson);
 
         assertThat(personRepository.findOne(ID_VALUE), checkPersonFieldsEquality(PERSON_FIRST_NAME, PERSON_LAST_NAME));
     }
@@ -94,18 +94,18 @@ public class PersonControllerIntegrationTest {
     @Sql(value = "classpath:data-test.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Commit
     public void shouldResponseWithSavedPersonData() {
-        HttpEntity<PersonDTO> entity = new HttpEntity<>(testPersonDTO, httpHeaders);
+        HttpEntity<Person> entity = new HttpEntity<>(testPerson, httpHeaders);
 
-        response = restTemplate.postForEntity(home + apiForPeople, entity, PersonDTO.class);
+        response = restTemplate.postForEntity(home + apiForPeople, entity, Person.class);
 
-        assertResponse(response, CREATED, is(checkPersonDtoFieldsEquality(PERSON_FIRST_NAME, PERSON_LAST_NAME)));
+        assertResponse(response, CREATED, is(checkPersonFieldsEquality(PERSON_FIRST_NAME, PERSON_LAST_NAME)));
     }
 
     @Test
     public void shouldUpdatePerson() {
         changePersonData();
 
-        personController.updatePerson(testPersonDTO);
+        personController.updatePerson(testPerson);
 
         assertThat(personRepository.findOne(ID_VALUE), is(checkPersonFieldsEquality(
                 ANOTHER_PERSON_FIRST_NAME, ANOTHER_PERSON_LAST_NAME)));
@@ -116,11 +116,11 @@ public class PersonControllerIntegrationTest {
     @Commit
     public void shouldResponseWithUpdatedPersonData() {
         changePersonData();
-        HttpEntity<PersonDTO> entity = new HttpEntity<>(testPersonDTO, httpHeaders);
+        HttpEntity<Person> entity = new HttpEntity<>(testPerson, httpHeaders);
 
-        response = restTemplate.exchange(home + apiForPerson + ID_VALUE, PUT, entity, PersonDTO.class);
+        response = restTemplate.exchange(home + apiForPerson + ID_VALUE, PUT, entity, Person.class);
 
-        assertResponse(response, OK, is(checkPersonDtoFieldsEquality(ANOTHER_PERSON_FIRST_NAME,
+        assertResponse(response, OK, is(checkPersonFieldsEquality(ANOTHER_PERSON_FIRST_NAME,
                 ANOTHER_PERSON_LAST_NAME)));
     }
 
@@ -134,7 +134,7 @@ public class PersonControllerIntegrationTest {
     }
 
     private void changePersonData() {
-        testPersonDTO.setFirstName(ANOTHER_PERSON_FIRST_NAME);
-        testPersonDTO.setLastName(ANOTHER_PERSON_LAST_NAME);
+        testPerson.setFirstName(ANOTHER_PERSON_FIRST_NAME);
+        testPerson.setLastName(ANOTHER_PERSON_LAST_NAME);
     }
 }

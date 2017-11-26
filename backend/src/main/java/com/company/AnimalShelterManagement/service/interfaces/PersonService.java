@@ -1,17 +1,16 @@
 package com.company.AnimalShelterManagement.service.interfaces;
 
 import com.company.AnimalShelterManagement.model.Person;
-import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 
-public interface PersonService extends CommonDTOService<Person, PersonDTO> {
+public interface PersonService extends CommonService<Person> {
 
-    Iterable<PersonDTO> returnPeople();
+    Iterable<Person> returnPeople();
 
     Person returnPerson(Long personId);
 
-    PersonDTO savePerson(PersonDTO person);
+    Person savePerson(Person person);
 
-    PersonDTO updatePerson(PersonDTO person);
+    Person updatePerson(Person person);
 
     void deletePerson(Long personId);
 }

@@ -1,7 +1,6 @@
 package com.company.AnimalShelterManagement.controller;
 
 import com.company.AnimalShelterManagement.model.Person;
-import com.company.AnimalShelterManagement.model.dto.PersonDTO;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,33 +25,29 @@ public class PersonController {
     }
 
     @GetMapping("${rest.person.getPeople}")
-    public Iterable<PersonDTO> returnPeople() {
+    public Iterable<Person> returnPeople() {
         return personService.returnPeople();
     }
 
     @GetMapping("${rest.person.getPerson}")
-    public PersonDTO returnPerson(@PathVariable Long personId) {
-        return mapToDTO(personService.returnPerson(personId));
+    public Person returnPerson(@PathVariable Long personId) {
+        return personService.returnPerson(personId);
     }
 
     @PostMapping(value = "${rest.person.postPerson}", consumes = APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(CREATED)
-    public PersonDTO savePerson(@Valid @RequestBody PersonDTO personDTO) {
-        return personService.savePerson(personDTO);
+    public Person savePerson(@Valid @RequestBody Person person) {
+        return personService.savePerson(person);
     }
 
     @PutMapping(value = "${rest.person.putPerson}", consumes = APPLICATION_JSON_UTF8_VALUE)
-    public PersonDTO updatePerson(@Valid @RequestBody PersonDTO personDTO) {
-        return personService.updatePerson(personDTO);
+    public Person updatePerson(@Valid @RequestBody Person person) {
+        return personService.updatePerson(person);
     }
 
     @DeleteMapping(value = "${rest.person.deletePerson}", produces = TEXT_PLAIN_VALUE)
     public ResponseEntity<String> deletePerson(@PathVariable Long personId) {
         personService.deletePerson(personId);
         return new ResponseEntity<>("Person with id: " + personId + " was successfully deleted", OK);
-    }
-
-    private PersonDTO mapToDTO(Person person) {
-        return personService.mapToDTO(person);
     }
 }
