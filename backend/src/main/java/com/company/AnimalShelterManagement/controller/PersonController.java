@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 @RestController
 @RequestMapping(value = "/api", produces = APPLICATION_JSON_UTF8_VALUE)
@@ -45,10 +46,10 @@ public class PersonController {
         return personService.updatePerson(personDTO);
     }
 
-    @DeleteMapping("${rest.person.deletePerson}")
-    public ResponseEntity<Void> deletePerson(@PathVariable Long personId) {
+    @DeleteMapping(value = "${rest.person.deletePerson}", produces = TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> deletePerson(@PathVariable Long personId) {
         personService.deletePerson(personId);
-        return ResponseEntity.status(OK).build();
+        return new ResponseEntity<>("Person with id: " + personId + " was successfully deleted", OK);
     }
 
     private PersonDTO mapToDTO(Person person) {
