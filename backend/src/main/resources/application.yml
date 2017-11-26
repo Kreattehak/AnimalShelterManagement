@@ -15,6 +15,9 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
       ddl-auto: create
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
 
 # Turn off security while in production
 security:

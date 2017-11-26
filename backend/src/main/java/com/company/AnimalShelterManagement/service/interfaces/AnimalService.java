@@ -12,4 +12,6 @@ public interface AnimalService extends CommonService<Animal> {
     Person returnPreviousOwner(Long animalId);
 
     long countAnimals();
+
+    long[] countAnimalsForPeople();
 }

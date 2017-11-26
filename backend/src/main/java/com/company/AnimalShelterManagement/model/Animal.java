@@ -1,5 +1,6 @@
 package com.company.AnimalShelterManagement.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
@@ -35,12 +36,12 @@ public class Animal extends BaseEntity {
 
     @Column(name = "animal_identifier", length = 8, unique = true)
     @Pattern(regexp = "\\d{8}", message = "{validation.animalIdentifierPattern}")
-    //first two letters - animal type, second two letters - year of birth, third four letters - unique id
-    //animalIdentifier is print on dog id tag
+    /*first two letters - animal type, second two letters - year of birth, third four letters - unique id
+    animalIdentifier is print on dog/cat id tag*/
     private String animalIdentifier;
 
     @Column(name = "date_of_birth")
-//    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate dateOfBirth;
 

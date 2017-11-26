@@ -12,4 +12,7 @@ public interface AnimalRepository extends CrudRepository<Animal, Long> {
 
     @Query("SELECT a.previousOwner FROM Animal a WHERE a.id = ?1")
     Person findPersonByAnimalId(Long animalId);
+
+    @Query("SELECT COUNT(p) FROM Person p JOIN p.animal GROUP BY p.id")
+    long[] findAnimalsCountForPeople();
 }

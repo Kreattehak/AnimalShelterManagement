@@ -43,6 +43,7 @@ public class Person extends BaseEntity {
 
     public Person() {
         this.address = new HashSet<>();
+        this.animal = new HashSet<>();
         this.dateOfRegistration = LocalDate.now();
     }
 
@@ -72,8 +73,8 @@ public class Person extends BaseEntity {
         return address;
     }
 
-    public void setAddress(Set<Address> adress) {
-        this.address = adress;
+    public void setAddress(Set<Address> address) {
+        this.address = address;
     }
 
     public void addAddress(Address address) {
@@ -111,6 +112,12 @@ public class Person extends BaseEntity {
 
     public void setAnimal(Set<Animal> animal) {
         this.animal = animal;
+    }
+
+    public void addAnimal(Animal animal) {
+        System.out.println(animal);
+        this.animal.add(animal);
+        animal.setPreviousOwner(this);
     }
 
     @Override

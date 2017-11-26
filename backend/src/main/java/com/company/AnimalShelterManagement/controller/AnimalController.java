@@ -44,4 +44,9 @@ public class AnimalController {
     public long returnAnimalsCount() {
         return animalService.countAnimals();
     }
+
+    @GetMapping(value = "${rest.animal.animalsCountForPeople}")
+    public long[] returnAnimalsCountForPeople() {
+        return animalService.countAnimalsForPeople();
+    }
 }

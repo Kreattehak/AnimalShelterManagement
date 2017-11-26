@@ -2,6 +2,7 @@ package com.company.AnimalShelterManagement.model.dto;
 
 import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
 
@@ -12,6 +13,7 @@ public abstract class AnimalDTO extends BaseDTO {
     private String behaviorDescription;
     private AvailableForAdoption availableForAdoption;
     private String animalIdentifier;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
 

@@ -12,6 +12,7 @@ public class TestConstant {
     public static final int DOGS_COUNT = 1;
     public static final int EXPECTED_ADDRESS_COUNT = 2;
     public static final int EXPECTED_ANIMALS_FOR_ADOPTION_COUNT = 1;
+    public static final int EXPECTED_ANIMALS_FOR_PERSON_COUNT = 1;
     public static final int EXPECTED_ANIMALS_COUNT = 2;
 
     public static final String FILL_UP = "00";

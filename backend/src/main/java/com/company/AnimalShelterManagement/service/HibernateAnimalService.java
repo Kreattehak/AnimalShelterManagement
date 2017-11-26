@@ -39,6 +39,11 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
         return repository.count();
     }
 
+    @Override
+    public long[] countAnimalsForPeople() {
+        return repository.findAnimalsCountForPeople();
+    }
+
     @Autowired
     public void setAnimalRepository(AnimalRepository animalRepository) {
         this.repository = animalRepository;
