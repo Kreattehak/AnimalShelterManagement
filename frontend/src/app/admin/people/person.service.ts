@@ -8,6 +8,7 @@ export class PersonService {
 
   private _getAllPeople = '/api/people';
   private _saveNewPerson = '/api/people';
+  private _deletePerson = '/api/person/';
 
   constructor(private _http: HttpClient) {
   }
@@ -18,6 +19,10 @@ export class PersonService {
 
   saveNewPerson(person: Person): Observable<Person> {
     return this._http.post<Person>(this._saveNewPerson, person, this.requestBearer());
+  }
+
+  deletePerson(person: Person): Observable<string> {
+    return this._http.delete(this._deletePerson + person.id, {responseType: 'text'});
   }
 
   private requestBearer(): { headers: HttpHeaders } {

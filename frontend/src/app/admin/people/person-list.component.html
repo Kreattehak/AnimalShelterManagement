@@ -16,7 +16,7 @@
       <td>{{ person.firstName }}</td>
       <td>{{ person.lastName }}</td>
       <td>{{ person.mainAddress?.cityName }}</td>
-      <td>{{ animalsCount[i] }}</td>
+      <td>{{ animalsCount[i] || 0 }}</td>
     </tr>
     </tbody>
   </table>
@@ -24,9 +24,12 @@
 <div class="container">
   <div class="row">
     <div class="form-group">
-      <div class="col-lg-4">
-        <button type="button" id="bInfo" class="btn btn-success" (click)="onInfo()">Person Details</button>
-        <button type="button" id="bEditPerson" class="btn btn-info" (click)="onEditPerson()">Edit Person</button>
+      <div class="col-lg-5">
+        <button type="button" id="bAdd" class="btn btn-success" [routerLink]="['/admin', 'people', 'new']">
+          Add Person
+        </button>
+        <button type="button" id="bInfo" class="btn btn-info" (click)="onInfo()">Person Details</button>
+        <button type="button" id="bEditPerson" class="btn btn-warning" (click)="onEditPerson()">Edit Person</button>
         <button type="button" id="bRemove" class="btn btn-danger" (click)="onRemove()">Remove</button>
       </div>
       <div class="col-xs-2 col-md-2 pull-right">

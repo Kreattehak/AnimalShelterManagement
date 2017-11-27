@@ -22,6 +22,7 @@ import {AnimalDetailComponent} from './visitor/animals/animal-detail.component';
 import {PersonDetailComponent} from './admin/people/person-detail.component';
 import {PersonListComponent} from './admin/people/person-list.component';
 import {ComplexAnimalDetailComponent} from './admin/animals/complex-animal-detail.component';
+import {FilterService} from './shared/filter.service';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import {ComplexAnimalDetailComponent} from './admin/animals/complex-animal-detai
     PersonService,
     CanActivateAuthGuard,
     ValidationService,
-    AuthenticationService
+    AuthenticationService,
+    FilterService
   ],
   bootstrap: [AppComponent]
 })

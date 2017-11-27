@@ -4,6 +4,7 @@ import {Subject} from 'rxjs/Subject';
 import {PersonService} from './person.service';
 import {Router} from '@angular/router';
 import {AnimalService} from '../../shared/animal.service';
+import {FilterService} from '../../shared/filter.service';
 
 @Component({
   templateUrl: './person-list.component.html'
@@ -20,7 +21,7 @@ export class PersonListComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(private _personService: PersonService, private _animalService: AnimalService,
-              private _router: Router) {
+              private _filterService: FilterService, private _router: Router) {
   }
 
   ngOnInit() {
@@ -33,24 +34,12 @@ export class PersonListComponent implements OnInit, OnDestroy {
 
   set filter(value: string) {
     this._filter = value;
-    this.filteredPeople = this.filter ? this.performFilter(this.filter) : this.people;
-  }
-
-  private performFilter(filter: string): Person[] {
-    filter = filter.toLocaleLowerCase();
-    const filterBy: string[] = filter.split(/\s/);
-    let filteredPersons: Person[] = [];
-
-    if (filterBy.length === 2) {
-      filteredPersons = this.filterFirstAndLastNameSeparately(filterBy);
-    } else if (filterBy.length === 1) {
-      filteredPersons = this.filterFirstAndLastNameSimultaneously(filter);
-    }
-    if (filteredPersons.length === 0) {
-      this.errorMessage = 'Data not found';
-      return null;
+    if (this.filter) {
+      const filterObject = this._filterService.performPersonFilter(this.filter, this.people);
+      this.filteredPeople = filterObject.data;
+      this.errorMessage = filterObject.message;
     } else {
-      return filteredPersons;
+      this.filteredPeople = this.people;
     }
   }
 
@@ -93,38 +82,37 @@ export class PersonListComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  private filterFirstAndLastNameSeparately(filterBy: string[]): Person[] {
-    return this.people.filter((person: Person) => {
-      return person.firstName.toLocaleLowerCase().indexOf(filterBy[0]) !== -1
-        && person.lastName.toLocaleLowerCase().indexOf(filterBy[1]) !== -1;
-    });
-  }
-
-  private filterFirstAndLastNameSimultaneously(filter: string): Person[] {
-    return this.people.filter((person: Person) => {
-      return person.firstName.toLocaleLowerCase().indexOf(filter) !== -1
-        || person.lastName.toLocaleLowerCase().indexOf(filter) !== -1;
-    });
-  }
-
   private removeConfirm(): void {
-    prompt('Confirm deletion');
+    if (confirm('Confirm deletion')) {
+      this.removePerson();
+    }
   }
 
-  private removePerson = (result) => {
-    // to be implemented
+  private removePerson(): void {
+    this._personService.deletePerson(this.activePerson)
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(
+        response => {
+          const data = this.people.filter(person => person !== this.activePerson);
+          this.people = data;
+          this.filteredPeople = data;
+          this.activePerson = null;
+          this.checkArrayForPeople();
+        }, error => console.log('Error! Person not deleted!' + error)
+      );
   }
 
   private generateTable(): void {
     this._personService.getAllPeople()
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
-        persons => {
-          this.people = persons;
+        people => {
+          this.people = people;
           this.filteredPeople = this.people;
           this.checkArrayForPeople();
         }, error => this.errorMessage = 'Server offline'
       );
+
     this._animalService.getAnimalsCountForPeople()
       .takeUntil(this.ngUnsubscribe)
       .subscribe(

@@ -13,7 +13,7 @@ export class AuthenticationService {
   }
 
   login(username: string, password: string): void {
-    if (username === 'main-page' && password === 'main-page') {
+    if (username === 'admin' && password === 'admin') {
       this.isLoggedIn = true;
     }
   }
