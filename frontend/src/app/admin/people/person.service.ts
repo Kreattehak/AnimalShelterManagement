@@ -6,8 +6,11 @@ import {Person} from './person';
 @Injectable()
 export class PersonService {
 
+  private headers = {headers: new HttpHeaders().set('Content-Type', 'application/json')};
   private _getAllPeople = '/api/people';
+  private _getPerson = '/api/person/';
   private _saveNewPerson = '/api/people';
+  private _updatePerson = '/api/person/';
   private _deletePerson = '/api/person/';
 
   constructor(private _http: HttpClient) {
@@ -17,17 +20,19 @@ export class PersonService {
     return this._http.get<Person[]>(this._getAllPeople);
   }
 
+  getPerson(id: number): Observable<Person> {
+    return this._http.get<Person>(this._getPerson + id);
+  }
+
   saveNewPerson(person: Person): Observable<Person> {
-    return this._http.post<Person>(this._saveNewPerson, person, this.requestBearer());
+    return this._http.post<Person>(this._saveNewPerson, person, this.headers);
+  }
+
+  updatePerson(person: Person): Observable<Person> {
+    return this._http.put<Person>(this._updatePerson + person.id, person, this.headers);
   }
 
   deletePerson(person: Person): Observable<string> {
     return this._http.delete(this._deletePerson + person.id, {responseType: 'text'});
-  }
-
-  private requestBearer(): { headers: HttpHeaders } {
-    return {
-      headers: new HttpHeaders().set('Content-Type', 'application/json')
-    };
   }
 }

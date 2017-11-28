@@ -19,10 +19,11 @@ import {PersonFormComponent} from './admin/people/person-form.component';
 import {AddressFormComponent} from './admin/addresses/address-form.component';
 import {PersonService} from './admin/people/person.service';
 import {AnimalDetailComponent} from './visitor/animals/animal-detail.component';
-import {PersonDetailComponent} from './admin/people/person-detail.component';
 import {PersonListComponent} from './admin/people/person-list.component';
 import {ComplexAnimalDetailComponent} from './admin/animals/complex-animal-detail.component';
 import {FilterService} from './shared/filter.service';
+import {PersonResolve} from './admin/people/person.resolve';
+import {PersonAddressDetailComponent} from './admin/people/person-address-detail.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,7 @@ import {FilterService} from './shared/filter.service';
     AnimalFormComponent,
     PersonFormComponent,
     AddressFormComponent,
-    PersonDetailComponent,
+    PersonAddressDetailComponent,
     PersonListComponent,
     ComplexAnimalDetailComponent
   ],
@@ -53,7 +54,8 @@ import {FilterService} from './shared/filter.service';
     CanActivateAuthGuard,
     ValidationService,
     AuthenticationService,
-    FilterService
+    FilterService,
+    PersonResolve
   ],
   bootstrap: [AppComponent]
 })

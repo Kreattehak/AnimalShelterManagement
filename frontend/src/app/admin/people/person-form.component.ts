@@ -47,11 +47,11 @@ export class PersonFormComponent implements OnInit, OnDestroy {
     if (this.isNewPerson) {
       this.tryToSaveNewPerson();
     } else {
-      // if (this.checkForPersonDataDuplication()) {
-      //   return;
-      // } else {
-      //   this.tryToUpdatePerson(id);
-      // }
+      if (this.checkForPersonDataDuplication()) {
+        return;
+      } else {
+        this.tryToUpdatePerson(id);
+      }
     }
   }
 
@@ -74,18 +74,16 @@ export class PersonFormComponent implements OnInit, OnDestroy {
       );
   }
 
-  // private tryToUpdatePerson(id: number): void {
-  //   this.activePerson = this.personForm.value;
-  //   this.activePerson.id = id;
-  //   this._personService.updatePerson(this.activePerson)
-  //     .takeUntil(this.ngUnsubscribe)
-  //     .subscribe(
-  //       response => this._toastr.success(response,
-  //         this._validationService.getLocalizedMessages('successTitle')).then(
-  //         () => this.onBack()),
-  //       error => this._toastr.error(error,
-  //         this._validationService.getLocalizedMessages('errorTitle')));
-  // }
+  private tryToUpdatePerson(id: number): void {
+    this.activePerson = this.personForm.value;
+    this.activePerson.id = id;
+    this._personService.updatePerson(this.activePerson)
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(
+        response => console.log('Person updated successfully' + response),
+        error => console.log('Error! Person was not updated!' + error)
+      );
+  }
 
   private checkForPersonDataDuplication(): boolean {
     if (this.activePerson.lastName === this.personForm.value.lastName

@@ -6,6 +6,7 @@ import {Animal} from './animal';
 @Injectable()
 export class AnimalService {
 
+  private headers = {headers: new HttpHeaders().set('Content-Type', 'application/json')};
   private _getAnimalsCount = '/api/animals/count';
   private _getAnimalsCountForPeople = '/api/animals/countForPeople';
   private _getAllAnimals = '/api/animals/availableForAdoption';
@@ -61,16 +62,10 @@ export class AnimalService {
 
   saveNewAnimal(animal: Animal): Observable<Animal> {
     const animalUrlByType = this._saveNewAnimal[animal.type.toLowerCase()];
-    return this._http.post<Animal>(animalUrlByType, animal, this.requestBearer());
+    return this._http.post<Animal>(animalUrlByType, animal, this.headers);
   }
 
   getAnimalsAvailableForAdoption(): Observable<Animal[]> {
     return this._http.get<Animal[]>(this._getAnimalsAvailableForAdoption);
-  }
-
-  private requestBearer(): { headers: HttpHeaders } {
-    return {
-      headers: new HttpHeaders().set('Content-Type', 'application/json')
-    };
   }
 }

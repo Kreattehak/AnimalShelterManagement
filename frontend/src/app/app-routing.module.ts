@@ -10,8 +10,9 @@ import {AnimalFormComponent} from './admin/animals/animal-form.component';
 import {PersonFormComponent} from './admin/people/person-form.component';
 import {AnimalDetailComponent} from './visitor/animals/animal-detail.component';
 import {PersonListComponent} from './admin/people/person-list.component';
-import {PersonDetailComponent} from './admin/people/person-detail.component';
 import {ComplexAnimalDetailComponent} from './admin/animals/complex-animal-detail.component';
+import {PersonResolve} from './admin/people/person.resolve';
+import {PersonAddressDetailComponent} from './admin/people/person-address-detail.component';
 
 @NgModule({
   imports: [
@@ -22,8 +23,9 @@ import {ComplexAnimalDetailComponent} from './admin/animals/complex-animal-detai
       {path: 'admin', component: AdminComponent},
       {path: 'admin/people', component: PersonListComponent},
       {path: 'admin/people/new', component: PersonFormComponent},
-      {path: 'admin/people/:id/details', component: PersonDetailComponent},
-      {path: 'admin/people/:id', component: PersonFormComponent},
+      {path: 'admin/people/:id/details/address', component: PersonAddressDetailComponent},
+      {path: 'admin/people/:id/details/animal', component: PersonAddressDetailComponent},
+      {path: 'admin/people/:id', component: PersonFormComponent, resolve: {person: PersonResolve}},
       {path: 'admin/animals', component: AnimalListComponent},
       {path: 'admin/animals/new', component: AnimalFormComponent},
       {path: 'admin/animals/:id/details', component: ComplexAnimalDetailComponent},

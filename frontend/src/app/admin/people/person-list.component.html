@@ -1,4 +1,4 @@
-<div class="container" *ngIf="filteredPeople && filteredPeople.length !== 0; else emptyTable">
+<div class="container" *ngIf="animalsCount && filteredPeople && filteredPeople.length !== 0; else emptyTable">
   <table class="table" id="peopleTable">
     <thead>
     <tr>
@@ -15,8 +15,8 @@
       <th scope="row">{{ person.id }}</th>
       <td>{{ person.firstName }}</td>
       <td>{{ person.lastName }}</td>
-      <td>{{ person.mainAddress?.cityName }}</td>
-      <td>{{ animalsCount[i] || 0 }}</td>
+      <td>{{ person?.mainAddress?.cityName || 'No Data'}}</td>
+      <td>{{ animalsCount[i] || 'None' }}</td>
     </tr>
     </tbody>
   </table>
@@ -24,11 +24,12 @@
 <div class="container">
   <div class="row">
     <div class="form-group">
-      <div class="col-lg-5">
+      <div class="col-lg-6">
         <button type="button" id="bAdd" class="btn btn-success" [routerLink]="['/admin', 'people', 'new']">
           Add Person
         </button>
-        <button type="button" id="bInfo" class="btn btn-info" (click)="onInfo()">Person Details</button>
+        <button type="button" id="bInfoAddress" class="btn btn-info" (click)="onInfoAddress()">Person Details</button>
+        <button type="button" id="bInfoAnimal" class="btn btn-info" (click)="onInfoAnimal()">Owned animals</button>
         <button type="button" id="bEditPerson" class="btn btn-warning" (click)="onEditPerson()">Edit Person</button>
         <button type="button" id="bRemove" class="btn btn-danger" (click)="onRemove()">Remove</button>
       </div>

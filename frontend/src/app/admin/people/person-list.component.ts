@@ -51,12 +51,15 @@ export class PersonListComponent implements OnInit, OnDestroy {
     }
   }
 
-  onInfo(): boolean {
+  onInfoAddress(): void {
     if (!this.isFieldSelected()) {
-      return false;
-    } else {
-      this._router.navigate(['/admin', 'people', this.activePerson.id, 'details']);
-      return true;
+      this._router.navigate(['/admin', 'people', this.activePerson.id, 'details', 'address']);
+    }
+  }
+
+  onInfoAnimal(): void {
+    if (!this.isFieldSelected()) {
+      this._router.navigate(['/admin', 'people', this.activePerson.id, 'details', 'animal']);
     }
   }
 
