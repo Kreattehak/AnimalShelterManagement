@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Person} from '../admin/people/person';
 import {Animal} from './animal';
-import {FilterData} from './FilterData';
+import {FilterData} from './filter-data';
 
 @Injectable()
 export class FilterService {

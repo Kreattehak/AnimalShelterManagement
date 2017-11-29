@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs/Subject';
-import {ValidationService} from '../../shared/validation-and-locale-messages.service';
 import {AuthenticationService} from './authentication.service';
 import {Router} from '@angular/router';
+import {ValidationService} from '../../shared/validation.service';
 
 @Component({
   templateUrl: './login.component.html'

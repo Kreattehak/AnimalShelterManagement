@@ -13,6 +13,9 @@ import {PersonListComponent} from './admin/people/person-list.component';
 import {ComplexAnimalDetailComponent} from './admin/animals/complex-animal-detail.component';
 import {PersonResolve} from './admin/people/person.resolve';
 import {PersonAddressDetailComponent} from './admin/people/person-address-detail.component';
+import {PersonAnimalDetailComponent} from './admin/people/person-animal-detail.component';
+import {AddressesResolve} from './admin/addresses/addresses.resolve';
+import {AddressFormComponent} from './admin/addresses/address-form.component';
 
 @NgModule({
   imports: [
@@ -23,8 +26,15 @@ import {PersonAddressDetailComponent} from './admin/people/person-address-detail
       {path: 'admin', component: AdminComponent},
       {path: 'admin/people', component: PersonListComponent},
       {path: 'admin/people/new', component: PersonFormComponent},
-      {path: 'admin/people/:id/details/address', component: PersonAddressDetailComponent},
-      {path: 'admin/people/:id/details/animal', component: PersonAddressDetailComponent},
+      {
+        path: 'admin/people/:id/addresses', component: PersonAddressDetailComponent,
+        resolve: {person: PersonResolve, addresses: AddressesResolve}
+      },
+      {path: 'admin/people/:id/addresses/new', component: AddressFormComponent},
+      {path: 'admin/people/:id/addresses/:id', component: AddressFormComponent},
+      {path: 'admin/people/:id/animals', component: PersonAnimalDetailComponent},
+      {path: 'admin/people/:id/animals/new', component: AnimalFormComponent}, // add animal with previous owner
+      {path: 'admin/people/:id/animals/:id', component: AnimalFormComponent},
       {path: 'admin/people/:id', component: PersonFormComponent, resolve: {person: PersonResolve}},
       {path: 'admin/animals', component: AnimalListComponent},
       {path: 'admin/animals/new', component: AnimalFormComponent},

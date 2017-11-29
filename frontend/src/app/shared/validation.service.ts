@@ -55,6 +55,11 @@ export class ValidationService {
     },
   };
 
+  public static cannotProceed(message: string): boolean {
+    alert(message);
+    return false;
+  }
+
   constructor() {
   }
 

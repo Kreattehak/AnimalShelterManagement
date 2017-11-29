@@ -2,9 +2,9 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Person} from './person';
-import {ValidationService} from '../../shared/validation-and-locale-messages.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PersonService} from './person.service';
+import {ValidationService} from '../../shared/validation.service';
 
 @Component({
   templateUrl: './person-form.component.html'

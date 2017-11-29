@@ -3,8 +3,8 @@ import {Animal} from '../../shared/animal';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs/Subject';
 import {AnimalService} from '../../shared/animal.service';
-import {ValidationService} from '../../shared/validation-and-locale-messages.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {ValidationService} from '../../shared/validation.service';
 
 @Component({
   templateUrl: './animal-form.component.html'
@@ -26,8 +26,7 @@ export class AnimalFormComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
-  constructor(public _animalService: AnimalService,
-              private _validationService: ValidationService,
+  constructor(public _animalService: AnimalService, private _validationService: ValidationService,
               private _route: ActivatedRoute, private _router: Router) {
   }
 

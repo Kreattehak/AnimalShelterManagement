@@ -5,6 +5,7 @@ import {PersonService} from './person.service';
 import {Router} from '@angular/router';
 import {AnimalService} from '../../shared/animal.service';
 import {FilterService} from '../../shared/filter.service';
+import {ValidationService} from '../../shared/validation.service';
 
 @Component({
   templateUrl: './person-list.component.html'
@@ -52,14 +53,14 @@ export class PersonListComponent implements OnInit, OnDestroy {
   }
 
   onInfoAddress(): void {
-    if (!this.isFieldSelected()) {
-      this._router.navigate(['/admin', 'people', this.activePerson.id, 'details', 'address']);
+    if (this.isFieldSelected()) {
+      this._router.navigate(['/admin', 'people', this.activePerson.id, 'addresses']);
     }
   }
 
   onInfoAnimal(): void {
-    if (!this.isFieldSelected()) {
-      this._router.navigate(['/admin', 'people', this.activePerson.id, 'details', 'animal']);
+    if (this.isFieldSelected()) {
+      this._router.navigate(['/admin', 'people', this.activePerson.id, 'animals']);
     }
   }
 
@@ -101,6 +102,7 @@ export class PersonListComponent implements OnInit, OnDestroy {
           this.filteredPeople = data;
           this.activePerson = null;
           this.checkArrayForPeople();
+          console.log(response);
         }, error => console.log('Error! Person not deleted!' + error)
       );
   }
@@ -131,8 +133,7 @@ export class PersonListComponent implements OnInit, OnDestroy {
 
   private isFieldSelected(): boolean {
     if (!this.activePerson) {
-      alert('Row not selected');
-      return false;
+      return ValidationService.cannotProceed('Row not selected');
     }
     return true;
   }

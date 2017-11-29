@@ -1,4 +1,4 @@
-<div class="container" *ngIf="addresses.length; else personWithoutAddress">
+<div class="container" *ngIf="addresses && addresses.length; else personWithoutAddress">
   <div class="jumbotron">
     <h2>{{ person.firstName + ' ' + person.lastName }}</h2>
     <p>Date of registration: {{ person.dateOfRegistration | date:'dd.MM.y' }}</p>
@@ -31,8 +31,8 @@
       <div class="col-lg-10">
         <button type="button" id="bAddAddress" class="btn btn-info" (click)="onAddAddress()">
           Add Address</button>
-        <button type="button" id="bEditAddresses" class="btn btn-info" (click)="onEditAddresses()">
-          Edit Person's Addresses</button>
+        <button type="button" id="bEditAddresses" class="btn btn-info" (click)="onEditAddress()">
+          Edit Address</button>
         <button type="button" id="bSetAsMainAddress" class="btn btn-info" (click)="onSetAsMainAddress()">
           Set as Main Address</button>
         <button type="button" id="bRemove" class="btn btn-danger" (click)="onRemoveAddress()" >

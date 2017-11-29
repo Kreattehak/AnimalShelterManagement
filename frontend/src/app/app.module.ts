@@ -10,7 +10,6 @@ import {MainPageComponent} from './visitor/main-page/main-page.component';
 import {LoginComponent} from './admin/login/login.component';
 import {AdminComponent} from './admin/main-page/admin.component';
 import {CanActivateAuthGuard} from './admin/login/can-activate-auth.guard';
-import {ValidationService} from './shared/validation-and-locale-messages.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AuthenticationService} from './admin/login/authentication.service';
 import {AnimalListComponent} from './admin/animals/animal-list.component';
@@ -24,6 +23,10 @@ import {ComplexAnimalDetailComponent} from './admin/animals/complex-animal-detai
 import {FilterService} from './shared/filter.service';
 import {PersonResolve} from './admin/people/person.resolve';
 import {PersonAddressDetailComponent} from './admin/people/person-address-detail.component';
+import { PersonAnimalDetailComponent } from './admin/people/person-animal-detail.component';
+import {AddressService} from './admin/addresses/address.service';
+import {AddressesResolve} from './admin/addresses/addresses.resolve';
+import {ValidationService} from './shared/validation.service';
 
 @NgModule({
   declarations: [
@@ -38,8 +41,10 @@ import {PersonAddressDetailComponent} from './admin/people/person-address-detail
     PersonFormComponent,
     AddressFormComponent,
     PersonAddressDetailComponent,
+    PersonAnimalDetailComponent,
     PersonListComponent,
-    ComplexAnimalDetailComponent
+    ComplexAnimalDetailComponent,
+    PersonAnimalDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -49,12 +54,14 @@ import {PersonAddressDetailComponent} from './admin/people/person-address-detail
     ReactiveFormsModule,
   ],
   providers: [
+    AddressService,
     AnimalService,
     PersonService,
     CanActivateAuthGuard,
     ValidationService,
     AuthenticationService,
     FilterService,
+    AddressesResolve,
     PersonResolve
   ],
   bootstrap: [AppComponent]
