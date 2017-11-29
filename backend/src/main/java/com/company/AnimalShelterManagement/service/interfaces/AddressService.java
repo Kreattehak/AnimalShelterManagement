@@ -13,4 +13,6 @@ public interface AddressService extends CommonService<Address> {
     Address updateAddress(Address address);
 
     void deleteAddress(Long addressId, Long personId);
+
+    void updateMainAddress(Long personId, Long addressId);
 }

@@ -67,4 +67,17 @@ public class HibernateAddressService extends HibernateCommonService<Address, Add
 
         repository.delete(addressId);
     }
+
+    @Override
+    public void updateMainAddress(Long personId, Long addressId) {
+        Person person = personService.returnPerson(personId);
+        Address address = returnAddress(addressId);
+        if (person.getMainAddress().equals(address)) {
+            throw new ProcessUserRequestException(Address.class,
+                    "address_id", addressId.toString(), "person_id", personId.toString());
+        }
+        person.setMainAddress(address);
+
+        personService.updatePerson(person);
+    }
 }

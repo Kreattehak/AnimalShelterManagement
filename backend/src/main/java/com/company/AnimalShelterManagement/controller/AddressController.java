@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.Serializable;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -45,8 +46,38 @@ public class AddressController {
     }
 
     @DeleteMapping("${rest.address.deleteAddress}")
-    public ResponseEntity<Void> deleteAddress(@PathVariable Long addressId, @PathVariable Long personId) {
+    public ResponseEntity<String> deleteAddress(@PathVariable Long addressId, @PathVariable Long personId) {
         addressService.deleteAddress(addressId, personId);
-        return ResponseEntity.status(OK).build();
+        return new ResponseEntity<>("Address with id: " + addressId + " was successfully deleted", OK);
+    }
+
+    @PutMapping(value = "${rest.address.updateMainAddress}", consumes = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<String> editMainAddress(@RequestBody Params params) {
+        addressService.updateMainAddress(params.getPersonId(), params.getAddressId());
+        return new ResponseEntity<>("Main address was set to address with id: " + params.getAddressId(), OK);
+    }
+
+    static class Params implements Serializable {
+
+        private static final long serialVersionUID = -8298640005440291518L;
+
+        private Long addressId;
+        private Long personId;
+
+        public Long getAddressId() {
+            return addressId;
+        }
+
+        void setAddressId(Long addressId) {
+            this.addressId = addressId;
+        }
+
+        public Long getPersonId() {
+            return personId;
+        }
+
+        void setPersonId(Long personId) {
+            this.personId = personId;
+        }
     }
 }

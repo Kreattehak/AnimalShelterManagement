@@ -145,6 +145,37 @@ public class HibernateAddressServiceTest {
         addressService.deleteAddress(ID_VALUE, ID_VALUE);
     }
 
+    @Test
+    public void shouldUpdateMainAddress() {
+        Address anotherTestAddress = setUpPersonWithTwoAddresses();
+
+        when(personService.returnPerson(anyLong())).thenReturn(testPerson);
+        when(addressRepository.findOne(anyLong())).thenReturn(anotherTestAddress);
+
+        addressService.updateMainAddress(testPerson.getId(), testAddress.getId());
+
+        assertThat(testPerson.getMainAddress(), is(checkAddressFieldsEquality(ANOTHER_ADDRESS_STREET_NAME,
+                ANOTHER_ADDRESS_CITY_NAME, ANOTHER_ADDRESS_ZIP_CODE)));
+
+        verify(addressRepository).findOne(anyLong());
+        verify(personService).returnPerson(anyLong());
+        verify(personService).updatePerson(any(Person.class));
+        verifyNoMoreInteractions(addressRepository);
+        verifyNoMoreInteractions(personService);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenTryToUpdateMainAddressToTheSameAddress() {
+        testPerson.addAddress(testAddress);
+
+        when(personService.returnPerson(anyLong())).thenReturn(testPerson);
+        when(addressRepository.findOne(anyLong())).thenReturn(testAddress);
+
+        expectedException.expect(ProcessUserRequestException.class);
+        expectedException.expectMessage("{address_id=" + ID_VALUE + ", person_id=" + ID_VALUE + '}');
+        addressService.updateMainAddress(ID_VALUE, ID_VALUE);
+    }
+
     public static Matcher<Address> checkAddressFieldsEquality(
             String streetName, String cityName, String zipCode) {
         return allOf(

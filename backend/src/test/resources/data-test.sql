@@ -7,7 +7,7 @@
 --   `street_name` varchar(50) NOT NULL,
 --   `zip_code` varchar(6) NOT NULL,
 --   PRIMARY KEY (`id`)
--- ) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+-- ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 --
 -- CREATE TABLE `animal` (
 --   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -21,41 +21,41 @@
 --   PRIMARY KEY (`id`),
 --   UNIQUE KEY `UK_ma2mbfpfpm7nj8otvpntscx66` (`animal_identifier`),
 --   KEY `FKcrf9elpwsi2uvvikdvdhiltk4` (`previous_owner_id`)
--- ) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+-- ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 --
 -- CREATE TABLE `cat` (
 --   `cat_race` varchar(15) NOT NULL,
 --   `id` bigint(20) NOT NULL,
 --   PRIMARY KEY (`id`)
--- ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
 -- CREATE TABLE `dog` (
 --   `dog_race` varchar(15) NOT NULL,
 --   `id` bigint(20) NOT NULL,
 --   PRIMARY KEY (`id`)
--- ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
 -- CREATE TABLE `person` (
 --   `id` bigint(20) NOT NULL AUTO_INCREMENT,
 --   `date_of_registration` date NOT NULL,
 --   `first_name` varchar(30) NOT NULL,
---   `last_name` varchar(30) NOT NULL,
+--   `last_name` varchar(50) NOT NULL,
 --   PRIMARY KEY (`id`)
--- ) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+-- ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 --
 -- CREATE TABLE `person_address` (
 --   `person_id` bigint(20) DEFAULT NULL,
 --   `address_id` bigint(20) NOT NULL,
 --   PRIMARY KEY (`address_id`),
 --   KEY `FKnndfs0btabect8upo03uwgfxt` (`person_id`)
--- ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
 -- CREATE TABLE `person_main_address` (
 --   `address_id` bigint(20) DEFAULT NULL,
 --   `person_id` bigint(20) NOT NULL,
 --   PRIMARY KEY (`person_id`),
 --   KEY `FK8689fvht85svevbyo38k5w69e` (`address_id`)
--- ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
 -- TRUNCATE TABLE address;
 -- TRUNCATE TABLE person;
