@@ -68,8 +68,12 @@ export class PersonFormComponent implements OnInit, OnDestroy {
     this._personService.savePerson(this.activePerson)
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
-        response => console.log('Person saved successfully' + response),
-        error => console.log('Error! Person was not saved!' + error)
+        response => {
+          if (this.shouldRedirectToAddressForm) {
+            this._router.navigate(['/admin', 'people', response.id, 'addresses', 'new']);
+          }
+          console.log('Person saved successfully' + response);
+        }, error => console.log('Error! Person was not saved!' + error)
       );
   }
 
