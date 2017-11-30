@@ -9,7 +9,7 @@ export class PersonService {
   private headers = {headers: new HttpHeaders().set('Content-Type', 'application/json')};
   private _getAllPeople = '/api/people';
   private _getPerson = '/api/person/';
-  private _saveNewPerson = '/api/people';
+  private _savePerson = '/api/people';
   private _updatePerson = '/api/person/';
   private _deletePerson = '/api/person/';
 
@@ -24,8 +24,8 @@ export class PersonService {
     return this._http.get<Person>(this._getPerson + id);
   }
 
-  saveNewPerson(person: Person): Observable<Person> {
-    return this._http.post<Person>(this._saveNewPerson, person, this.headers);
+  savePerson(person: Person): Observable<Person> {
+    return this._http.post<Person>(this._savePerson, person, this.headers);
   }
 
   updatePerson(person: Person): Observable<Person> {

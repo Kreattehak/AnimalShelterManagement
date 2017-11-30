@@ -11,7 +11,6 @@ import {ValidationService} from '../../shared/validation.service';
 })
 export class PersonFormComponent implements OnInit, OnDestroy {
 
-
   public activePerson: Person;
   public isNewPerson: boolean;
   public shouldRedirectToAddressForm: boolean;
@@ -66,7 +65,7 @@ export class PersonFormComponent implements OnInit, OnDestroy {
 
   private tryToSaveNewPerson(): void {
     this.activePerson = this.personForm.value;
-    this._personService.saveNewPerson(this.activePerson)
+    this._personService.savePerson(this.activePerson)
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
         response => console.log('Person saved successfully' + response),

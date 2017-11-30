@@ -31,11 +31,17 @@ import {AddressFormComponent} from './admin/addresses/address-form.component';
         resolve: {person: PersonResolve, addresses: AddressesResolve}
       },
       {path: 'admin/people/:id/addresses/new', component: AddressFormComponent},
-      {path: 'admin/people/:id/addresses/:id', component: AddressFormComponent},
+      {
+        path: 'admin/people/:id/addresses/:addressId', component: AddressFormComponent,
+        resolve: {person: PersonResolve, addresses: AddressesResolve}
+      },
       {path: 'admin/people/:id/animals', component: PersonAnimalDetailComponent},
       {path: 'admin/people/:id/animals/new', component: AnimalFormComponent}, // add animal with previous owner
-      {path: 'admin/people/:id/animals/:id', component: AnimalFormComponent},
-      {path: 'admin/people/:id', component: PersonFormComponent, resolve: {person: PersonResolve}},
+      {path: 'admin/people/:id/animals/:animalId', component: AnimalFormComponent},
+      {
+        path: 'admin/people/:id', component: PersonFormComponent,
+        resolve: {person: PersonResolve}
+      },
       {path: 'admin/animals', component: AnimalListComponent},
       {path: 'admin/animals/new', component: AnimalFormComponent},
       {path: 'admin/animals/:id/details', component: ComplexAnimalDetailComponent},
