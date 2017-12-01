@@ -10,6 +10,9 @@ public interface AnimalRepository extends CrudRepository<Animal, Long> {
     @Query("SELECT a FROM Animal a WHERE a.availableForAdoption = 'AVAILABLE'")
     Iterable<Animal> findAnimalByAvailableForAdoption();
 
+    @Query("SELECT p.animal FROM Person p WHERE p.id = ?1")
+    Iterable<Animal> findAnimalsOwnedByPerson(Long personId);
+
     @Query("SELECT a.previousOwner FROM Animal a WHERE a.id = ?1")
     Person findPersonByAnimalId(Long animalId);
 

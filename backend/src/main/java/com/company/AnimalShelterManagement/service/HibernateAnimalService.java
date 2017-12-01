@@ -4,6 +4,8 @@ import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.repository.AnimalRepository;
 import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
+import com.company.AnimalShelterManagement.service.interfaces.PersonService;
+import com.company.AnimalShelterManagement.utils.ProcessUserRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,10 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class HibernateAnimalService extends HibernateCommonService<Animal, AnimalRepository>
         implements AnimalService {
 
+    private final PersonService personService;
+
     @Autowired
-    public HibernateAnimalService(AnimalRepository animalRepository) {
+    public HibernateAnimalService(AnimalRepository animalRepository, PersonService personService) {
         super(Animal.class);
         this.repository = animalRepository;
+        this.personService = personService;
     }
 
     @Override
@@ -27,6 +32,11 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
     @Override
     public Iterable<Animal> returnAnimalsAvailableForAdoption() {
         return repository.findAnimalByAvailableForAdoption();
+    }
+
+    @Override
+    public Iterable<Animal> returnAnimalsOwnedByPerson(Long personId) {
+        return repository.findAnimalsOwnedByPerson(personId);
     }
 
     @Override
@@ -42,6 +52,18 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
     @Override
     public long[] countAnimalsForPeople() {
         return repository.findAnimalsCountForPeople();
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteOwnedAnimal(Long personId, Long animalId) {
+        Person personFromDatabase = personService.returnPerson(personId);
+        Animal animalFromDatabase = ifExistsReturnEntity(animalId);
+
+        if (!personFromDatabase.removeAnimal(animalFromDatabase)) {
+            throw new ProcessUserRequestException(Person.class, "person_id", personId.toString(),
+                    "animal_id", animalId.toString());
+        }
     }
 
     @Autowired

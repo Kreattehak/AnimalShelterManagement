@@ -9,9 +9,13 @@ public interface AnimalService extends CommonService<Animal> {
 
     Iterable<Animal> returnAnimalsAvailableForAdoption();
 
+    Iterable<Animal> returnAnimalsOwnedByPerson(Long personId);
+
     Person returnPreviousOwner(Long animalId);
 
     long countAnimals();
 
     long[] countAnimalsForPeople();
+
+    void deleteOwnedAnimal(Long personId, Long animalId);
 }

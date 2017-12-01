@@ -5,11 +5,10 @@ import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 @RestController
@@ -34,6 +33,12 @@ public class AnimalController {
         return animalService.returnAnimalsAvailableForAdoption();
     }
 
+    @GetMapping(value = "${rest.person.getAnimalsOwnedByPerson}",
+            produces = APPLICATION_JSON_UTF8_VALUE)
+    public Iterable<Animal> returnAnimalsOwnedByPerson(@PathVariable Long personId) {
+        return animalService.returnAnimalsOwnedByPerson(personId);
+    }
+
     @GetMapping(value = "${rest.animal.previousOwner}",
             produces = APPLICATION_JSON_UTF8_VALUE)
     public Person returnPreviousOwner(@PathVariable Long animalId) {
@@ -48,5 +53,12 @@ public class AnimalController {
     @GetMapping(value = "${rest.animal.animalsCountForPeople}")
     public long[] returnAnimalsCountForPeople() {
         return animalService.countAnimalsForPeople();
+    }
+
+    @DeleteMapping("${rest.person.deleteOwnedAnimal}")
+    public ResponseEntity<String> deleteOwnedAnimal(@PathVariable Long personId, @PathVariable Long animalId) {
+        animalService.deleteOwnedAnimal(personId, animalId);
+        return new ResponseEntity<>("Animal with id: " + animalId + " was successfully deleted from person"
+                + " with id: " + personId, OK);
     }
 }
