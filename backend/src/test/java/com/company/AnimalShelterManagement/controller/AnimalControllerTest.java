@@ -12,8 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 
-import static com.company.AnimalShelterManagement.utils.TestConstant.ID_VALUE;
-import static com.company.AnimalShelterManagement.utils.TestConstant.RANDOM_NUMBER;
+import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.mockito.Mockito.*;
 
 
@@ -48,6 +47,16 @@ public class AnimalControllerTest {
     }
 
     @Test
+    public void shouldPerformReturnAnimalsOwnedByPerson() {
+        when(animalService.returnAnimalsOwnedByPerson(anyLong())).thenReturn(new ArrayList<>());
+
+        animalController.returnAnimalsOwnedByPerson(ID_VALUE);
+
+        verify(animalService).returnAnimalsOwnedByPerson(anyLong());
+        verifyNoMoreInteractions(animalService);
+    }
+
+    @Test
     public void shouldPerformReturnPreviousOwner() {
         when(animalService.returnPreviousOwner(anyLong())).thenReturn(new Person());
 
@@ -64,6 +73,24 @@ public class AnimalControllerTest {
         animalController.returnAnimalsCount();
 
         verify(animalService).countAnimals();
+        verifyNoMoreInteractions(animalService);
+    }
+
+    @Test
+    public void shouldPerformReturnAnimalsCountForPeople() {
+        when(animalService.countAnimalsForPeople()).thenReturn(new long[]{ID_VALUE, ANOTHER_ID_VALUE});
+
+        animalController.returnAnimalsCountForPeople();
+
+        verify(animalService).countAnimalsForPeople();
+        verifyNoMoreInteractions(animalService);
+    }
+
+    @Test
+    public void shouldPerformDeleteOwnedAnimal() {
+        animalController.deleteOwnedAnimal(ID_VALUE, ID_VALUE);
+
+        verify(animalService).deleteOwnedAnimal(anyLong(), anyLong());
         verifyNoMoreInteractions(animalService);
     }
 }

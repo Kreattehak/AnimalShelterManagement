@@ -35,7 +35,8 @@ public class AnimalRepositoryTest {
     @Autowired
     private AnimalRepository animalRepository;
 
-    private Dog dog;
+    private Dog testDog;
+    private Person testPerson;
 
     @Test
     public void shouldReturnAllDogsAvailableForAdoption() {
@@ -52,10 +53,10 @@ public class AnimalRepositoryTest {
     public void shouldReturnPersonRelatedWithAnimal() {
         setAsPreviousOwnerAndPersistPerson();
 
-        Person p = animalRepository.findPersonByAnimalId(dog.getId());
+        Person p = animalRepository.findPersonByAnimalId(testDog.getId());
 
-        assertThat(p.getAnimal(), hasItem(dog));
-        assertThat(dog.getPreviousOwner(), is(checkPersonFieldsEquality(PERSON_FIRST_NAME, PERSON_LAST_NAME)));
+        assertThat(p.getAnimal(), hasItem(testDog));
+        assertThat(testDog.getPreviousOwner(), is(checkPersonFieldsEquality(PERSON_FIRST_NAME, PERSON_LAST_NAME)));
     }
 
     @Test
@@ -63,17 +64,29 @@ public class AnimalRepositoryTest {
         setAsPreviousOwnerAndPersistPerson();
 
         long[] count = animalRepository.findAnimalsCountForPeople();
+        int animalsCountForOnlyPerson = (int) count[0];
 
-        assertEquals(EXPECTED_ANIMALS_FOR_PERSON_COUNT, count[count.length - 1]);
+        assertEquals(EXPECTED_ANIMALS_FOR_PERSON_COUNT, animalsCountForOnlyPerson);
+    }
+
+    @Test
+    public void shouldReturnAnimalsOwnedByPerson() {
+        setAsPreviousOwnerAndPersistPerson();
+
+        Iterable<Animal> animalsOwnedByPerson = animalRepository.findAnimalsOwnedByPerson(testPerson.getId());
+
+        assertThat(animalsOwnedByPerson, hasItem(checkAnimalFieldsEquality(
+                DOG_NAME, Animal.Type.DOG, LocalDate.now())));
+
     }
 
     private void createAndPersistTwoDogs() {
-        dog = newAvailableForAdoptionDog(DOG_NAME, Dog.Race.GERMAN_SHEPERD);
-        dog.setDateOfBirth(LocalDate.now());
+        testDog = newAvailableForAdoptionDog(DOG_NAME, Dog.Race.GERMAN_SHEPERD);
+        testDog.setDateOfBirth(LocalDate.now());
         Dog anotherDog = newlyReceivedDog(ANOTHER_DOG_NAME, Dog.Race.CROSSBREAD);
         anotherDog.setDateOfBirth(LocalDate.now());
 
-        saveTwoDogsInDatabase(dog, anotherDog);
+        saveTwoDogsInDatabase(testDog, anotherDog);
     }
 
     private void saveTwoDogsInDatabase(Dog dog, Dog anotherDog) {
@@ -83,8 +96,8 @@ public class AnimalRepositoryTest {
 
     private void setAsPreviousOwnerAndPersistPerson() {
         createAndPersistTwoDogs();
-        Person person = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
-        entityManager.persist(person);
-        person.addAnimal(dog);
+        testPerson = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
+        entityManager.persist(testPerson);
+        testPerson.addAnimal(testDog);
     }
 }
