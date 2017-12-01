@@ -115,9 +115,16 @@ public class Person extends BaseEntity {
     }
 
     public void addAnimal(Animal animal) {
-        System.out.println(animal);
         this.animal.add(animal);
         animal.setPreviousOwner(this);
+    }
+
+    public boolean removeAnimal(Animal animal) {
+        if (this.animal.remove(animal)) {
+            animal.setPreviousOwner(null);
+            return true;
+        }
+        return false;
     }
 
     @Override
