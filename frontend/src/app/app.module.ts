@@ -3,7 +3,6 @@ import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {AvailableAnimalsListComponent} from './visitor/animals/available-animals-list.component';
-import {AnimalService} from './shared/animal.service';
 import {HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {MainPageComponent} from './visitor/main-page/main-page.component';
@@ -23,10 +22,12 @@ import {ComplexAnimalDetailComponent} from './admin/animals/complex-animal-detai
 import {FilterService} from './shared/filter.service';
 import {PersonResolve} from './admin/people/person.resolve';
 import {PersonAddressDetailComponent} from './admin/people/person-address-detail.component';
-import { PersonAnimalDetailComponent } from './admin/people/person-animal-detail.component';
+import {PersonAnimalDetailComponent} from './admin/people/person-animal-detail.component';
 import {AddressService} from './admin/addresses/address.service';
-import {AddressesResolve} from './admin/addresses/addresses.resolve';
 import {ValidationService} from './shared/validation.service';
+import {PersonAddressesResolve} from './admin/addresses/person-addresses.resolve';
+import {PersonAnimalsResolve} from './admin/animals/person-animals.resolve';
+import {AnimalService} from './shared/animal.service';
 
 @NgModule({
   declarations: [
@@ -61,8 +62,9 @@ import {ValidationService} from './shared/validation.service';
     ValidationService,
     AuthenticationService,
     FilterService,
-    AddressesResolve,
-    PersonResolve
+    PersonResolve,
+    PersonAddressesResolve,
+    PersonAnimalsResolve
   ],
   bootstrap: [AppComponent]
 })

@@ -5,7 +5,7 @@ import {AddressService} from './address.service';
 import {Address} from './address';
 
 @Injectable()
-export class AddressesResolve implements Resolve<Address[]> {
+export class PersonAddressesResolve implements Resolve<Address[]> {
 
   constructor(private _addressService: AddressService) {
   }
