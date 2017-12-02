@@ -30,7 +30,10 @@ import {AddressFormComponent} from './admin/addresses/address-form.component';
         path: 'admin/people/:id/addresses', component: PersonAddressDetailComponent,
         resolve: {person: PersonResolve, addresses: AddressesResolve}
       },
-      {path: 'admin/people/:id/addresses/new', component: AddressFormComponent},
+      {
+        path: 'admin/people/:id/addresses/new', component: AddressFormComponent,
+        resolve: {person: PersonResolve}
+      },
       {
         path: 'admin/people/:id/addresses/:addressId', component: AddressFormComponent,
         resolve: {person: PersonResolve, addresses: AddressesResolve}
