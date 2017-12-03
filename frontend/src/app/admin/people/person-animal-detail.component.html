@@ -1,3 +1,58 @@
-<p>
-  person-animal-detail works!
-</p>
+<div class="container" *ngIf="animals && animals.length; else personWithoutAnimal">
+  <div class="jumbotron">
+    <h2>{{ person.firstName + ' ' + person.lastName }}</h2>
+    <p>Date of registration: {{ person.dateOfRegistration | date:'dd.MM.y' }}</p>
+    <p>Main address: {{ person.mainAddress.cityName + ', ' + person.mainAddress.streetName + ', '
+      + person.mainAddress.zipCode }}</p>
+  </div>
+  <table class="table" id="personDetails">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Animal Name</th>
+      <th>Animal Type</th>
+      <th>Animal Subtype</th>
+      <th>Animal Identifier</th>
+      <th>Birthdate</th>
+    </thead>
+    <tbody>
+    <tr *ngFor="let animal of animals" (click)="markAsActive(animal)" [class.success]="animal === activeAnimal">
+      <th scope="row">{{ animal.id }}</th>
+      <td>{{ animal.name }}</td>
+      <td>{{ animal.type }}</td>
+      <td>{{ animal.subType }}</td>
+      <td>{{ animal.animalIdentifier }}</td>
+      <td>{{ animal.dateOfBirth }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="form-group">
+      <div class="col-lg-10">
+        <button type="button" id="bAddAnimal" class="btn btn-info" (click)="onAddAnimal()">
+          Add Animal
+        </button>
+        <button type="button" id="bEditAnimal" class="btn btn-info" (click)="onEditAnimal()">
+          Edit Animal
+        </button>
+        <button type="button" id="bRemoveAnimal" class="btn btn-danger" (click)="onRemoveAnimal()">
+          Remove Animal
+        </button>
+        <button type="button" class="btn btn-warning" (click)="onBack()">
+          Back
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #personWithoutAnimal>
+  <div class="container">
+    <div class="jumbotron">
+      <p>This person doesn't have any animals adopted from our shelter.</p>
+    </div>
+  </div>
+</ng-template>

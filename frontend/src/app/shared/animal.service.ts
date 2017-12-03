@@ -10,11 +10,13 @@ export class AnimalService {
   private _getAnimalsCount = '/api/animals/count';
   private _getAnimalsCountForPeople = '/api/animals/countForPeople';
   private _getAllAnimals = '/api/animals/availableForAdoption';
-  private _saveNewAnimal = {
+  private _saveOrDeleteAnimal = {
     cat: '/api/cats',
     dog: '/api/dogs',
     bird: '/api/birds'
   };
+  private _deleteAnimalFromOwner = '/api/person/{personId}/animals/{animalId}';
+  private _getAnimalsOwnedByPerson = '/api/person/{personId}/animals';
   private _getAnimalsAvailableForAdoption = '/api/animals/availableForAdoption';
 
   public animalTypes: {} = [
@@ -60,12 +62,25 @@ export class AnimalService {
     return this._http.get<Animal[]>(this._getAllAnimals);
   }
 
-  saveNewAnimal(animal: Animal): Observable<Animal> {
-    const animalUrlByType = this._saveNewAnimal[animal.type.toLowerCase()];
-    return this._http.post<Animal>(animalUrlByType, animal, this.headers);
+  getAnimalsOwnedByPerson(personId: number): Observable<Animal[]> {
+    return this._http.get<Animal[]>(this._getAnimalsOwnedByPerson.replace('{personId}', personId.toString()));
   }
 
   getAnimalsAvailableForAdoption(): Observable<Animal[]> {
     return this._http.get<Animal[]>(this._getAnimalsAvailableForAdoption);
+  }
+
+  saveNewAnimal(animal: Animal): Observable<Animal> {
+    return this._http.post<Animal>(this.getRequestUrlByAnimalType(animal.type), animal, this.headers);
+  }
+
+  // only removes OneToOne relationship between person and animal, animal is still in animal table
+  deleteOwnedAnimal(personId: number, animalId: number): Observable<string> {
+    return this._http.delete(this._deleteAnimalFromOwner.replace('{personId}', personId.toString())
+      .replace('{animalId}', animalId.toString()), {responseType: 'text'});
+  }
+
+  private getRequestUrlByAnimalType(animalType: string) {
+    return this._saveOrDeleteAnimal[animalType.toLowerCase()];
   }
 }
