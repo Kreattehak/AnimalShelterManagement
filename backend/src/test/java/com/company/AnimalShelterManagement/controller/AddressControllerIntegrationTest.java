@@ -155,9 +155,20 @@ public class AddressControllerIntegrationTest {
     public void shouldDeleteAddress() {
         long countAfterDeletion = addressRepository.count() - 1;
 
-        addressController.deleteAddress(ANOTHER_ID_VALUE, ID_VALUE);
+        addressController.deleteAddress(ID_VALUE, ANOTHER_ID_VALUE);
 
         assertEquals(countAfterDeletion, addressRepository.count());
+    }
+
+    @Test
+    @Sql(value = "classpath:data-test.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Commit
+    public void shouldResponseWithMessageAfterDeletingAddress() {
+        ResponseEntity<String> response = restTemplate.exchange(home + apiForPerson + ID_VALUE + address
+                + ANOTHER_ID_VALUE, DELETE, null, String.class);
+
+        assertResponse(response, OK, containsString("Address with id: " + ANOTHER_ID_VALUE
+                + " was successfully deleted"));
     }
 
     @Test

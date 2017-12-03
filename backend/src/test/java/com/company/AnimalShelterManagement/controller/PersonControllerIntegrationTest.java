@@ -24,10 +24,12 @@ import static com.company.AnimalShelterManagement.controller.RestExceptionHandle
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -131,6 +133,16 @@ public class PersonControllerIntegrationTest {
         personController.deletePerson(ID_VALUE);
 
         assertEquals(countAfterDeletion, personRepository.count());
+    }
+
+    @Test
+    @Sql(value = "classpath:data-test.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Commit
+    public void shouldResponseWithMessageAfterDeletingPerson() {
+        ResponseEntity<String> response = restTemplate.exchange(home + apiForPerson+ ID_VALUE, DELETE,
+                null, String.class);
+
+        assertResponse(response, OK, containsString("Person with id: " + ID_VALUE + " was successfully deleted"));
     }
 
     private void changePersonData() {

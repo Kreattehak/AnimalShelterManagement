@@ -9,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertResponse;
 import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertThatResponseHaveMultipleEntitiesReturned;
 import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseProcessUserRequestException;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
@@ -101,6 +104,17 @@ public class AnimalControllerIntegrationTest {
         animalController.deleteOwnedAnimal(ID_VALUE, ID_VALUE);
 
         assertThat(personService.returnPerson(ID_VALUE).getAnimal(), hasSize(NO_ENTITIES));
+    }
+
+    @Test
+    @Sql(value = "classpath:data-test.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Commit
+    public void shouldResponseWithMessageAfterDeletingDog() {
+        ResponseEntity<String> response = restTemplate.exchange(home + apiForPerson + ID_VALUE + animalsResource
+                + ID_VALUE, DELETE, null, String.class);
+
+        assertResponse(response, OK, containsString("Animal with id: " + ID_VALUE
+                + " was successfully deleted from person with id: " + ID_VALUE));
     }
 
     @Test

@@ -26,18 +26,17 @@ import java.time.LocalDate;
 import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertResponse;
 import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertThatResponseHaveMultipleEntitiesReturned;
 import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseEntityNotFoundException;
-import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.AVAILABLE;
-import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.UNDER_VETERINARY_CARE;
+import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.*;
 import static com.company.AnimalShelterManagement.model.Dog.Race.GERMAN_SHEPERD;
 import static com.company.AnimalShelterManagement.service.HibernateDogServiceTest.checkDogDtoFieldsEquality;
 import static com.company.AnimalShelterManagement.service.HibernateDogServiceTest.checkDogFieldsEquality;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -87,7 +86,7 @@ public class DogControllerIntegrationTest {
         response = restTemplate.getForEntity(home + apiForDog + ID_VALUE, DogDTO.class);
 
         assertResponse(response, OK, is(checkDogDtoFieldsEquality(DOG_NAME, GERMAN_SHEPERD,
-                LocalDate.now(), AVAILABLE)));
+                LocalDate.now(), ADOPTED)));
     }
 
     @Test
@@ -101,7 +100,7 @@ public class DogControllerIntegrationTest {
         dogController.saveDog(mapper.map(testDog, DogDTO.class));
 
         assertThat(dogRepository.findOne(ID_VALUE), is(checkDogFieldsEquality(DOG_NAME, GERMAN_SHEPERD,
-                LocalDate.now(), AVAILABLE)));
+                LocalDate.now(), ADOPTED)));
     }
 
     @Test
@@ -134,7 +133,6 @@ public class DogControllerIntegrationTest {
         changeDogData();
         HttpEntity<DogDTO> entity = new HttpEntity<>(mapper.map(testDog, DogDTO.class), httpHeaders);
 
-        System.out.println(ID_VALUE);
         response = restTemplate.exchange(home + apiForDog + ID_VALUE, PUT, entity, DogDTO.class);
 
         assertResponse(response, OK, is(checkDogDtoFieldsEquality(ANOTHER_DOG_NAME, GERMAN_SHEPERD,
@@ -148,6 +146,16 @@ public class DogControllerIntegrationTest {
         dogController.deleteDog(ID_VALUE);
 
         assertEquals(countAfterDeletion, dogRepository.count());
+    }
+
+    @Test
+    @Sql(value = "classpath:data-test.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Commit
+    public void shouldResponseWithMessageAfterDeletingDog() {
+        ResponseEntity<String> response = restTemplate.exchange(home + apiForDog + ID_VALUE, DELETE,
+                null, String.class);
+
+        assertResponse(response, OK, containsString("Dog with id: " + ID_VALUE + " was successfully deleted"));
     }
 
     private void changeDogData() {
