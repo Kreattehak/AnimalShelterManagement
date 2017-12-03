@@ -121,7 +121,7 @@ public class HibernateAddressServiceTest {
         when(personService.returnPerson(anyLong())).thenReturn(testPerson);
         when(addressRepository.findOne(anyLong())).thenReturn(anotherTestAddress);
 
-        addressService.deleteAddress(ID_VALUE, ID_VALUE);
+        addressService.deleteAddress(ID_VALUE, ANOTHER_ID_VALUE);
 
         assertThat(testPerson.getAddress(), contains(equalTo(testAddress)));
         assertThat(testAddress.getPerson(), equalTo(testPerson));

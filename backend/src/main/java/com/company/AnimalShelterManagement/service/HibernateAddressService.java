@@ -56,7 +56,7 @@ public class HibernateAddressService extends HibernateCommonService<Address, Add
     }
 
     @Override
-    public void deleteAddress(Long addressId, Long personId) {
+    public void deleteAddress(Long personId, Long addressId) {
         Person person = personService.returnPerson(personId);
         Address address = returnAddress(addressId);
         if (person.getMainAddress() == address) {

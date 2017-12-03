@@ -12,7 +12,7 @@ public interface AddressService extends CommonService<Address> {
 
     Address updateAddress(Address address);
 
-    void deleteAddress(Long addressId, Long personId);
+    void deleteAddress(Long personId, Long addressId);
 
     void updateMainAddress(Long personId, Long addressId);
 }
