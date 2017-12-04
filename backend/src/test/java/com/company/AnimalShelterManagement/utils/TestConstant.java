@@ -52,4 +52,5 @@ public class TestConstant {
     public static final String BIRD_NAME = "Papi";
 
     public static final String STRING_TO_TEST_EQUALITY = ID_NOT_FOUND.toString();
+    public static final String METHOD_NOT_SUPPORTED = "GET";
 }
