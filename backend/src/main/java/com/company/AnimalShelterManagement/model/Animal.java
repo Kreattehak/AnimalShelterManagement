@@ -45,6 +45,11 @@ public class Animal extends BaseEntity {
     @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate dateOfBirth;
 
+    @Column(name = "date_of_registration")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
+    private LocalDate dateOfRegistration;
+
     @ManyToOne
     @JoinTable(name = "person_animal", joinColumns = @JoinColumn(name = "animal_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))
@@ -52,6 +57,7 @@ public class Animal extends BaseEntity {
     private Person previousOwner;
 
     Animal() {
+        this.dateOfRegistration = LocalDate.now();
     }
 
     public String getName() {
@@ -102,6 +108,14 @@ public class Animal extends BaseEntity {
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public LocalDate getDateOfRegistration() {
+        return dateOfRegistration;
+    }
+
+    public void setDateOfRegistration(LocalDate dateOfRegistration) {
+        this.dateOfRegistration = dateOfRegistration;
     }
 
     public Person getPreviousOwner() {
