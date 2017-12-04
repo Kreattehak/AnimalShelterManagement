@@ -114,9 +114,12 @@ public class Person extends BaseEntity {
         this.animal = animal;
     }
 
-    public void addAnimal(Animal animal) {
-        this.animal.add(animal);
-        animal.setPreviousOwner(this);
+    public boolean addAnimal(Animal animal) {
+        if(this.animal.add(animal)) {
+            animal.setPreviousOwner(this);
+            return true;
+        }
+        return false;
     }
 
     public boolean removeAnimal(Animal animal) {
