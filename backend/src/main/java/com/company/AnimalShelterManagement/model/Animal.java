@@ -40,12 +40,12 @@ public class Animal extends BaseEntity {
     animalIdentifier is print on dog/cat id tag*/
     private String animalIdentifier;
 
-    @Column(name = "date_of_birth")
+    @Column(name = "date_of_birth", columnDefinition = "DATE")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate dateOfBirth;
 
-    @Column(name = "date_of_registration")
+    @Column(name = "date_of_registration", nullable = false, updatable = false, columnDefinition = "DATE")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate dateOfRegistration;

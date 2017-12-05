@@ -28,7 +28,7 @@ public class Person extends BaseEntity {
     @JsonIgnore
     private Set<Address> address;
 
-    @Column(name = "date_of_registration", nullable = false, updatable = false)
+    @Column(name = "date_of_registration", nullable = false, updatable = false, columnDefinition = "DATE")
     @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate dateOfRegistration;
 
