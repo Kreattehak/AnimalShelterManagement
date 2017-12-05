@@ -75,7 +75,7 @@ public class HibernateDogServiceTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenAddressIdWasNotFound() {
+    public void shouldThrowExceptionWhenDogIdWasNotFound() {
         when(dogRepository.findOne(anyLong())).thenReturn(null);
 
         expectedException.expect(EntityNotFoundException.class);
@@ -109,7 +109,7 @@ public class HibernateDogServiceTest {
     }
 
     @Test
-    public void shouldPerformDeletePerson() {
+    public void shouldPerformDeleteDog() {
         when(dogRepository.findOne(anyLong())).thenReturn(testDog);
 
         dogService.deleteDog(ID_VALUE);

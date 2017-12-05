@@ -46,9 +46,9 @@ public class DogController {
     }
 
     @DeleteMapping("${rest.dog.deleteDog}")
-    public ResponseEntity<Void> deleteDog(@PathVariable Long dogId) {
+    public ResponseEntity<String> deleteDog(@PathVariable Long dogId) {
         dogService.deleteDog(dogId);
-        return ResponseEntity.status(OK).build();
+        return new ResponseEntity<>("Dog with id: " + dogId + " was successfully deleted", OK);
     }
 
     private DogDTO mapToDTO(Dog dog) {
