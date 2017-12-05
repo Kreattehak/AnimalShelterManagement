@@ -38,11 +38,12 @@ public class AnimalControllerTest {
 
     @Test
     public void shouldPerformReturnAnimalsAvailableForAdoptions() {
-        when(animalService.returnAnimalsAvailableForAdoption()).thenReturn(new ArrayList<>());
+        when(animalService.returnAnimalsAvailableForAdoption(null, null, null))
+                .thenReturn(new ArrayList<>());
 
-        animalController.returnAnimalsAvailableForAdoption();
+        animalController.returnAnimalsAvailableForAdoption(null, null, null);
 
-        verify(animalService).returnAnimalsAvailableForAdoption();
+        verify(animalService).returnAnimalsAvailableForAdoption(null, null, null);
         verifyNoMoreInteractions(animalService);
     }
 
@@ -83,6 +84,14 @@ public class AnimalControllerTest {
         animalController.returnAnimalsCountForPeople();
 
         verify(animalService).countAnimalsForPeople();
+        verifyNoMoreInteractions(animalService);
+    }
+
+    @Test
+    public void shouldPerformAddAnimalToPerson() {
+        animalController.addAnimalToPerson(ID_VALUE, ID_VALUE);
+
+        verify(animalService).addAnimalToPerson(anyLong(), anyLong());
         verifyNoMoreInteractions(animalService);
     }
 

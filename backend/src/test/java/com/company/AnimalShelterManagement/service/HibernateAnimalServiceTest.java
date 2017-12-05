@@ -9,6 +9,7 @@ import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import com.company.AnimalShelterManagement.utils.ProcessUserRequestException;
 import org.hamcrest.Matcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -21,10 +22,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.ADOPTED;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -38,8 +40,18 @@ public class HibernateAnimalServiceTest {
     @Autowired
     private AnimalService animalService;
 
+    private Person testPerson;
+    private Dog testDog;
+
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
+
+    @Before
+    public void setUp() throws Exception {
+        testPerson = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
+        testDog = new Dog();
+        testDog.setId(ID_VALUE);
+    }
 
     @Test
     public void shouldPerformReturnAnimals() {
@@ -55,7 +67,7 @@ public class HibernateAnimalServiceTest {
     public void shouldPerformReturnAnimalsAvailableForAdoption() {
         when(animalRepository.findAnimalByAvailableForAdoption()).thenReturn(new ArrayList<>());
 
-        animalService.returnAnimalsAvailableForAdoption();
+        animalService.returnAnimalsAvailableForAdoption(null, null, null);
 
         verify(animalRepository).findAnimalByAvailableForAdoption();
         verifyNoMoreInteractions(animalRepository);
@@ -101,13 +113,34 @@ public class HibernateAnimalServiceTest {
         verifyNoMoreInteractions(animalRepository);
     }
 
+
+    @Test
+    public void shouldPerformAddAnimalToPerson() {
+        when(personService.returnPerson(anyLong())).thenReturn(testPerson);
+        when(animalRepository.findOne(anyLong())).thenReturn(testDog);
+
+        animalService.addAnimalToPerson(ID_VALUE, ID_VALUE);
+
+        assertThat(testPerson.getAnimal(), hasSize(EXPECTED_ANIMALS_FOR_PERSON_COUNT));
+        assertTrue(testPerson.getAnimal().contains(testDog));
+        assertEquals(ADOPTED, testDog.getAvailableForAdoption());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenCantPerformAddAnimalToPerson() {
+        addAnimalsToPerson();
+
+        when(personService.returnPerson(anyLong())).thenReturn(testPerson);
+        when(animalRepository.findOne(anyLong())).thenReturn(testDog);
+
+        expectedException.expectMessage("Request could not be processed for PERSON");
+        expectedException.expect(ProcessUserRequestException.class);
+        animalService.addAnimalToPerson(ID_VALUE, ID_VALUE);
+    }
+
     @Test
     public void shouldPerformDeleteOwnedAnimal() {
-        Person testPerson = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
-        Dog testDog = new Dog();
-        Cat testCat = new Cat();
-        testPerson.addAnimal(testDog);
-        testPerson.addAnimal(testCat);
+        addAnimalsToPerson();
 
         when(personService.returnPerson(anyLong())).thenReturn(testPerson);
         when(animalRepository.findOne(anyLong())).thenReturn(testDog);
@@ -125,11 +158,8 @@ public class HibernateAnimalServiceTest {
 
     @Test
     public void shouldThrowExceptionWhenPerformDeleteNotOwnedAnimal() {
-        Person testPerson = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
-        Dog testDog = new Dog();
-
         when(personService.returnPerson(anyLong())).thenReturn(testPerson);
-        when(animalRepository.findOne(anyLong())).thenReturn(testDog);
+        when(animalRepository.findOne(anyLong())).thenReturn(new Dog());
 
         expectedException.expectMessage("Request could not be processed for PERSON");
         expectedException.expect(ProcessUserRequestException.class);
@@ -142,5 +172,11 @@ public class HibernateAnimalServiceTest {
                 hasProperty(NAME, is(animalName)),
                 hasProperty(TYPE, is(animalType)),
                 hasProperty(DATE_OF_BIRTH, is(dateOfBirth)));
+    }
+
+    private void addAnimalsToPerson() {
+        Cat testCat = new Cat();
+        testPerson.addAnimal(testDog);
+        testPerson.addAnimal(testCat);
     }
 }
