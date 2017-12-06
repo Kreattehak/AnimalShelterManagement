@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.ADOPTED;
+import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.AVAILABLE;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -51,6 +52,7 @@ public class HibernateAnimalServiceTest {
         testPerson = new Person(PERSON_FIRST_NAME, PERSON_LAST_NAME);
         testDog = new Dog();
         testDog.setId(ID_VALUE);
+        testDog.setAvailableForAdoption(AVAILABLE);
     }
 
     @Test
@@ -113,7 +115,6 @@ public class HibernateAnimalServiceTest {
         verifyNoMoreInteractions(animalRepository);
     }
 
-
     @Test
     public void shouldPerformAddAnimalToPerson() {
         when(personService.returnPerson(anyLong())).thenReturn(testPerson);
@@ -127,8 +128,21 @@ public class HibernateAnimalServiceTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenCantPerformAddAnimalToPerson() {
-        addAnimalsToPerson();
+    public void shouldThrowExceptionWhenAnimalIsNotAvailable() {
+        testDog.setAvailableForAdoption(ADOPTED);
+
+        when(personService.returnPerson(anyLong())).thenReturn(testPerson);
+        when(animalRepository.findOne(anyLong())).thenReturn(testDog);
+
+        expectedException.expectMessage("Request could not be processed for ANIMAL");
+        expectedException.expect(ProcessUserRequestException.class);
+        animalService.addAnimalToPerson(ID_VALUE, ID_VALUE);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenAddTheSameAnimalToPerson() {
+        testPerson.addAnimal(testDog);
+        testDog.setAvailableForAdoption(AVAILABLE);
 
         when(personService.returnPerson(anyLong())).thenReturn(testPerson);
         when(animalRepository.findOne(anyLong())).thenReturn(testDog);

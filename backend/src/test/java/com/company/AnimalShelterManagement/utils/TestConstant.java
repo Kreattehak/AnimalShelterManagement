@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class TestConstant {
     public static final Long ID_VALUE = 1L;
     public static final Long ANOTHER_ID_VALUE = 2L;
+    public static final Long AVAILABLE_ANIMAL_ID = 3L;
     public static final Long ID_NOT_FOUND = 123123511L;
     public static final Long RANDOM_NUMBER = 12345L;
     public static final int NO_ENTITIES = 0;
@@ -13,6 +14,7 @@ public class TestConstant {
     public static final int EXPECTED_ADDRESS_COUNT = 2;
     public static final int EXPECTED_ANIMALS_FOR_ADOPTION_COUNT = 1;
     public static final int EXPECTED_ANIMALS_FOR_PERSON_COUNT = 1;
+    public static final int EXPECT_PERSON_WITH_TWO_ANIMALS = 2;
     public static final int EXPECTED_ANIMALS_COUNT = 3;
 
     public static final String FILL_UP = "00";
@@ -53,4 +55,6 @@ public class TestConstant {
 
     public static final String STRING_TO_TEST_EQUALITY = ID_NOT_FOUND.toString();
     public static final String METHOD_NOT_SUPPORTED = "GET";
+
+    public static final LocalDate DATE_OF_BIRTH_VALUE = LocalDate.of(1999, 11, 06);
 }

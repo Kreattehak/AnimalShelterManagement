@@ -3,8 +3,11 @@ package com.company.AnimalShelterManagement.controller;
 import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
+import com.company.AnimalShelterManagement.utils.ProcessUserRequestException;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +25,7 @@ import java.util.Set;
 import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertResponse;
 import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertThatResponseHaveMultipleEntitiesReturned;
 import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseProcessUserRequestException;
+import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.AVAILABLE;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -54,6 +58,9 @@ public class AnimalControllerIntegrationTest {
     private String apiForPerson = "/api/person/";
     private String previousOwner = "/previousOwner";
     private String animalsForAdoption = "/availableForAdoption";
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Before
     public void setUp() {
@@ -105,7 +112,7 @@ public class AnimalControllerIntegrationTest {
 
     @Test
     public void shouldAddAnimalToPerson() {
-        animalController.addAnimalToPerson(ID_VALUE, ANOTHER_ID_VALUE);
+        animalController.addAnimalToPerson(ID_VALUE, AVAILABLE_ANIMAL_ID);
 
         Set<Animal> adoptedAnimals = personService.returnPerson(ID_VALUE).getAnimal();
         assertThat(adoptedAnimals, hasSize(EXPECT_PERSON_WITH_TWO_ANIMALS));
@@ -117,21 +124,31 @@ public class AnimalControllerIntegrationTest {
     @Commit
     public void shouldResponseWithMessageAfterAddingAnimalToPersonDog() {
         ResponseEntity<String> response = restTemplate.exchange(home + apiForPerson + ID_VALUE + animalsResource
-                + ANOTHER_ID_VALUE, PUT, null, String.class);
+                + AVAILABLE_ANIMAL_ID, PUT, null, String.class);
 
-        assertResponse(response, OK, containsString("Animal with id: " + ANOTHER_ID_VALUE
+        assertResponse(response, OK, containsString("Animal with id: " + AVAILABLE_ANIMAL_ID
                 + " was successfully added to person with id: " + ID_VALUE));
     }
 
     @Test
-    public void shouldThrowExceptionWhenCantAddAnimalToPerson() {
-        String url = home + apiForPerson + ID_VALUE + animalsResource + ID_VALUE;
-        String message = "Request could not be processed for PERSON, " + "for parameters: {person_id="
-                + ID_VALUE + ", animal_id=" + ID_VALUE + '}';
+    public void shouldThrowExceptionWhenAnimalIsNotAvailable() {
+        String url = home + apiForPerson + ID_VALUE + animalsResource + ANOTHER_ID_VALUE;
+        String message = "Request could not be processed for ANIMAL, " + "for parameters: {animal_id="
+                + ANOTHER_ID_VALUE + ", available=false}";
 
         checkResponseProcessUserRequestException(url, PUT, message);
 
         assertThat(personService.returnPerson(ID_VALUE).getAnimal(), hasSize(EXPECTED_ANIMALS_FOR_PERSON_COUNT));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenAddTheSameAnimalToPerson() {
+        setAdoptedAnimalToAvailable();
+
+        expectedException.expect(ProcessUserRequestException.class);
+        expectedException.expectMessage("Request could not be processed for PERSON, " + "for parameters: {person_id="
+                + ID_VALUE + ", animal_id=" + ID_VALUE + '}');
+        animalController.addAnimalToPerson(ID_VALUE, ID_VALUE);
     }
 
     @Test
@@ -161,5 +178,12 @@ public class AnimalControllerIntegrationTest {
         checkResponseProcessUserRequestException(url, DELETE, message);
 
         assertThat(personService.returnPerson(ID_VALUE).getAnimal(), hasSize(EXPECTED_ANIMALS_FOR_PERSON_COUNT));
+    }
+
+    private void setAdoptedAnimalToAvailable() {
+        Person person = personService.returnPerson(ID_VALUE);
+        Animal adoptedAnimal = person.getAnimal().iterator().next();
+        adoptedAnimal.setAvailableForAdoption(AVAILABLE);
+        personService.updatePerson(person);
     }
 }
