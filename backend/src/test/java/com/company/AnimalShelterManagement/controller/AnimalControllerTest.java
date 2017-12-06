@@ -2,6 +2,7 @@ package com.company.AnimalShelterManagement.controller;
 
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
+import com.company.AnimalShelterManagement.utils.RestResponsePage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,16 @@ public class AnimalControllerTest {
         animalController.returnAnimalsAvailableForAdoption(null, null, null);
 
         verify(animalService).returnAnimalsAvailableForAdoption(null, null, null);
+        verifyNoMoreInteractions(animalService);
+    }
+
+    @Test
+    public void shouldPerformReturnAnimalsWithLongestWaitingTime() {
+        when(animalService.returnAnimalsWithLongestWaitingTime()).thenReturn(new RestResponsePage<>());
+
+        animalController.returnAnimalsWithLongestWaitingTime();
+
+        verify(animalService).returnAnimalsWithLongestWaitingTime();
         verifyNoMoreInteractions(animalService);
     }
 

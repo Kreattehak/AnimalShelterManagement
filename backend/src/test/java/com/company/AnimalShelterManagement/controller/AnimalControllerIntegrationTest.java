@@ -22,8 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Set;
 
-import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertResponse;
-import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertThatResponseHaveMultipleEntitiesReturned;
+import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.*;
 import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseProcessUserRequestException;
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.AVAILABLE;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
@@ -58,6 +57,7 @@ public class AnimalControllerIntegrationTest {
     private String apiForPerson = "/api/person/";
     private String previousOwner = "/previousOwner";
     private String animalsForAdoption = "/availableForAdoption";
+    private String longestWaitingTime = "/longestWaitingTime";
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -76,6 +76,12 @@ public class AnimalControllerIntegrationTest {
     @Test
     public void shouldReturnAnimalsAvailableForAdoptions() {
         assertThatResponseHaveMultipleEntitiesReturned(home + apiForAnimals + animalsForAdoption,
+                EXPECTED_ANIMALS_FOR_ADOPTION_COUNT);
+    }
+
+    @Test
+    public void shouldReturnAnimalsWithLongestWaitingTime() {
+        assertThatResponseHavePagedEntitiesReturned(home + apiForAnimals + longestWaitingTime,
                 EXPECTED_ANIMALS_FOR_ADOPTION_COUNT);
     }
 

@@ -1,6 +1,7 @@
 package com.company.AnimalShelterManagement;
 
 import com.company.AnimalShelterManagement.controller.*;
+import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.repository.AddressRepositoryTest;
 import com.company.AnimalShelterManagement.repository.AnimalRepositoryTest;
 import com.company.AnimalShelterManagement.service.HibernateAddressServiceTest;
@@ -9,9 +10,11 @@ import com.company.AnimalShelterManagement.service.HibernateDogServiceTest;
 import com.company.AnimalShelterManagement.service.HibernatePersonServiceTest;
 import com.company.AnimalShelterManagement.utils.AnimalFactoryTest;
 import com.company.AnimalShelterManagement.utils.AnimalShelterExceptionTest;
+import com.company.AnimalShelterManagement.utils.RestResponsePage;
 import org.hamcrest.Matcher;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -25,6 +28,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.OK;
 
 @RunWith(Suite.class)
@@ -53,6 +57,17 @@ public class AnimalShelterManagementApplicationTests {
 
         assertThat(response.getStatusCode(), equalTo(OK));
         assertEquals(count, response.getBody().size());
+    }
+
+    public static void assertThatResponseHavePagedEntitiesReturned(String url, int count) {
+        ParameterizedTypeReference<RestResponsePage<Animal>> responseType =
+                new ParameterizedTypeReference<RestResponsePage<Animal>>() {
+                };
+
+        ResponseEntity<RestResponsePage<Animal>> response = new RestTemplate().exchange(url, GET, null, responseType);
+
+        assertThat(response.getStatusCode(), equalTo(OK));
+        assertEquals(count, response.getBody().getNumberOfElements());
     }
 
     public static <T> void testConstructorIsPrivate(Class<T> clazz) throws NoSuchMethodException, IllegalAccessException,

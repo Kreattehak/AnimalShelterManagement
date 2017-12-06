@@ -8,6 +8,7 @@ import com.company.AnimalShelterManagement.repository.AnimalRepository;
 import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import com.company.AnimalShelterManagement.utils.ProcessUserRequestException;
+import com.company.AnimalShelterManagement.utils.RestResponsePage;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
@@ -28,6 +29,7 @@ import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -72,6 +74,16 @@ public class HibernateAnimalServiceTest {
         animalService.returnAnimalsAvailableForAdoption(null, null, null);
 
         verify(animalRepository).findAnimalByAvailableForAdoption();
+        verifyNoMoreInteractions(animalRepository);
+    }
+
+    @Test
+    public void shouldPerformReturnAnimalsWithLongestWaitingTime() {
+        when(animalRepository.findAnimalsWithLongestWaitingTime(any())).thenReturn(new RestResponsePage<>());
+
+        animalService.returnAnimalsWithLongestWaitingTime();
+
+        verify(animalRepository).findAnimalsWithLongestWaitingTime(any());
         verifyNoMoreInteractions(animalRepository);
     }
 
