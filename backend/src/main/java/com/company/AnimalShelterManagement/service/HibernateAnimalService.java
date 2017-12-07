@@ -7,8 +7,13 @@ import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import com.company.AnimalShelterManagement.utils.ProcessUserRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.ADOPTED;
+import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.AVAILABLE;
 
 @Service("defaultAnimalService")
 @Transactional(readOnly = true)
@@ -16,6 +21,7 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
         implements AnimalService {
 
     private final PersonService personService;
+    private final int PAGE_SIZE = 10;
 
     @Autowired
     public HibernateAnimalService(AnimalRepository animalRepository, PersonService personService) {
@@ -30,8 +36,23 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
     }
 
     @Override
-    public Iterable<Animal> returnAnimalsAvailableForAdoption() {
-        return repository.findAnimalByAvailableForAdoption();
+    public Iterable<Animal> returnAnimalsAvailableForAdoption(Animal.Type animalType, String animalIdentifier,
+                                                              String animalName) {
+        if (animalType != null) {
+            if (animalName != null) {
+                return repository.findAnimalByAvailableForAdoptionByName(animalType, animalName);
+            } else {
+                return repository.findAnimalByAvailableForAdoptionByIdentifier(animalType, animalIdentifier);
+            }
+        } else {
+            System.out.println("TYPE NULL");
+            return repository.findAnimalByAvailableForAdoption();
+        }
+    }
+
+    @Override
+    public Page<Animal> returnAnimalsWithLongestWaitingTime() {
+        return repository.findAnimalsWithLongestWaitingTime(new PageRequest(0, PAGE_SIZE));
     }
 
     @Override
@@ -56,6 +77,24 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
 
     @Override
     @Transactional(readOnly = false)
+    public void addAnimalToPerson(Long personId, Long animalId) {
+        Person personFromDatabase = personService.returnPerson(personId);
+        Animal animalFromDatabase = ifExistsReturnEntity(animalId);
+
+        if (animalFromDatabase.getAvailableForAdoption() != AVAILABLE) {
+            throw new ProcessUserRequestException(Animal.class, "animal_id", animalId.toString(),
+                    "available", "false");
+        }
+        if (!personFromDatabase.addAnimal(animalFromDatabase)) {
+            throw new ProcessUserRequestException(Person.class, "person_id", personId.toString(),
+                    "animal_id", animalId.toString());
+        }
+
+        animalFromDatabase.setAvailableForAdoption(ADOPTED);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public void deleteOwnedAnimal(Long personId, Long animalId) {
         Person personFromDatabase = personService.returnPerson(personId);
         Animal animalFromDatabase = ifExistsReturnEntity(animalId);
@@ -64,6 +103,8 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
             throw new ProcessUserRequestException(Person.class, "person_id", personId.toString(),
                     "animal_id", animalId.toString());
         }
+
+        animalFromDatabase.setAvailableForAdoption(AVAILABLE);
     }
 
     @Autowired
