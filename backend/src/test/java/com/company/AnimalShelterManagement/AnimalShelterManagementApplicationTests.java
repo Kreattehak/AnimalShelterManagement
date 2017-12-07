@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.reflect.Modifier.isPrivate;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -54,6 +55,13 @@ import static org.springframework.http.HttpStatus.OK;
 public class AnimalShelterManagementApplicationTests {
     public static void assertThatResponseHaveMultipleEntitiesReturned(String url, int count) {
         ResponseEntity<List> response = new RestTemplate().getForEntity(url, List.class);
+
+        assertThat(response.getStatusCode(), equalTo(OK));
+        assertEquals(count, response.getBody().size());
+    }
+
+    public static void assertThatResponseHaveMultipleEntitiesReturnedWithParams(String url, int count, Map<String, String> params) {
+        ResponseEntity<List> response = new RestTemplate().getForEntity(url, List.class, params);
 
         assertThat(response.getStatusCode(), equalTo(OK));
         assertEquals(count, response.getBody().size());

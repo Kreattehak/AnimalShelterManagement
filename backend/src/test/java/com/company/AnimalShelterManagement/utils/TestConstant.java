@@ -56,5 +56,11 @@ public class TestConstant {
     public static final String STRING_TO_TEST_EQUALITY = ID_NOT_FOUND.toString();
     public static final String METHOD_NOT_SUPPORTED = "GET";
 
+    public static final String ANIMAL_TYPE = "animalType";
+    public static final String ANIMAL_IDENTIFIER = "animalIdentifier";
+    public static final String AVAILABLE_ANIMAL_IDENTIFIER_VALUE = "00050003";
+    public static final String ANIMAL_NAME = "animalName";
+    public static final String AVAILABLE_ANIMAL_NAME= "Fire";
+
     public static final LocalDate DATE_OF_BIRTH_VALUE = LocalDate.of(1999, 11, 06);
 }

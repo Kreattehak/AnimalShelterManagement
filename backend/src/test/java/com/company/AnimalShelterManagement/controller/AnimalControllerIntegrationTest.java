@@ -21,12 +21,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.*;
 import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseProcessUserRequestException;
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.ADOPTED;
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.AVAILABLE;
+import static com.company.AnimalShelterManagement.model.Animal.Type.DOG;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -78,9 +81,28 @@ public class AnimalControllerIntegrationTest {
     }
 
     @Test
-    public void shouldReturnAnimalsAvailableForAdoptions() {
+    public void shouldPerformReturnAnimalsAvailableForAdoptionWithNoDataProvided() {
         assertThatResponseHaveMultipleEntitiesReturned(home + apiForAnimals + animalsForAdoption,
                 EXPECTED_ANIMALS_FOR_ADOPTION_COUNT);
+    }
+
+    @Test
+    public void shouldPerformReturnAnimalsAvailableForAdoptionByIdentifier() {
+        Map<String, String> params = new HashMap<>();
+        params.put(ANIMAL_TYPE, DOG.toString());
+        params.put(ANIMAL_IDENTIFIER, AVAILABLE_ANIMAL_IDENTIFIER_VALUE);
+        assertThatResponseHaveMultipleEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption,
+                EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
+    }
+
+    @Test
+    public void shouldPerformReturnAnimalsAvailableForAdoptionByName() {
+        Map<String, String> params = new HashMap<>();
+        params.put(ANIMAL_TYPE, DOG.toString());
+        params.put(ANIMAL_NAME,  AVAILABLE_ANIMAL_NAME);
+
+        assertThatResponseHaveMultipleEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption,
+                EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
     }
 
     @Test

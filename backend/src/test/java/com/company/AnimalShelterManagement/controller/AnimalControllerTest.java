@@ -1,5 +1,6 @@
 package com.company.AnimalShelterManagement.controller;
 
+import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
 import com.company.AnimalShelterManagement.utils.RestResponsePage;
@@ -38,13 +39,13 @@ public class AnimalControllerTest {
     }
 
     @Test
-    public void shouldPerformReturnAnimalsAvailableForAdoptions() {
-        when(animalService.returnAnimalsAvailableForAdoption(null, null, null))
+    public void shouldPerformReturnAnimalsAvailableForAdoption() {
+        when(animalService.returnAnimalsAvailableForAdoption(any(Animal.Type.class), anyString(), anyString()))
                 .thenReturn(new ArrayList<>());
 
         animalController.returnAnimalsAvailableForAdoption(null, null, null);
 
-        verify(animalService).returnAnimalsAvailableForAdoption(null, null, null);
+        verify(animalService).returnAnimalsAvailableForAdoption(any(Animal.Type.class), anyString(), anyString());
         verifyNoMoreInteractions(animalService);
     }
 
