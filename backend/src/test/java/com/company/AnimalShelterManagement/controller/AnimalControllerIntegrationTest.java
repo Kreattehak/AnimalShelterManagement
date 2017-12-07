@@ -2,6 +2,7 @@ package com.company.AnimalShelterManagement.controller;
 
 import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.model.Person;
+import com.company.AnimalShelterManagement.repository.AnimalRepository;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import com.company.AnimalShelterManagement.utils.ProcessUserRequestException;
 import org.junit.Before;
@@ -24,6 +25,7 @@ import java.util.Set;
 
 import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.*;
 import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseProcessUserRequestException;
+import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.ADOPTED;
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.AVAILABLE;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
@@ -45,6 +47,8 @@ public class AnimalControllerIntegrationTest {
     private int port;
     @Autowired
     private AnimalController animalController;
+    @Autowired
+    private AnimalRepository animalRepository;
     @Autowired
     private PersonService personService;
 
@@ -158,6 +162,13 @@ public class AnimalControllerIntegrationTest {
     }
 
     @Test
+    public void shouldSetAvailableToAdoptedAfterAdoption() {
+        animalController.addAnimalToPerson(ID_VALUE, AVAILABLE_ANIMAL_ID);
+
+        assertEquals(ADOPTED, animalRepository.findOne(AVAILABLE_ANIMAL_ID).getAvailableForAdoption());
+    }
+
+    @Test
     public void shouldDeleteOwnedAnimal() {
         animalController.deleteOwnedAnimal(ID_VALUE, ID_VALUE);
 
@@ -184,6 +195,13 @@ public class AnimalControllerIntegrationTest {
         checkResponseProcessUserRequestException(url, DELETE, message);
 
         assertThat(personService.returnPerson(ID_VALUE).getAnimal(), hasSize(EXPECTED_ANIMALS_FOR_PERSON_COUNT));
+    }
+
+    @Test
+    public void shouldSetAvailableToAvailableAfterDogWasAbandoned() {
+        animalController.deleteOwnedAnimal(ID_VALUE, ID_VALUE);
+
+        assertEquals(AVAILABLE, animalRepository.findOne(ID_VALUE).getAvailableForAdoption());
     }
 
     private void setAdoptedAnimalToAvailable() {
