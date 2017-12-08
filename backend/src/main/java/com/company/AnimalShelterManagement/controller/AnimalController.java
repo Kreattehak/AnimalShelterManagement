@@ -5,6 +5,7 @@ import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +13,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value = "/api", produces = APPLICATION_JSON_UTF8_VALUE)
 public class AnimalController {
 
     private final AnimalService animalService;
@@ -22,37 +23,48 @@ public class AnimalController {
         this.animalService = animalService;
     }
 
-    @GetMapping(value = "${rest.animal.getAnimals}", produces = APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("${rest.animal.getAnimals}")
     public Iterable<Animal> returnAnimals() {
         return animalService.returnAnimals();
     }
 
-    @GetMapping(value = "${rest.animal.getAnimalsAvailableForAdoption}",
-            produces = APPLICATION_JSON_UTF8_VALUE)
-    public Iterable<Animal> returnAnimalsAvailableForAdoption() {
-        return animalService.returnAnimalsAvailableForAdoption();
+    @GetMapping("${rest.animal.getAnimalsAvailableForAdoption}")
+    public Iterable<Animal> returnAnimalsAvailableForAdoption(@RequestParam(required = false) Animal.Type animalType,
+                                                              @RequestParam(required = false) String animalIdentifier,
+                                                              @RequestParam(required = false) String animalName) {
+        return animalService.returnAnimalsAvailableForAdoption(animalType, animalIdentifier, animalName);
     }
 
-    @GetMapping(value = "${rest.person.getAnimalsOwnedByPerson}",
-            produces = APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("${rest.animal.getAnimalsWithLongestWaitingTime}")
+    public Page<Animal> returnAnimalsWithLongestWaitingTime() {
+        return animalService.returnAnimalsWithLongestWaitingTime();
+    }
+
+    @GetMapping("${rest.person.getAnimalsOwnedByPerson}")
     public Iterable<Animal> returnAnimalsOwnedByPerson(@PathVariable Long personId) {
         return animalService.returnAnimalsOwnedByPerson(personId);
     }
 
-    @GetMapping(value = "${rest.animal.previousOwner}",
-            produces = APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("${rest.animal.previousOwner}")
     public Person returnPreviousOwner(@PathVariable Long animalId) {
         return animalService.returnPreviousOwner(animalId);
     }
 
-    @GetMapping(value = "${rest.animal.animalsCount}")
+    @GetMapping("${rest.animal.animalsCount}")
     public long returnAnimalsCount() {
         return animalService.countAnimals();
     }
 
-    @GetMapping(value = "${rest.animal.animalsCountForPeople}")
+    @GetMapping("${rest.animal.animalsCountForPeople}")
     public long[] returnAnimalsCountForPeople() {
         return animalService.countAnimalsForPeople();
+    }
+
+    @PutMapping("${rest.person.addAnimalToPerson}")
+    public ResponseEntity<String> addAnimalToPerson(@PathVariable Long personId, @PathVariable Long animalId) {
+        animalService.addAnimalToPerson(personId, animalId);
+        return new ResponseEntity<>("Animal with id: " + animalId + " was successfully added to person"
+                + " with id: " + personId, OK);
     }
 
     @DeleteMapping("${rest.person.deleteOwnedAnimal}")
