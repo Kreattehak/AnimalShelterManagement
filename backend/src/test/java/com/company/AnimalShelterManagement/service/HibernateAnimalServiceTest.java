@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.ADOPTED;
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.AVAILABLE;
+import static com.company.AnimalShelterManagement.model.Animal.Type.DOG;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -68,12 +69,34 @@ public class HibernateAnimalServiceTest {
     }
 
     @Test
-    public void shouldPerformReturnAnimalsAvailableForAdoption() {
+    public void shouldPerformReturnAnimalsAvailableForAdoptionWithNoDataProvided() {
         when(animalRepository.findAnimalByAvailableForAdoption()).thenReturn(new ArrayList<>());
 
         animalService.returnAnimalsAvailableForAdoption(null, null, null);
 
         verify(animalRepository).findAnimalByAvailableForAdoption();
+        verifyNoMoreInteractions(animalRepository);
+    }
+
+    @Test
+    public void shouldPerformReturnAnimalsAvailableForAdoptionByIdentifier() {
+        when(animalRepository.findAnimalByAvailableForAdoptionByIdentifier(any(Animal.Type.class), anyString()))
+                .thenReturn(new ArrayList<>());
+
+        animalService.returnAnimalsAvailableForAdoption(DOG, ANIMAL_IDENTIFIER_PATTERN, null);
+
+        verify(animalRepository).findAnimalByAvailableForAdoptionByIdentifier(any(Animal.Type.class), anyString());
+        verifyNoMoreInteractions(animalRepository);
+    }
+
+    @Test
+    public void shouldPerformReturnAnimalsAvailableForAdoptionByName() {
+        when(animalRepository.findAnimalByAvailableForAdoptionByName(any(Animal.Type.class), anyString()))
+                .thenReturn(new ArrayList<>());
+
+        animalService.returnAnimalsAvailableForAdoption(DOG, null, DOG_NAME);
+
+        verify(animalRepository).findAnimalByAvailableForAdoptionByName(any(Animal.Type.class), anyString());
         verifyNoMoreInteractions(animalRepository);
     }
 
