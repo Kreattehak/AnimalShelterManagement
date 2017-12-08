@@ -2,6 +2,8 @@ package com.company.AnimalShelterManagement.repository;
 
 import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.model.Person;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -9,6 +11,17 @@ public interface AnimalRepository extends CrudRepository<Animal, Long> {
 
     @Query("SELECT a FROM Animal a WHERE a.availableForAdoption = 'AVAILABLE'")
     Iterable<Animal> findAnimalByAvailableForAdoption();
+
+    @Query("SELECT a FROM Animal a WHERE a.availableForAdoption = 'AVAILABLE' AND a.type = ?1 "
+            + "AND a.name LIKE CONCAT('%',?2,'%')")
+    Iterable<Animal> findAnimalByAvailableForAdoptionByName(Animal.Type animalType, String animalName);
+
+    @Query("SELECT a FROM Animal a WHERE a.availableForAdoption = 'AVAILABLE' AND a.type = ?1"
+            + " AND a.animalIdentifier LIKE CONCAT('%',?2,'%')")
+    Iterable<Animal> findAnimalByAvailableForAdoptionByIdentifier(Animal.Type animalType, String animalIdentifier);
+
+    @Query("SELECT a FROM Animal a WHERE a.availableForAdoption = 'AVAILABLE' ORDER BY a.dateOfRegistration DESC")
+    Page<Animal> findAnimalsWithLongestWaitingTime(Pageable pageable);
 
     @Query("SELECT p.animal FROM Person p WHERE p.id = ?1")
     Iterable<Animal> findAnimalsOwnedByPerson(Long personId);
