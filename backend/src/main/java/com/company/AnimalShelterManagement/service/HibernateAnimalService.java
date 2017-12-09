@@ -21,7 +21,7 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
         implements AnimalService {
 
     private final PersonService personService;
-    private final int PAGE_SIZE = 10;
+    private final int DEFAULT_PAGE_SIZE = 10;
 
     @Autowired
     public HibernateAnimalService(AnimalRepository animalRepository, PersonService personService) {
@@ -51,8 +51,9 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
     }
 
     @Override
-    public Page<Animal> returnAnimalsWithLongestWaitingTime() {
-        return repository.findAnimalsWithLongestWaitingTime(new PageRequest(0, PAGE_SIZE));
+    public Page<Animal> returnAnimalsWithLongestWaitingTime(Integer pageSize) {
+        pageSize = (pageSize != null ? pageSize : DEFAULT_PAGE_SIZE);
+        return repository.findAnimalsWithLongestWaitingTime(new PageRequest(0, pageSize));
     }
 
     @Override

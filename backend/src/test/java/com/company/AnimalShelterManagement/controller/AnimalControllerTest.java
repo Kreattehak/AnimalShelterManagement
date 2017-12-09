@@ -51,11 +51,11 @@ public class AnimalControllerTest {
 
     @Test
     public void shouldPerformReturnAnimalsWithLongestWaitingTime() {
-        when(animalService.returnAnimalsWithLongestWaitingTime()).thenReturn(new RestResponsePage<>());
+        when(animalService.returnAnimalsWithLongestWaitingTime(anyInt())).thenReturn(new RestResponsePage<>());
 
-        animalController.returnAnimalsWithLongestWaitingTime();
+        animalController.returnAnimalsWithLongestWaitingTime(PAGE_SIZE_VALUE);
 
-        verify(animalService).returnAnimalsWithLongestWaitingTime();
+        verify(animalService).returnAnimalsWithLongestWaitingTime(anyInt());
         verifyNoMoreInteractions(animalService);
     }
 

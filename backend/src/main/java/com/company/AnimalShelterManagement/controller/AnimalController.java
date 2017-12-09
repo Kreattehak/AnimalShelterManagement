@@ -36,8 +36,8 @@ public class AnimalController {
     }
 
     @GetMapping("${rest.animal.getAnimalsWithLongestWaitingTime}")
-    public Page<Animal> returnAnimalsWithLongestWaitingTime() {
-        return animalService.returnAnimalsWithLongestWaitingTime();
+    public Page<Animal> returnAnimalsWithLongestWaitingTime(@RequestParam(required = false) Integer pageSize) {
+        return animalService.returnAnimalsWithLongestWaitingTime(pageSize);
     }
 
     @GetMapping("${rest.person.getAnimalsOwnedByPerson}")

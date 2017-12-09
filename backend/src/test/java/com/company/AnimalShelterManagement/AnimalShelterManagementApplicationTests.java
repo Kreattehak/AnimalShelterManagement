@@ -67,12 +67,13 @@ public class AnimalShelterManagementApplicationTests {
         assertEquals(count, response.getBody().size());
     }
 
-    public static void assertThatResponseHavePagedEntitiesReturned(String url, int count) {
+    public static void assertThatResponseHavePagedEntitiesReturned(String url, int count, Map<String, String> params) {
         ParameterizedTypeReference<RestResponsePage<Animal>> responseType =
                 new ParameterizedTypeReference<RestResponsePage<Animal>>() {
                 };
 
-        ResponseEntity<RestResponsePage<Animal>> response = new RestTemplate().exchange(url, GET, null, responseType);
+        ResponseEntity<RestResponsePage<Animal>> response = new RestTemplate().exchange(url, GET, null,
+                responseType, params);
 
         assertThat(response.getStatusCode(), equalTo(OK));
         assertEquals(count, response.getBody().getNumberOfElements());
