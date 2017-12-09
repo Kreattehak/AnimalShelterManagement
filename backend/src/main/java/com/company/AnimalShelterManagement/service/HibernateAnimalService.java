@@ -81,11 +81,11 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
         Person personFromDatabase = personService.returnPerson(personId);
         Animal animalFromDatabase = ifExistsReturnEntity(animalId);
 
-        if (animalFromDatabase.getAvailableForAdoption() != AVAILABLE) {
+        if (!isAnimalAvailable(animalFromDatabase)) {
             throw new ProcessUserRequestException(Animal.class, "animal_id", animalId.toString(),
                     "available", "false");
         }
-        if (!personFromDatabase.addAnimal(animalFromDatabase)) {
+        if (!canAddAnimalToPerson(personFromDatabase, animalFromDatabase)) {
             throw new ProcessUserRequestException(Person.class, "person_id", personId.toString(),
                     "animal_id", animalId.toString());
         }
@@ -99,7 +99,7 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
         Person personFromDatabase = personService.returnPerson(personId);
         Animal animalFromDatabase = ifExistsReturnEntity(animalId);
 
-        if (!personFromDatabase.removeAnimal(animalFromDatabase)) {
+        if (!canRemoveOwnedAnimal(personFromDatabase, animalFromDatabase)) {
             throw new ProcessUserRequestException(Person.class, "person_id", personId.toString(),
                     "animal_id", animalId.toString());
         }
@@ -110,5 +110,17 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
     @Autowired
     public void setAnimalRepository(AnimalRepository animalRepository) {
         this.repository = animalRepository;
+    }
+
+    private boolean canAddAnimalToPerson(Person personFromDatabase, Animal animalFromDatabase) {
+        return personFromDatabase.addAnimal(animalFromDatabase);
+    }
+
+    private boolean isAnimalAvailable(Animal animalFromDatabase) {
+        return animalFromDatabase.getAvailableForAdoption().isAvailable();
+    }
+
+    private boolean canRemoveOwnedAnimal(Person personFromDatabase, Animal animalFromDatabase) {
+        return personFromDatabase.removeAnimal(animalFromDatabase);
     }
 }
