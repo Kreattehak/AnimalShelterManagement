@@ -36,13 +36,15 @@ public class AnimalController {
     }
 
     @GetMapping("${rest.animal.getAnimalsWithLongestWaitingTime}")
-    public Page<Animal> returnAnimalsWithLongestWaitingTime(@RequestParam(required = false) Integer pageSize) {
-        return animalService.returnAnimalsWithLongestWaitingTime(pageSize);
+    public Page<Animal> returnAnimalsWithLongestWaitingTime(@RequestParam(required = false) Integer pageNumber,
+                                                            @RequestParam(required = false) Integer pageSize) {
+        return animalService.returnAnimalsWithLongestWaitingTime(pageNumber, pageSize);
     }
 
     @GetMapping("${rest.animal.getRecentlyAddedAnimals}")
-    public Page<Animal> returnRecentlyAddedAnimals(@RequestParam(required = false) Integer pageSize) {
-        return animalService.returnRecentlyAddedAnimals(pageSize);
+    public Page<Animal> returnRecentlyAddedAnimals(@RequestParam(required = false) Integer pageNumber,
+                                                   @RequestParam(required = false) Integer pageSize) {
+        return animalService.returnRecentlyAddedAnimals(pageNumber, pageSize);
     }
 
     @GetMapping("${rest.person.getAnimalsOwnedByPerson}")

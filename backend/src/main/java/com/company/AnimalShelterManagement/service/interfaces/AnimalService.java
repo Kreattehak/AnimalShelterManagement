@@ -10,9 +10,9 @@ public interface AnimalService extends CommonService<Animal> {
 
     Iterable<Animal> returnAnimalsAvailableForAdoption(Animal.Type animalType, String animalIdentifier, String animalName);
 
-    Page<Animal> returnAnimalsWithLongestWaitingTime(Integer pageSize);
+    Page<Animal> returnAnimalsWithLongestWaitingTime(Integer pageNumber, Integer pageSize);
 
-    Page<Animal> returnRecentlyAddedAnimals(Integer pageSize);
+    Page<Animal> returnRecentlyAddedAnimals(Integer pageNumber, Integer pageSize);
 
     Iterable<Animal> returnAnimalsOwnedByPerson(Long personId);
 

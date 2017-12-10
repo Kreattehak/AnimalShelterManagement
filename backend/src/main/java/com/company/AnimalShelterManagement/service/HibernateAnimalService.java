@@ -21,7 +21,10 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
         implements AnimalService {
 
     private final PersonService personService;
+    private final int FIRST_PAGE = 0;
     private final int DEFAULT_PAGE_SIZE = 10;
+    private final int PAGE_NUMBER_INDEX = 0;
+    private final int PAGE_SIZE_INDEX = 1;
 
     @Autowired
     public HibernateAnimalService(AnimalRepository animalRepository, PersonService personService) {
@@ -51,15 +54,17 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
     }
 
     @Override
-    public Page<Animal> returnAnimalsWithLongestWaitingTime(Integer pageSize) {
-        pageSize = checkPageSize(pageSize);
-        return repository.findAnimalsWithLongestWaitingTime(new PageRequest(0, pageSize));
+    public Page<Animal> returnAnimalsWithLongestWaitingTime(Integer pageNumber, Integer pageSize) {
+        int[] pageData = checkPageData(pageNumber, pageSize);
+        return repository.findAnimalsWithLongestWaitingTime(new PageRequest(pageData[PAGE_NUMBER_INDEX],
+                pageData[PAGE_SIZE_INDEX]));
     }
 
     @Override
-    public Page<Animal> returnRecentlyAddedAnimals(Integer pageSize) {
-        pageSize = checkPageSize(pageSize);
-        return repository.findRecentlyAddedAnimals(new PageRequest(0, pageSize));
+    public Page<Animal> returnRecentlyAddedAnimals(Integer pageNumber, Integer pageSize) {
+        int[] pageData = checkPageData(pageNumber, pageSize);
+        return repository.findRecentlyAddedAnimals(new PageRequest(pageData[PAGE_NUMBER_INDEX],
+                pageData[PAGE_SIZE_INDEX]));
     }
 
     @Override
@@ -119,9 +124,13 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
         this.repository = animalRepository;
     }
 
-    private Integer checkPageSize(Integer pageSize) {
-        return (pageSize != null ? pageSize : DEFAULT_PAGE_SIZE);
+    private int[] checkPageData(Integer pageNumber, Integer pageSize) {
+        pageNumber = (pageNumber != null ? pageNumber : FIRST_PAGE);
+        pageSize = (pageSize != null ? pageSize : DEFAULT_PAGE_SIZE);
+
+        return new int[]{pageNumber, pageSize};
     }
+
     private boolean canAddAnimalToPerson(Person personFromDatabase, Animal animalFromDatabase) {
         return personFromDatabase.addAnimal(animalFromDatabase);
     }
