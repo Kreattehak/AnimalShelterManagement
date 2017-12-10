@@ -52,8 +52,14 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
 
     @Override
     public Page<Animal> returnAnimalsWithLongestWaitingTime(Integer pageSize) {
-        pageSize = (pageSize != null ? pageSize : DEFAULT_PAGE_SIZE);
+        pageSize = checkPageSize(pageSize);
         return repository.findAnimalsWithLongestWaitingTime(new PageRequest(0, pageSize));
+    }
+
+    @Override
+    public Page<Animal> returnRecentlyAddedAnimals(Integer pageSize) {
+        pageSize = checkPageSize(pageSize);
+        return repository.findRecentlyAddedAnimals(new PageRequest(0, pageSize));
     }
 
     @Override
@@ -113,6 +119,9 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
         this.repository = animalRepository;
     }
 
+    private Integer checkPageSize(Integer pageSize) {
+        return (pageSize != null ? pageSize : DEFAULT_PAGE_SIZE);
+    }
     private boolean canAddAnimalToPerson(Person personFromDatabase, Animal animalFromDatabase) {
         return personFromDatabase.addAnimal(animalFromDatabase);
     }

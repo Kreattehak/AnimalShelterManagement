@@ -91,6 +91,7 @@ public class AnimalControllerIntegrationTest {
         Map<String, String> params = new HashMap<>();
         params.put(ANIMAL_TYPE, DOG.toString());
         params.put(ANIMAL_IDENTIFIER, AVAILABLE_ANIMAL_IDENTIFIER_VALUE);
+
         assertThatResponseHaveMultipleEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption,
                 EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
     }

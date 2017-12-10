@@ -40,6 +40,11 @@ public class AnimalController {
         return animalService.returnAnimalsWithLongestWaitingTime(pageSize);
     }
 
+    @GetMapping("${rest.animal.getRecentlyAddedAnimals}")
+    public Page<Animal> returnRecentlyAddedAnimals(@RequestParam(required = false) Integer pageSize) {
+        return animalService.returnRecentlyAddedAnimals(pageSize);
+    }
+
     @GetMapping("${rest.person.getAnimalsOwnedByPerson}")
     public Iterable<Animal> returnAnimalsOwnedByPerson(@PathVariable Long personId) {
         return animalService.returnAnimalsOwnedByPerson(personId);

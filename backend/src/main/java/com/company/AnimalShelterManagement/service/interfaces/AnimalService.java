@@ -12,6 +12,8 @@ public interface AnimalService extends CommonService<Animal> {
 
     Page<Animal> returnAnimalsWithLongestWaitingTime(Integer pageSize);
 
+    Page<Animal> returnRecentlyAddedAnimals(Integer pageSize);
+
     Iterable<Animal> returnAnimalsOwnedByPerson(Long personId);
 
     Person returnPreviousOwner(Long animalId);

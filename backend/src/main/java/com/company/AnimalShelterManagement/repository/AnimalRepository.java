@@ -23,6 +23,9 @@ public interface AnimalRepository extends CrudRepository<Animal, Long> {
     @Query("SELECT a FROM Animal a WHERE a.availableForAdoption = 'AVAILABLE' ORDER BY a.dateOfRegistration DESC")
     Page<Animal> findAnimalsWithLongestWaitingTime(Pageable pageable);
 
+    @Query("SELECT a FROM Animal a ORDER BY a.dateOfRegistration DESC")
+    Page<Animal> findRecentlyAddedAnimals(Pageable pageable);
+
     @Query("SELECT p.animal FROM Person p WHERE p.id = ?1")
     Iterable<Animal> findAnimalsOwnedByPerson(Long personId);
 
