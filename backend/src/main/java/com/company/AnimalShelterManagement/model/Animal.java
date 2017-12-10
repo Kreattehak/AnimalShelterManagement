@@ -26,7 +26,7 @@ public class Animal extends BaseEntity {
     private Type type;
 
     @Column(name = "behavior_description", length = 500)
-    @Length(min = 3, message = "{validation.minLength}")
+    @Length(min = 10, message = "{validation.minLength}")
     private String behaviorDescription;
 
     @Column(name = "available_for_adoption", nullable = false, length = 25)
