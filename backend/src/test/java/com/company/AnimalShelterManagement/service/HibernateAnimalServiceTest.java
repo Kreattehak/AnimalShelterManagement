@@ -104,7 +104,7 @@ public class HibernateAnimalServiceTest {
     public void shouldPerformReturnAnimalsWithLongestWaitingTime() {
         when(animalRepository.findAnimalsWithLongestWaitingTime(any())).thenReturn(new RestResponsePage<>());
 
-        animalService.returnAnimalsWithLongestWaitingTime(PAGE_SIZE_VALUE);
+        animalService.returnAnimalsWithLongestWaitingTime(FIRST_PAGE, PAGE_SIZE_VALUE);
 
         verify(animalRepository).findAnimalsWithLongestWaitingTime(any());
         verifyNoMoreInteractions(animalRepository);

@@ -9,16 +9,20 @@ public class TestConstant {
     public static final Long ID_NOT_FOUND = 123123511L;
     public static final Long RANDOM_NUMBER = 12345L;
     public static final int PAGE_SIZE_VALUE = 1;
+    public static final int FIRST_PAGE = 0;
+    public static final int SECOND_PAGE = 1;
     public static final int NO_ENTITIES = 0;
     public static final int PEOPLE_COUNT = 2;
     public static final int DOGS_COUNT = 2;
     public static final int EXPECTED_ADDRESS_COUNT = 2;
     public static final int EXPECTED_ANIMALS_FOR_ADOPTION_COUNT = 1;
+    public static final int EXPECTED_NOT_ADOPTED_ANIMALS_COUNT = 2;
     public static final int EXPECTED_ANIMALS_FOR_PERSON_COUNT = 1;
     public static final int EXPECT_PERSON_WITH_TWO_ANIMALS = 2;
     public static final int EXPECTED_ANIMALS_COUNT = 3;
 
     public static final String PAGE_SIZE = "pageSize";
+    public static final String PAGE_NUMBER = "pageSize";
     public static final String FILL_UP = "00";
     public static final String ID = "id";
     public static final String FIRST_NAME = "firstName";

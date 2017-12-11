@@ -107,12 +107,28 @@ public class AnimalControllerIntegrationTest {
     }
 
     @Test
-    public void shouldReturnAnimalsWithLongestWaitingTime() {
+    public void shouldReturnAnimalsWithLongestWaitingTimeWithPageSizeParameter() {
         Map<String, String> params = new HashMap<>();
         params.put(PAGE_SIZE, Integer.toString((EXPECTED_ANIMALS_FOR_ADOPTION_COUNT)));
 
-        assertThatResponseHavePagedEntitiesReturned(home + apiForAnimals + longestWaitingTime,
+        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + longestWaitingTime,
                 EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
+    }
+
+    @Test
+    public void shouldReturnAnimalsWithLongestWaitingTimeWithPageSizeAndNumberParameters() {
+        Map<String, String> params = new HashMap<>();
+        params.put(PAGE_SIZE, Integer.toString((EXPECTED_ANIMALS_FOR_ADOPTION_COUNT)));
+        params.put(PAGE_NUMBER, Integer.toString((SECOND_PAGE)));
+
+        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + longestWaitingTime,
+                EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
+    }
+
+    @Test
+    public void shouldReturnAnimalsWithLongestWaitingTimeWithoutParameters() {
+        assertThatResponseHavePagedEntitiesReturned(home + apiForAnimals + longestWaitingTime,
+                EXPECTED_ANIMALS_FOR_ADOPTION_COUNT);
     }
 
     @Test
