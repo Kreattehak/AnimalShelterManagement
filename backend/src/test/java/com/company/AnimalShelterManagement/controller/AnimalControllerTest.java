@@ -60,6 +60,16 @@ public class AnimalControllerTest {
     }
 
     @Test
+    public void shouldPerformReturnRecentlyAddedAnimals() {
+        when(animalService.returnRecentlyAddedAnimals(anyInt(), anyInt())).thenReturn(new RestResponsePage<>());
+
+        animalController.returnRecentlyAddedAnimals(FIRST_PAGE, PAGE_SIZE_VALUE);
+
+        verify(animalService).returnRecentlyAddedAnimals(anyInt(), anyInt());
+        verifyNoMoreInteractions(animalService);
+    }
+
+    @Test
     public void shouldPerformReturnAnimalsOwnedByPerson() {
         when(animalService.returnAnimalsOwnedByPerson(anyLong())).thenReturn(new ArrayList<>());
 

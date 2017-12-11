@@ -78,10 +78,22 @@ public class AnimalRepositoryTest {
         createAndPersistTwoDogs();
 
         Page<Animal> animalsWithLongestWaitingTime = animalRepository.findAnimalsWithLongestWaitingTime(
-                new PageRequest(0, DOGS_COUNT));
+                new PageRequest(FIRST_PAGE, EXPECTED_NOT_ADOPTED_ANIMALS_COUNT));
 
-        assertEquals(DOGS_COUNT, animalsWithLongestWaitingTime.getNumberOfElements());
+        assertEquals(EXPECTED_NOT_ADOPTED_ANIMALS_COUNT, animalsWithLongestWaitingTime.getNumberOfElements());
         assertThat(animalsWithLongestWaitingTime, hasItem(checkAnimalFieldsEquality(
+                DOG_NAME, DOG, DATE_OF_BIRTH_VALUE)));
+    }
+
+    @Test
+    public void shouldReturnRecentlyAddedAnimals() {
+        createAndPersistTwoDogs();
+
+        Page<Animal> recentlyAddedAnimals = animalRepository.findRecentlyAddedAnimals(
+                new PageRequest(FIRST_PAGE, EXPECTED_NOT_ADOPTED_ANIMALS_COUNT));
+
+        assertEquals(EXPECTED_NOT_ADOPTED_ANIMALS_COUNT, recentlyAddedAnimals.getNumberOfElements());
+        assertThat(recentlyAddedAnimals, hasItem(checkAnimalFieldsEquality(
                 DOG_NAME, DOG, DATE_OF_BIRTH_VALUE)));
     }
 

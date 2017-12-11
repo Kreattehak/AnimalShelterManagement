@@ -56,18 +56,27 @@ public class AnimalShelterManagementApplicationTests {
     public static void assertThatResponseHaveMultipleEntitiesReturned(String url, int count) {
         ResponseEntity<List> response = new RestTemplate().getForEntity(url, List.class);
 
-        assertThat(response.getStatusCode(), equalTo(OK));
-        assertEquals(count, response.getBody().size());
+        assertResponseAndSize(count, response);
     }
 
     public static void assertThatResponseHaveMultipleEntitiesReturnedWithParams(String url, int count, Map<String, String> params) {
         ResponseEntity<List> response = new RestTemplate().getForEntity(url, List.class, params);
 
-        assertThat(response.getStatusCode(), equalTo(OK));
-        assertEquals(count, response.getBody().size());
+        assertResponseAndSize(count, response);
     }
 
-    public static void assertThatResponseHavePagedEntitiesReturned(String url, int count, Map<String, String> params) {
+    public static void assertThatResponseHavePagedEntitiesReturned(String url, int count) {
+        ParameterizedTypeReference<RestResponsePage<Animal>> responseType =
+                new ParameterizedTypeReference<RestResponsePage<Animal>>() {
+                };
+
+        ResponseEntity<RestResponsePage<Animal>> response = new RestTemplate().exchange(url, GET, null,
+                responseType);
+
+        assertResponseAndNumberOfElements(count, response);
+    }
+
+    public static void assertThatResponseHavePagedEntitiesReturnedWithParams(String url, int count, Map<String, String> params) {
         ParameterizedTypeReference<RestResponsePage<Animal>> responseType =
                 new ParameterizedTypeReference<RestResponsePage<Animal>>() {
                 };
@@ -75,8 +84,7 @@ public class AnimalShelterManagementApplicationTests {
         ResponseEntity<RestResponsePage<Animal>> response = new RestTemplate().exchange(url, GET, null,
                 responseType, params);
 
-        assertThat(response.getStatusCode(), equalTo(OK));
-        assertEquals(count, response.getBody().getNumberOfElements());
+        assertResponseAndNumberOfElements(count, response);
     }
 
     public static <T> void testConstructorIsPrivate(Class<T> clazz) throws NoSuchMethodException, IllegalAccessException,
@@ -90,6 +98,16 @@ public class AnimalShelterManagementApplicationTests {
     public static <T> void assertResponse(ResponseEntity<T> response, HttpStatus status, Matcher<T> matcher) {
         assertThat(response.getStatusCode(), equalTo(status));
         assertThat(response.getBody(), matcher);
+    }
+
+    private static void assertResponseAndSize(int count, ResponseEntity<List> response) {
+        assertThat(response.getStatusCode(), equalTo(OK));
+        assertEquals(count, response.getBody().size());
+    }
+
+    private static void assertResponseAndNumberOfElements(int count, ResponseEntity<RestResponsePage<Animal>> response) {
+        assertThat(response.getStatusCode(), equalTo(OK));
+        assertEquals(count, response.getBody().getNumberOfElements());
     }
 }
 

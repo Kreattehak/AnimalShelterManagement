@@ -65,6 +65,12 @@ public class AnimalControllerIntegrationTest {
     private String previousOwner = "/previousOwner";
     private String animalsForAdoption = "/availableForAdoption";
     private String longestWaitingTime = "/longestWaitingTime";
+    private String recentlyAdded = "/recentlyAdded";
+    private String withAnimalType = "?animalType={animalType}";
+    private String withAnimalNameAdditionalParameter = "&animalName={animalName}";
+    private String withAnimalIdentifierAdditionalParameter = "&animalIdentifier={animalIdentifier}";
+    private String withPageSizeParameter = "?pageSize={pageSize}";
+    private String withPageNumberAdditionalParameter = "&pageNumber={pageNumber}";
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -81,29 +87,29 @@ public class AnimalControllerIntegrationTest {
     }
 
     @Test
-    public void shouldPerformReturnAnimalsAvailableForAdoptionWithNoDataProvided() {
+    public void shouldReturnAnimalsAvailableForAdoptionWithNoDataProvided() {
         assertThatResponseHaveMultipleEntitiesReturned(home + apiForAnimals + animalsForAdoption,
                 EXPECTED_ANIMALS_FOR_ADOPTION_COUNT);
     }
 
     @Test
-    public void shouldPerformReturnAnimalsAvailableForAdoptionByIdentifier() {
+    public void shouldReturnAnimalsAvailableForAdoptionByIdentifier() {
         Map<String, String> params = new HashMap<>();
         params.put(ANIMAL_TYPE, DOG.toString());
         params.put(ANIMAL_IDENTIFIER, AVAILABLE_ANIMAL_IDENTIFIER_VALUE);
 
-        assertThatResponseHaveMultipleEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption,
-                EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
+        assertThatResponseHaveMultipleEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption
+                + withAnimalType + withAnimalIdentifierAdditionalParameter, EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
     }
 
     @Test
-    public void shouldPerformReturnAnimalsAvailableForAdoptionByName() {
+    public void shouldReturnAnimalsAvailableForAdoptionByName() {
         Map<String, String> params = new HashMap<>();
         params.put(ANIMAL_TYPE, DOG.toString());
-        params.put(ANIMAL_NAME,  AVAILABLE_ANIMAL_NAME);
+        params.put(ANIMAL_NAME, AVAILABLE_ANIMAL_NAME);
 
-        assertThatResponseHaveMultipleEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption,
-                EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
+        assertThatResponseHaveMultipleEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption
+                + withAnimalType + withAnimalNameAdditionalParameter, EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
     }
 
     @Test
@@ -111,8 +117,8 @@ public class AnimalControllerIntegrationTest {
         Map<String, String> params = new HashMap<>();
         params.put(PAGE_SIZE, Integer.toString((EXPECTED_ANIMALS_FOR_ADOPTION_COUNT)));
 
-        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + longestWaitingTime,
-                EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
+        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + longestWaitingTime
+                + withPageSizeParameter, EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
     }
 
     @Test
@@ -121,7 +127,34 @@ public class AnimalControllerIntegrationTest {
         params.put(PAGE_SIZE, Integer.toString((EXPECTED_ANIMALS_FOR_ADOPTION_COUNT)));
         params.put(PAGE_NUMBER, Integer.toString((SECOND_PAGE)));
 
-        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + longestWaitingTime,
+        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + longestWaitingTime
+                        + withPageSizeParameter + withPageNumberAdditionalParameter,
+                NO_ENTITIES, params);
+    }
+
+    @Test
+    public void shouldReturnRecentlyAddedAnimalsWithoutParameters() {
+        assertThatResponseHavePagedEntitiesReturned(home + apiForAnimals + recentlyAdded,
+                EXPECTED_ANIMALS_IN_SHELTER_COUNT);
+    }
+
+    @Test
+    public void shouldReturnRecentlyAddedAnimalsWithPageSizeParameter() {
+        Map<String, String> params = new HashMap<>();
+        params.put(PAGE_SIZE, Integer.toString((EXPECTED_ANIMALS_FOR_ADOPTION_COUNT)));
+
+        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + recentlyAdded
+                + withPageSizeParameter, EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
+    }
+
+    @Test
+    public void shouldReturnRecentlyAddedAnimalsWithPageSizeAndNumberParameters() {
+        Map<String, String> params = new HashMap<>();
+        params.put(PAGE_SIZE, Integer.toString((EXPECTED_ANIMALS_FOR_ADOPTION_COUNT)));
+        params.put(PAGE_NUMBER, Integer.toString((SECOND_PAGE)));
+
+        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + recentlyAdded
+                        + withPageSizeParameter + withPageNumberAdditionalParameter,
                 EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
     }
 

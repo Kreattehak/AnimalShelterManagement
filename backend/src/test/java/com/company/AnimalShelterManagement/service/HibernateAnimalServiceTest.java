@@ -18,6 +18,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
@@ -107,6 +109,16 @@ public class HibernateAnimalServiceTest {
         animalService.returnAnimalsWithLongestWaitingTime(FIRST_PAGE, PAGE_SIZE_VALUE);
 
         verify(animalRepository).findAnimalsWithLongestWaitingTime(any());
+        verifyNoMoreInteractions(animalRepository);
+    }
+
+    @Test
+    public void shouldPerformReturnRecentlyAddedAnimals() {
+        when(animalRepository.findRecentlyAddedAnimals(any())).thenReturn(new RestResponsePage<>());
+
+        animalService.returnRecentlyAddedAnimals(FIRST_PAGE, PAGE_SIZE_VALUE);
+
+        verify(animalRepository).findRecentlyAddedAnimals(any());
         verifyNoMoreInteractions(animalRepository);
     }
 
