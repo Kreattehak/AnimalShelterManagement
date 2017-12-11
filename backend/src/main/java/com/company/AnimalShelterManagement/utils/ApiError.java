@@ -19,25 +19,12 @@ public class ApiError {
         this.status = status;
     }
 
-    public ApiError(HttpStatus status, String message) {
-        this(status);
-        this.message = message;
-    }
-
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public HttpStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(HttpStatus status) {
-        this.status = status;
     }
 
     public String getMessage() {
