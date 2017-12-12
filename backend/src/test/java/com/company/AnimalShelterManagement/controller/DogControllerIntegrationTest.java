@@ -86,7 +86,7 @@ public class DogControllerIntegrationTest {
         response = restTemplate.getForEntity(home + apiForDog + ID_VALUE, DogDTO.class);
 
         assertResponse(response, OK, is(checkDogDtoFieldsEquality(DOG_NAME, GERMAN_SHEPERD,
-                LocalDate.now(), ADOPTED)));
+                DATE_OF_BIRTH_VALUE, ADOPTED)));
     }
 
     @Test
@@ -97,10 +97,10 @@ public class DogControllerIntegrationTest {
     @Test
     public void shouldSaveDog() {
         testDog.setId(null);
-        dogController.saveDog(mapper.map(testDog, DogDTO.class));
+        DogDTO dogDTO = dogController.saveDog(mapper.map(testDog, DogDTO.class));
 
-        assertThat(dogRepository.findOne(ID_VALUE), is(checkDogFieldsEquality(DOG_NAME, GERMAN_SHEPERD,
-                LocalDate.now(), ADOPTED)));
+        assertThat(dogRepository.findOne(dogDTO.getId()), is(checkDogFieldsEquality(DOG_NAME, GERMAN_SHEPERD,
+                LocalDate.now(), AVAILABLE)));
     }
 
     @Test
@@ -123,7 +123,7 @@ public class DogControllerIntegrationTest {
         dogController.updateDog(mapper.map(testDog, DogDTO.class));
 
         assertThat(dogRepository.findOne(ID_VALUE), is(checkDogFieldsEquality(ANOTHER_DOG_NAME,
-                GERMAN_SHEPERD, LocalDate.of(1999, 11, 5), UNDER_VETERINARY_CARE)));
+                GERMAN_SHEPERD, DATE_OF_BIRTH_VALUE, UNDER_VETERINARY_CARE)));
     }
 
     @Test
@@ -136,7 +136,7 @@ public class DogControllerIntegrationTest {
         response = restTemplate.exchange(home + apiForDog + ID_VALUE, PUT, entity, DogDTO.class);
 
         assertResponse(response, OK, is(checkDogDtoFieldsEquality(ANOTHER_DOG_NAME, GERMAN_SHEPERD,
-                LocalDate.of(1999, 11, 5), UNDER_VETERINARY_CARE)));
+                DATE_OF_BIRTH_VALUE, UNDER_VETERINARY_CARE)));
     }
 
     @Test
@@ -160,7 +160,7 @@ public class DogControllerIntegrationTest {
 
     private void changeDogData() {
         testDog.setName(ANOTHER_DOG_NAME);
-        testDog.setDateOfBirth(LocalDate.of(1999, 11, 5));
+        testDog.setDateOfBirth(DATE_OF_BIRTH_VALUE);
         testDog.setAvailableForAdoption(UNDER_VETERINARY_CARE);
     }
 }

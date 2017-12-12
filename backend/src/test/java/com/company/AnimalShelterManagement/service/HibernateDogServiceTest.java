@@ -101,7 +101,7 @@ public class HibernateDogServiceTest {
         dogService.updateDog(mapper.map(setUpAnotherDog(), DogDTO.class));
 
         assertThat(testDog, is(checkDogFieldsEquality(ANOTHER_DOG_NAME, GERMAN_SHEPERD,
-                LocalDate.of(1999, 11, 05), AVAILABLE)));
+                DATE_OF_BIRTH_VALUE , AVAILABLE)));
 
         verify(dogRepository).findOne(anyLong());
         verify(dogRepository).save(any(Dog.class));
@@ -122,7 +122,7 @@ public class HibernateDogServiceTest {
     private Dog setUpAnotherDog() {
         Dog dog = AnimalFactory.newlyReceivedDog(ANOTHER_DOG_NAME, GERMAN_SHEPERD);
         dog.setId(ANOTHER_ID_VALUE);
-        dog.setDateOfBirth(LocalDate.of(1999, 11, 05));
+        dog.setDateOfBirth(DATE_OF_BIRTH_VALUE );
         dog.setAvailableForAdoption(AVAILABLE);
         return dog;
     }
