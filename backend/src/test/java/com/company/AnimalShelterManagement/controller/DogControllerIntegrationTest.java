@@ -22,9 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
-import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertResponse;
-import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertThatResponseHaveMultipleEntitiesReturned;
+import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.*;
+import static com.company.AnimalShelterManagement.controller.AnimalControllerIntegrationTest.WITH_PAGE_NUMBER_ADDITIONAL_PARAMETER;
+import static com.company.AnimalShelterManagement.controller.AnimalControllerIntegrationTest.WITH_PAGE_SIZE_PARAMETER;
 import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseEntityNotFoundException;
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.*;
 import static com.company.AnimalShelterManagement.model.Dog.Race.GERMAN_SHEPERD;
@@ -64,6 +67,7 @@ public class DogControllerIntegrationTest {
     private String home = "http://localhost:";
     private String apiForDogs = "/api/dogs";
     private String apiForDog = "/api/dog/";
+    private String notAdoptedDogs = "/notAdopted";
 
     @Before
     public void setUp() {
@@ -79,6 +83,31 @@ public class DogControllerIntegrationTest {
     @Test
     public void shouldReturnDogs() {
         assertThatResponseHaveMultipleEntitiesReturned(home + apiForDogs, DOGS_COUNT);
+    }
+
+    @Test
+    public void shouldReturnAllDogsWithStatusOtherThanAdoptedWithPageSizeParameter() {
+        Map<String, String> params = new HashMap<>();
+        params.put(PAGE_SIZE, Integer.toString(EXPECTED_ANIMALS_FOR_ADOPTION_COUNT));
+
+        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForDogs + notAdoptedDogs
+                + WITH_PAGE_SIZE_PARAMETER, EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
+    }
+
+    @Test
+    public void shouldReturnAllDogsWithStatusOtherThanAdoptedWithPageSizeAndNumberParameters() {
+        Map<String, String> params = new HashMap<>();
+        params.put(PAGE_SIZE, Integer.toString(EXPECTED_ANIMALS_FOR_ADOPTION_COUNT));
+        params.put(PAGE_NUMBER, Integer.toString(SECOND_PAGE));
+
+        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForDogs + notAdoptedDogs
+                + WITH_PAGE_SIZE_PARAMETER + WITH_PAGE_NUMBER_ADDITIONAL_PARAMETER, NO_ENTITIES, params);
+    }
+
+    @Test
+    public void shouldReturnAllDogsWithStatusOtherThanAdoptedWithoutParameters() {
+        assertThatResponseHavePagedEntitiesReturned(home + apiForDogs + notAdoptedDogs,
+                EXPECTED_ANIMALS_FOR_ADOPTION_COUNT);
     }
 
     @Test

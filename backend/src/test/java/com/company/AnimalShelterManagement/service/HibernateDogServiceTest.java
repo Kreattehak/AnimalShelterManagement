@@ -7,6 +7,7 @@ import com.company.AnimalShelterManagement.repository.DogRepository;
 import com.company.AnimalShelterManagement.service.interfaces.DogService;
 import com.company.AnimalShelterManagement.utils.AnimalFactory;
 import com.company.AnimalShelterManagement.utils.EntityNotFoundException;
+import com.company.AnimalShelterManagement.utils.RestResponsePage;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
@@ -61,6 +63,16 @@ public class HibernateDogServiceTest {
         dogService.returnDogs();
 
         verify(dogRepository).findAll();
+        verifyNoMoreInteractions(dogRepository);
+    }
+
+    @Test
+    public void shouldPerformReturnAllDogsWithStatusOtherThanAdopted() {
+        when(dogRepository.findNotAdoptedDogs(any(Pageable.class))).thenReturn(new RestResponsePage<>());
+
+        dogService.returnNotAdoptedDogs(FIRST_PAGE, PAGE_SIZE_VALUE);
+
+        verify(dogRepository).findNotAdoptedDogs(any(Pageable.class));
         verifyNoMoreInteractions(dogRepository);
     }
 

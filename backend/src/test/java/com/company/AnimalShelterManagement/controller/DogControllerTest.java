@@ -4,6 +4,7 @@ import com.company.AnimalShelterManagement.model.Dog;
 import com.company.AnimalShelterManagement.model.dto.DogDTO;
 import com.company.AnimalShelterManagement.service.interfaces.DogService;
 import com.company.AnimalShelterManagement.utils.AnimalFactory;
+import com.company.AnimalShelterManagement.utils.RestResponsePage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +50,16 @@ public class DogControllerTest {
         dogController.returnDogs();
 
         verify(dogService).returnDogs();
+        verifyNoMoreInteractions(dogService);
+    }
+
+    @Test
+    public void shouldPerformReturnAllDogsWithStatusOtherThanAdopted() {
+        when(dogService.returnNotAdoptedDogs(anyInt(), anyInt())).thenReturn(new RestResponsePage<>());
+
+        dogController.returnNotAdoptedDogs(FIRST_PAGE, PAGE_SIZE_VALUE);
+
+        verify(dogService).returnNotAdoptedDogs(anyInt(), anyInt());
         verifyNoMoreInteractions(dogService);
     }
 
