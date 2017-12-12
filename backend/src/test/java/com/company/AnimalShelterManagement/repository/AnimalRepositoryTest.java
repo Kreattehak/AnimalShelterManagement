@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -43,7 +44,7 @@ public class AnimalRepositoryTest {
     private Person testPerson;
 
     @Test
-    public void shouldReturnAllDogsAvailableForAdoptionWithNoDataProvided() {
+    public void shouldReturnAllAnimalsAvailableForAdoptionWithNoDataProvided() {
         createAndPersistTwoDogs();
 
         Iterable<Animal> animals = animalRepository.findAnimalByAvailableForAdoption();
@@ -76,9 +77,9 @@ public class AnimalRepositoryTest {
     @Test
     public void shouldReturnAnimalsWithLongestWaitingTime() {
         createAndPersistTwoDogs();
+        Pageable pageable = new PageRequest(FIRST_PAGE, EXPECTED_NOT_ADOPTED_ANIMALS_COUNT);
 
-        Page<Animal> animalsWithLongestWaitingTime = animalRepository.findAnimalsWithLongestWaitingTime(
-                new PageRequest(FIRST_PAGE, EXPECTED_NOT_ADOPTED_ANIMALS_COUNT));
+        Page<Animal> animalsWithLongestWaitingTime = animalRepository.findAnimalsWithLongestWaitingTime(pageable);
 
         assertEquals(EXPECTED_NOT_ADOPTED_ANIMALS_COUNT, animalsWithLongestWaitingTime.getNumberOfElements());
         assertThat(animalsWithLongestWaitingTime, hasItem(checkAnimalFieldsEquality(
@@ -88,9 +89,9 @@ public class AnimalRepositoryTest {
     @Test
     public void shouldReturnRecentlyAddedAnimals() {
         createAndPersistTwoDogs();
+        Pageable pageable = new PageRequest(FIRST_PAGE, EXPECTED_NOT_ADOPTED_ANIMALS_COUNT);
 
-        Page<Animal> recentlyAddedAnimals = animalRepository.findRecentlyAddedAnimals(
-                new PageRequest(FIRST_PAGE, EXPECTED_NOT_ADOPTED_ANIMALS_COUNT));
+        Page<Animal> recentlyAddedAnimals = animalRepository.findRecentlyAddedAnimals(pageable);
 
         assertEquals(EXPECTED_NOT_ADOPTED_ANIMALS_COUNT, recentlyAddedAnimals.getNumberOfElements());
         assertThat(recentlyAddedAnimals, hasItem(checkAnimalFieldsEquality(

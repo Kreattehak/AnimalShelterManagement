@@ -18,8 +18,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
@@ -104,21 +103,21 @@ public class HibernateAnimalServiceTest {
 
     @Test
     public void shouldPerformReturnAnimalsWithLongestWaitingTime() {
-        when(animalRepository.findAnimalsWithLongestWaitingTime(any())).thenReturn(new RestResponsePage<>());
+        when(animalRepository.findAnimalsWithLongestWaitingTime(any(Pageable.class))).thenReturn(new RestResponsePage<>());
 
         animalService.returnAnimalsWithLongestWaitingTime(FIRST_PAGE, PAGE_SIZE_VALUE);
 
-        verify(animalRepository).findAnimalsWithLongestWaitingTime(any());
+        verify(animalRepository).findAnimalsWithLongestWaitingTime(any(Pageable.class));
         verifyNoMoreInteractions(animalRepository);
     }
 
     @Test
     public void shouldPerformReturnRecentlyAddedAnimals() {
-        when(animalRepository.findRecentlyAddedAnimals(any())).thenReturn(new RestResponsePage<>());
+        when(animalRepository.findRecentlyAddedAnimals(any(Pageable.class))).thenReturn(new RestResponsePage<>());
 
         animalService.returnRecentlyAddedAnimals(FIRST_PAGE, PAGE_SIZE_VALUE);
 
-        verify(animalRepository).findRecentlyAddedAnimals(any());
+        verify(animalRepository).findRecentlyAddedAnimals(any(Pageable.class));
         verifyNoMoreInteractions(animalRepository);
     }
 
