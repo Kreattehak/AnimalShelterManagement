@@ -29,6 +29,12 @@ public class DogController {
         return dogService.returnDogs();
     }
 
+    @GetMapping("${rest.dog.getNotAdoptedDogs}")
+    public Iterable<Dog> returnNotAdoptedDogs(@RequestParam(required = false) Integer pageNumber,
+                                              @RequestParam(required = false) Integer pageSize) {
+        return dogService.returnNotAdoptedDogs(pageNumber, pageSize);
+    }
+
     @GetMapping("${rest.dog.getDog}")
     public DogDTO returnDog(@PathVariable Long dogId) {
         return mapToDTO(dogService.returnDog(dogId));

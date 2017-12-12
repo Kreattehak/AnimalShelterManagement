@@ -7,8 +7,11 @@ import com.company.AnimalShelterManagement.service.interfaces.DogService;
 import com.company.AnimalShelterManagement.utils.AnimalFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.company.AnimalShelterManagement.service.HibernateAnimalService.*;
 
 @Service
 @Transactional
@@ -25,6 +28,14 @@ public class HibernateDogService extends HibernateCommonDTOService<Dog, DogDTO, 
     @Transactional(readOnly = true)
     public Iterable<DogDTO> returnDogs() {
         return returnMappedEntities();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Iterable<Dog> returnNotAdoptedDogs(Integer pageNumber, Integer pageSize) {
+        int[] pageData = checkPageData(pageNumber, pageSize);
+        return repository.findNotAdoptedDogs(new PageRequest(pageData[PAGE_NUMBER_INDEX],
+                pageData[PAGE_SIZE_INDEX]));
     }
 
     @Override

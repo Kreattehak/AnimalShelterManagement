@@ -21,10 +21,10 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
         implements AnimalService {
 
     private final PersonService personService;
-    private final int FIRST_PAGE = 0;
-    private final int DEFAULT_PAGE_SIZE = 10;
-    private final int PAGE_NUMBER_INDEX = 0;
-    private final int PAGE_SIZE_INDEX = 1;
+    public static final int FIRST_PAGE = 0;
+    public static final int DEFAULT_PAGE_SIZE = 10;
+    public static final int PAGE_NUMBER_INDEX = 0;
+    public static final int PAGE_SIZE_INDEX = 1;
 
     @Autowired
     public HibernateAnimalService(AnimalRepository animalRepository, PersonService personService) {
@@ -124,7 +124,7 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
         this.repository = animalRepository;
     }
 
-    private int[] checkPageData(Integer pageNumber, Integer pageSize) {
+    public static int[] checkPageData(Integer pageNumber, Integer pageSize) {
         pageNumber = (pageNumber != null ? pageNumber : FIRST_PAGE);
         pageSize = (pageSize != null ? pageSize : DEFAULT_PAGE_SIZE);
 
