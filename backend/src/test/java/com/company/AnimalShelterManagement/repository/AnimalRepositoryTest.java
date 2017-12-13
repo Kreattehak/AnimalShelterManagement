@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.LocalDate;
 
 import static com.company.AnimalShelterManagement.model.Animal.Type.DOG;
+import static com.company.AnimalShelterManagement.service.HibernateAnimalService.DEFAULT_PAGE_SIZE;
 import static com.company.AnimalShelterManagement.service.HibernateAnimalServiceTest.checkAnimalFieldsEquality;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
 import static com.company.AnimalShelterManagement.utils.AnimalFactory.newAvailableForAdoptionDog;
@@ -47,11 +48,19 @@ public class AnimalRepositoryTest {
     public void shouldReturnAllAnimalsAvailableForAdoptionWithNoDataProvided() {
         createAndPersistTwoDogs();
 
-        Iterable<Animal> animals = animalRepository.findAnimalByAvailableForAdoption();
+        Iterable<Animal> animals = animalRepository.findAnimalsByAvailableForAdoption();
 
         assertThat(animals, hasItem(checkAnimalFieldsEquality(DOG_NAME, DOG, DATE_OF_BIRTH_VALUE)));
-        assertThat(animals, not(hasItem(checkAnimalFieldsEquality(
-                ANOTHER_DOG_NAME, DOG, LocalDate.now()))));
+        assertThat(animals, not(hasItem(checkAnimalFieldsEquality(ANOTHER_DOG_NAME, DOG, LocalDate.now()))));
+    }
+
+    @Test
+    public void shouldPerformReturnAnimalsAvailableForAdoptionByName() {
+        createAndPersistTwoDogs();
+
+        Iterable<Animal> animals = animalRepository.findAnimalsAvailableForAdoptionByName(DOG, DOG_NAME);
+
+        assertThat(animals, hasItem(checkAnimalFieldsEquality(DOG_NAME, DOG, DATE_OF_BIRTH_VALUE)));
     }
 
     @Test
@@ -59,43 +68,97 @@ public class AnimalRepositoryTest {
         createAndPersistTwoDogs();
         AnimalFactory.generateAnimalIdentifier(testDog);
 
-        Iterable<Animal> animals = animalRepository.findAnimalByAvailableForAdoptionByIdentifier(DOG,
+        Iterable<Animal> animals = animalRepository.findAnimalsAvailableForAdoptionByIdentifier(DOG,
                 testDog.getAnimalIdentifier());
 
         assertThat(animals, hasItem(checkAnimalFieldsEquality(DOG_NAME, DOG, DATE_OF_BIRTH_VALUE)));
     }
 
     @Test
-    public void shouldPerformReturnAnimalsAvailableForAdoptionByName() {
+    public void shouldPerformReturnNotAdoptedAnimalsWithNoDataProvided() {
         createAndPersistTwoDogs();
+        Pageable pageable = new PageRequest(FIRST_PAGE, DEFAULT_PAGE_SIZE);
 
-        Iterable<Animal> animals = animalRepository.findAnimalByAvailableForAdoptionByName(DOG, DOG_NAME);
+        Page<Animal> animals = animalRepository.findNotAdoptedAnimals(pageable);
 
+        assertEquals(EXPECTED_NOT_ADOPTED_ANIMALS_COUNT, animals.getNumberOfElements());
+        assertThat(animals, allOf(
+                hasItem(checkAnimalFieldsEquality(DOG_NAME, DOG, DATE_OF_BIRTH_VALUE)),
+                hasItem(checkAnimalFieldsEquality(ANOTHER_DOG_NAME, DOG, LocalDate.now()))
+        ));
+    }
+
+    @Test
+    public void shouldPerformReturnNotAdoptedAnimalsByName() {
+        createAndPersistTwoDogs();
+        Pageable pageable = new PageRequest(FIRST_PAGE, DEFAULT_PAGE_SIZE);
+
+        Page<Animal> animals = animalRepository.findNotAdoptedAnimalsByName(DOG, DOG_NAME, pageable);
+
+        assertEquals(ONE_ENTITY, animals.getNumberOfElements());
         assertThat(animals, hasItem(checkAnimalFieldsEquality(DOG_NAME, DOG, DATE_OF_BIRTH_VALUE)));
+    }
+
+    @Test
+    public void shouldPerformReturnNotAdoptedAnimalsByIdentifier() {
+        createAndPersistTwoDogs();
+        AnimalFactory.generateAnimalIdentifier(testDog);
+        Pageable pageable = new PageRequest(FIRST_PAGE, DEFAULT_PAGE_SIZE);
+
+        Page<Animal> animals = animalRepository.findNotAdoptedAnimalsByIdentifier(DOG,
+                testDog.getAnimalIdentifier(), pageable);
+
+        assertEquals(ONE_ENTITY, animals.getNumberOfElements());
+        assertThat(animals, hasItem(checkAnimalFieldsEquality(DOG_NAME, DOG, DATE_OF_BIRTH_VALUE)));
+    }
+
+    @Test
+    public void shouldPerformReturnPagedNotAdoptedAnimals() {
+        Pageable pageable = new PageRequest(FIRST_PAGE, EXPECTED_ANIMALS_IN_SHELTER_COUNT);
+
+        Page<Animal> animals = animalRepository.findNotAdoptedAnimals(pageable);
+
+        assertEquals(EXPECTED_ANIMALS_IN_SHELTER_COUNT, animals.getNumberOfElements());
     }
 
     @Test
     public void shouldReturnAnimalsWithLongestWaitingTime() {
         createAndPersistTwoDogs();
-        Pageable pageable = new PageRequest(FIRST_PAGE, EXPECTED_NOT_ADOPTED_ANIMALS_COUNT);
+        Pageable pageable = new PageRequest(FIRST_PAGE, DEFAULT_PAGE_SIZE);
 
         Page<Animal> animalsWithLongestWaitingTime = animalRepository.findAnimalsWithLongestWaitingTime(pageable);
 
-        assertEquals(EXPECTED_NOT_ADOPTED_ANIMALS_COUNT, animalsWithLongestWaitingTime.getNumberOfElements());
-        assertThat(animalsWithLongestWaitingTime, hasItem(checkAnimalFieldsEquality(
-                DOG_NAME, DOG, DATE_OF_BIRTH_VALUE)));
+        assertEquals(EXPECTED_WITH_LONGEST_WAITING_TIME_ANIMALS_COUNT, animalsWithLongestWaitingTime.getNumberOfElements());
+        assertThat(animalsWithLongestWaitingTime, hasItem(checkAnimalFieldsEquality(DOG_NAME, DOG, DATE_OF_BIRTH_VALUE)));
+    }
+
+    @Test
+    public void shouldReturnPagedAnimalsWithLongestWaitingTime() {
+        Pageable pageable = new PageRequest(FIRST_PAGE, ONE_ENTITY);
+
+        Page<Animal> animalsWithLongestWaitingTime = animalRepository.findAnimalsWithLongestWaitingTime(pageable);
+
+        assertEquals(ONE_ENTITY, animalsWithLongestWaitingTime.getNumberOfElements());
     }
 
     @Test
     public void shouldReturnRecentlyAddedAnimals() {
         createAndPersistTwoDogs();
-        Pageable pageable = new PageRequest(FIRST_PAGE, EXPECTED_NOT_ADOPTED_ANIMALS_COUNT);
+        Pageable pageable = new PageRequest(FIRST_PAGE, DEFAULT_PAGE_SIZE);
 
         Page<Animal> recentlyAddedAnimals = animalRepository.findRecentlyAddedAnimals(pageable);
 
         assertEquals(EXPECTED_NOT_ADOPTED_ANIMALS_COUNT, recentlyAddedAnimals.getNumberOfElements());
-        assertThat(recentlyAddedAnimals, hasItem(checkAnimalFieldsEquality(
-                DOG_NAME, DOG, DATE_OF_BIRTH_VALUE)));
+        assertThat(recentlyAddedAnimals, hasItem(checkAnimalFieldsEquality(DOG_NAME, DOG, DATE_OF_BIRTH_VALUE)));
+    }
+
+    @Test
+    public void shouldReturnPagedRecentlyAddedAnimals() {
+        Pageable pageable = new PageRequest(FIRST_PAGE, ONE_ENTITY);
+
+        Page<Animal> recentlyAddedAnimals = animalRepository.findRecentlyAddedAnimals(pageable);
+
+        assertEquals(ONE_ENTITY, recentlyAddedAnimals.getNumberOfElements());
     }
 
     @Test
@@ -120,11 +183,11 @@ public class AnimalRepositoryTest {
 
     @Test
     public void shouldReturnAnimalsCountForPeople() {
-        setAsPreviousOwnerAndPersistPerson();
-
         long[] count = animalRepository.findAnimalsCountForPeople();
+
         int animalsCountForOnlyPerson = (int) count[0];
 
+        assertEquals(EXPECTED_ANIMALS_FOR_PERSON_COUNT, count.length);
         assertEquals(EXPECTED_ANIMALS_FOR_PERSON_COUNT, animalsCountForOnlyPerson);
     }
 

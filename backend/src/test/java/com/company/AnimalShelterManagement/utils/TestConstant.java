@@ -12,13 +12,15 @@ public class TestConstant {
     public static final int FIRST_PAGE = 0;
     public static final int SECOND_PAGE = 1;
     public static final int NO_ENTITIES = 0;
+    public static final int ONE_ENTITY = 1;
     public static final int PEOPLE_COUNT = 2;
     public static final int DOGS_COUNT = 2;
     public static final int EXPECTED_ANIMALS_FOR_ADOPTION_COUNT = 1;
     public static final int EXPECTED_ADDRESS_COUNT = 2;
     public static final int EXPECTED_ANIMALS_FOR_PERSON_COUNT = 1;
     public static final int EXPECTED_ANIMALS_IN_SHELTER_COUNT = 2;
-    public static final int EXPECTED_NOT_ADOPTED_ANIMALS_COUNT = 2;
+    public static final int EXPECTED_WITH_LONGEST_WAITING_TIME_ANIMALS_COUNT = 2;
+    public static final int EXPECTED_NOT_ADOPTED_ANIMALS_COUNT = 4;
     public static final int EXPECTED_NOT_ADOPTED_DOGS_COUNT = 2;
     public static final int EXPECT_PERSON_WITH_TWO_ANIMALS = 2;
     public static final int EXPECTED_ANIMALS_COUNT = 3;
