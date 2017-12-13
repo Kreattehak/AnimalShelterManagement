@@ -35,6 +35,15 @@ public class AnimalController {
         return animalService.returnAnimalsAvailableForAdoption(animalType, animalIdentifier, animalName);
     }
 
+    @GetMapping("${rest.animal.getNotAdoptedAnimals}")
+    public Page<Animal> returnNotAdoptedAnimals(@RequestParam(required = false) Animal.Type animalType,
+                                                @RequestParam(required = false) String animalIdentifier,
+                                                @RequestParam(required = false) String animalName,
+                                                @RequestParam(required = false) Integer pageNumber,
+                                                @RequestParam(required = false) Integer pageSize) {
+        return animalService.returnNotAdoptedAnimals(animalType, animalIdentifier, animalName, pageNumber, pageSize);
+    }
+
     @GetMapping("${rest.animal.getAnimalsWithLongestWaitingTime}")
     public Page<Animal> returnAnimalsWithLongestWaitingTime(@RequestParam(required = false) Integer pageNumber,
                                                             @RequestParam(required = false) Integer pageSize) {

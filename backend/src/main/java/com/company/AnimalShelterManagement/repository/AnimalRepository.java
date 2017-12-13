@@ -10,15 +10,26 @@ import org.springframework.data.repository.CrudRepository;
 public interface AnimalRepository extends CrudRepository<Animal, Long> {
 
     @Query("SELECT a FROM Animal a WHERE a.availableForAdoption = 'AVAILABLE'")
-    Iterable<Animal> findAnimalByAvailableForAdoption();
+    Iterable<Animal> findAnimalsByAvailableForAdoption();
 
     @Query("SELECT a FROM Animal a WHERE a.availableForAdoption = 'AVAILABLE' AND a.type = ?1 "
             + "AND a.name LIKE CONCAT('%',?2,'%')")
-    Iterable<Animal> findAnimalByAvailableForAdoptionByName(Animal.Type animalType, String animalName);
+    Iterable<Animal> findAnimalsAvailableForAdoptionByName(Animal.Type animalType, String animalName);
 
     @Query("SELECT a FROM Animal a WHERE a.availableForAdoption = 'AVAILABLE' AND a.type = ?1"
             + " AND a.animalIdentifier LIKE CONCAT('%',?2,'%')")
-    Iterable<Animal> findAnimalByAvailableForAdoptionByIdentifier(Animal.Type animalType, String animalIdentifier);
+    Iterable<Animal> findAnimalsAvailableForAdoptionByIdentifier(Animal.Type animalType, String animalIdentifier);
+
+    @Query("SELECT a FROM Animal a WHERE a.availableForAdoption <> 'ADOPTED' ORDER BY a.dateOfRegistration ASC")
+    Page<Animal> findNotAdoptedAnimals(Pageable pageable);
+
+    @Query("SELECT a FROM Animal a WHERE a.availableForAdoption <> 'ADOPTED' AND a.type = ?1 "
+            + "AND a.name LIKE CONCAT('%',?2,'%')")
+    Page<Animal> findNotAdoptedAnimalsByName(Animal.Type animalType, String animalName, Pageable pageable);
+
+    @Query("SELECT a FROM Animal a WHERE a.availableForAdoption <> 'ADOPTED' AND a.type = ?1"
+            + " AND a.animalIdentifier LIKE CONCAT('%',?2,'%')")
+    Page<Animal> findNotAdoptedAnimalsByIdentifier(Animal.Type animalType, String animalIdentifier, Pageable pageable);
 
     @Query("SELECT a FROM Animal a WHERE a.availableForAdoption = 'AVAILABLE' ORDER BY a.dateOfRegistration DESC")
     Page<Animal> findAnimalsWithLongestWaitingTime(Pageable pageable);

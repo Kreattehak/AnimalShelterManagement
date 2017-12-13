@@ -9,6 +9,7 @@ import com.company.AnimalShelterManagement.utils.ProcessUserRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,13 +44,30 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
                                                               String animalName) {
         if (animalType != null) {
             if (animalName != null) {
-                return repository.findAnimalByAvailableForAdoptionByName(animalType, animalName);
+                return repository.findAnimalsAvailableForAdoptionByName(animalType, animalName);
             } else {
-                return repository.findAnimalByAvailableForAdoptionByIdentifier(animalType, animalIdentifier);
+                return repository.findAnimalsAvailableForAdoptionByIdentifier(animalType, animalIdentifier);
             }
         } else {
             System.out.println("TYPE NULL");
-            return repository.findAnimalByAvailableForAdoption();
+            return repository.findAnimalsByAvailableForAdoption();
+        }
+    }
+
+    @Override
+    public Page<Animal> returnNotAdoptedAnimals(Animal.Type animalType, String animalIdentifier, String animalName,
+                                                Integer pageNumber, Integer pageSize) {
+        int[] pageData = checkPageData(pageNumber, pageSize);
+        Pageable pageable = new PageRequest(pageData[PAGE_NUMBER_INDEX], pageData[PAGE_SIZE_INDEX]);
+        if (animalType != null) {
+            if (animalName != null) {
+                return repository.findNotAdoptedAnimalsByName(animalType, animalName, pageable);
+            } else {
+                return repository.findNotAdoptedAnimalsByIdentifier(animalType, animalIdentifier, pageable);
+            }
+        } else {
+            System.out.println("TYPE NULL");
+            return repository.findNotAdoptedAnimals(pageable);
         }
     }
 

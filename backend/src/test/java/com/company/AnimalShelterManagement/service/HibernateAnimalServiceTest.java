@@ -71,33 +71,33 @@ public class HibernateAnimalServiceTest {
 
     @Test
     public void shouldPerformReturnAnimalsAvailableForAdoptionWithNoDataProvided() {
-        when(animalRepository.findAnimalByAvailableForAdoption()).thenReturn(new ArrayList<>());
+        when(animalRepository.findAnimalsByAvailableForAdoption()).thenReturn(new ArrayList<>());
 
         animalService.returnAnimalsAvailableForAdoption(null, null, null);
 
-        verify(animalRepository).findAnimalByAvailableForAdoption();
-        verifyNoMoreInteractions(animalRepository);
-    }
-
-    @Test
-    public void shouldPerformReturnAnimalsAvailableForAdoptionByIdentifier() {
-        when(animalRepository.findAnimalByAvailableForAdoptionByIdentifier(any(Animal.Type.class), anyString()))
-                .thenReturn(new ArrayList<>());
-
-        animalService.returnAnimalsAvailableForAdoption(DOG, ANIMAL_IDENTIFIER_PATTERN, null);
-
-        verify(animalRepository).findAnimalByAvailableForAdoptionByIdentifier(any(Animal.Type.class), anyString());
+        verify(animalRepository).findAnimalsByAvailableForAdoption();
         verifyNoMoreInteractions(animalRepository);
     }
 
     @Test
     public void shouldPerformReturnAnimalsAvailableForAdoptionByName() {
-        when(animalRepository.findAnimalByAvailableForAdoptionByName(any(Animal.Type.class), anyString()))
+        when(animalRepository.findAnimalsAvailableForAdoptionByName(any(Animal.Type.class), anyString()))
                 .thenReturn(new ArrayList<>());
 
         animalService.returnAnimalsAvailableForAdoption(DOG, null, DOG_NAME);
 
-        verify(animalRepository).findAnimalByAvailableForAdoptionByName(any(Animal.Type.class), anyString());
+        verify(animalRepository).findAnimalsAvailableForAdoptionByName(any(Animal.Type.class), anyString());
+        verifyNoMoreInteractions(animalRepository);
+    }
+
+    @Test
+    public void shouldPerformReturnAnimalsAvailableForAdoptionByIdentifier() {
+        when(animalRepository.findAnimalsAvailableForAdoptionByIdentifier(any(Animal.Type.class), anyString()))
+                .thenReturn(new ArrayList<>());
+
+        animalService.returnAnimalsAvailableForAdoption(DOG, ANIMAL_IDENTIFIER_PATTERN, null);
+
+        verify(animalRepository).findAnimalsAvailableForAdoptionByIdentifier(any(Animal.Type.class), anyString());
         verifyNoMoreInteractions(animalRepository);
     }
 
