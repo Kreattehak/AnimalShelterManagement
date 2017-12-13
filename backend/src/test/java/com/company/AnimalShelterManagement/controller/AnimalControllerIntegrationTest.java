@@ -93,16 +93,6 @@ public class AnimalControllerIntegrationTest {
     }
 
     @Test
-    public void shouldReturnAnimalsAvailableForAdoptionByIdentifier() {
-        Map<String, String> params = new HashMap<>();
-        params.put(ANIMAL_TYPE, DOG.toString());
-        params.put(ANIMAL_IDENTIFIER, AVAILABLE_ANIMAL_IDENTIFIER_VALUE);
-
-        assertThatResponseHaveMultipleEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption
-                + withAnimalType + withAnimalIdentifierAdditionalParameter, EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
-    }
-
-    @Test
     public void shouldReturnAnimalsAvailableForAdoptionByName() {
         Map<String, String> params = new HashMap<>();
         params.put(ANIMAL_TYPE, DOG.toString());
@@ -110,6 +100,16 @@ public class AnimalControllerIntegrationTest {
 
         assertThatResponseHaveMultipleEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption
                 + withAnimalType + withAnimalNameAdditionalParameter, EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
+    }
+
+    @Test
+    public void shouldReturnAnimalsAvailableForAdoptionByIdentifier() {
+        Map<String, String> params = new HashMap<>();
+        params.put(ANIMAL_TYPE, DOG.toString());
+        params.put(ANIMAL_IDENTIFIER, AVAILABLE_ANIMAL_IDENTIFIER_VALUE);
+
+        assertThatResponseHaveMultipleEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption
+                + withAnimalType + withAnimalIdentifierAdditionalParameter, EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
     }
 
     @Test
