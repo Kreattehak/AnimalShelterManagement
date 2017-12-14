@@ -19,11 +19,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.LocalDate;
 
 import static com.company.AnimalShelterManagement.model.Animal.Type.DOG;
-import static com.company.AnimalShelterManagement.service.HibernateAnimalService.DEFAULT_PAGE_SIZE;
 import static com.company.AnimalShelterManagement.service.HibernateAnimalServiceTest.checkAnimalFieldsEquality;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
 import static com.company.AnimalShelterManagement.utils.AnimalFactory.newAvailableForAdoptionDog;
 import static com.company.AnimalShelterManagement.utils.AnimalFactory.newlyReceivedDog;
+import static com.company.AnimalShelterManagement.utils.SearchForAnimalParams.DEFAULT_PAGE_SIZE;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -47,8 +47,9 @@ public class AnimalRepositoryTest {
     @Test
     public void shouldReturnAllAnimalsAvailableForAdoptionWithNoDataProvided() {
         createAndPersistTwoDogs();
+        Pageable pageable = new PageRequest(FIRST_PAGE, DEFAULT_PAGE_SIZE);
 
-        Iterable<Animal> animals = animalRepository.findAnimalsByAvailableForAdoption();
+        Iterable<Animal> animals = animalRepository.findAnimalsByAvailableForAdoption(pageable);
 
         assertThat(animals, hasItem(checkAnimalFieldsEquality(DOG_NAME, DOG, DATE_OF_BIRTH_VALUE)));
         assertThat(animals, not(hasItem(checkAnimalFieldsEquality(ANOTHER_DOG_NAME, DOG, LocalDate.now()))));
@@ -57,8 +58,9 @@ public class AnimalRepositoryTest {
     @Test
     public void shouldPerformReturnAnimalsAvailableForAdoptionByName() {
         createAndPersistTwoDogs();
+        Pageable pageable = new PageRequest(FIRST_PAGE, DEFAULT_PAGE_SIZE);
 
-        Iterable<Animal> animals = animalRepository.findAnimalsAvailableForAdoptionByName(DOG, DOG_NAME);
+        Iterable<Animal> animals = animalRepository.findAnimalsAvailableForAdoptionByName(DOG, DOG_NAME, pageable);
 
         assertThat(animals, hasItem(checkAnimalFieldsEquality(DOG_NAME, DOG, DATE_OF_BIRTH_VALUE)));
     }
@@ -66,10 +68,12 @@ public class AnimalRepositoryTest {
     @Test
     public void shouldPerformReturnAnimalsAvailableForAdoptionByIdentifier() {
         createAndPersistTwoDogs();
+        Pageable pageable = new PageRequest(FIRST_PAGE, DEFAULT_PAGE_SIZE);
+
         AnimalFactory.generateAnimalIdentifier(testDog);
 
         Iterable<Animal> animals = animalRepository.findAnimalsAvailableForAdoptionByIdentifier(DOG,
-                testDog.getAnimalIdentifier());
+                testDog.getAnimalIdentifier(), pageable);
 
         assertThat(animals, hasItem(checkAnimalFieldsEquality(DOG_NAME, DOG, DATE_OF_BIRTH_VALUE)));
     }
