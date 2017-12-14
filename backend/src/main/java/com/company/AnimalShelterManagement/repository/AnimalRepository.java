@@ -10,15 +10,16 @@ import org.springframework.data.repository.CrudRepository;
 public interface AnimalRepository extends CrudRepository<Animal, Long> {
 
     @Query("SELECT a FROM Animal a WHERE a.availableForAdoption = 'AVAILABLE'")
-    Iterable<Animal> findAnimalsByAvailableForAdoption();
+    Page<Animal> findAnimalsByAvailableForAdoption(Pageable pageable);
 
     @Query("SELECT a FROM Animal a WHERE a.availableForAdoption = 'AVAILABLE' AND a.type = ?1 "
             + "AND a.name LIKE CONCAT('%',?2,'%')")
-    Iterable<Animal> findAnimalsAvailableForAdoptionByName(Animal.Type animalType, String animalName);
+    Page<Animal>findAnimalsAvailableForAdoptionByName(Animal.Type animalType, String animalName, Pageable pageable);
 
     @Query("SELECT a FROM Animal a WHERE a.availableForAdoption = 'AVAILABLE' AND a.type = ?1"
             + " AND a.animalIdentifier LIKE CONCAT('%',?2,'%')")
-    Iterable<Animal> findAnimalsAvailableForAdoptionByIdentifier(Animal.Type animalType, String animalIdentifier);
+    Page<Animal> findAnimalsAvailableForAdoptionByIdentifier(Animal.Type animalType, String animalIdentifier,
+                                                                 Pageable pageable);
 
     @Query("SELECT a FROM Animal a WHERE a.availableForAdoption <> 'ADOPTED' ORDER BY a.dateOfRegistration ASC")
     Page<Animal> findNotAdoptedAnimals(Pageable pageable);

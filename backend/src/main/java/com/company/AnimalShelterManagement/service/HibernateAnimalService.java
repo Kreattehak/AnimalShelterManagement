@@ -5,19 +5,20 @@ import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.repository.AnimalRepository;
 import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
-import com.company.AnimalShelterManagement.utils.resolvers.NotAdoptedRequestResolver;
 import com.company.AnimalShelterManagement.utils.ProcessUserRequestException;
-import com.company.AnimalShelterManagement.utils.resolvers.RequestResolver;
 import com.company.AnimalShelterManagement.utils.SearchForAnimalParams;
+import com.company.AnimalShelterManagement.utils.resolvers.AvailableForAdoptionRequestResolver;
+import com.company.AnimalShelterManagement.utils.resolvers.NotAdoptedRequestResolver;
+import com.company.AnimalShelterManagement.utils.resolvers.RequestResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.ADOPTED;
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.AVAILABLE;
+import static com.company.AnimalShelterManagement.utils.SearchForAnimalParams.createPagination;
 
 @Service("defaultAnimalService")
 @Transactional(readOnly = true)
@@ -26,16 +27,17 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
 
     private final PersonService personService;
     private final NotAdoptedRequestResolver notAdoptedRequestResolver;
-    public static final int FIRST_PAGE = 0;
-    public static final int DEFAULT_PAGE_SIZE = 10;
+    private final AvailableForAdoptionRequestResolver availableForAdoptionRequestResolver;
 
     @Autowired
     public HibernateAnimalService(AnimalRepository animalRepository, PersonService personService,
-                                  NotAdoptedRequestResolver notAdoptedRequestResolver) {
+                                  NotAdoptedRequestResolver notAdoptedRequestResolver,
+                                  AvailableForAdoptionRequestResolver availableForAdoptionRequestResolver) {
         super(Animal.class);
         this.repository = animalRepository;
         this.personService = personService;
         this.notAdoptedRequestResolver = notAdoptedRequestResolver;
+        this.availableForAdoptionRequestResolver = availableForAdoptionRequestResolver;
     }
 
     @Override
@@ -44,18 +46,19 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
     }
 
     @Override
-    public Iterable<Animal> returnAnimalsAvailableForAdoption(Animal.Type animalType, String animalIdentifier,
-                                                              String animalName) {
-        if (animalType != null) {
-            if (animalName != null) {
-                return repository.findAnimalsAvailableForAdoptionByName(animalType, animalName);
-            } else {
-                return repository.findAnimalsAvailableForAdoptionByIdentifier(animalType, animalIdentifier);
-            }
-        } else {
-            System.out.println("TYPE NULL");
-            return repository.findAnimalsByAvailableForAdoption();
-        }
+    public Page<Animal> returnAnimalsAvailableForAdoption(SearchForAnimalParams searchParams) {
+        Pageable pageable = createPagination(searchParams.getPageNumber(), searchParams.getPageSize());
+        return returnAnimalsBySpecificRequestParameters(searchParams, pageable, availableForAdoptionRequestResolver);
+//        if (animalType != null) {
+//            if (animalName != null) {
+//                return repository.findAnimalsAvailableForAdoptionByName(animalType, animalName);
+//            } else {
+//                return repository.findAnimalsAvailableForAdoptionByIdentifier(animalType, animalIdentifier);
+//            }
+//        } else {
+//            System.out.println("TYPE NULL");
+//            return repository.findAnimalsByAvailableForAdoption();
+//        }
     }
 
     @Override
@@ -129,13 +132,6 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
     @Autowired
     public void setAnimalRepository(AnimalRepository animalRepository) {
         this.repository = animalRepository;
-    }
-
-    public static Pageable createPagination(Integer pageNumber, Integer pageSize) {
-        pageNumber = (pageNumber != null ? pageNumber : FIRST_PAGE);
-        pageSize = (pageSize != null ? pageSize : DEFAULT_PAGE_SIZE);
-
-        return new PageRequest(pageNumber, pageSize);
     }
 
     private Page<Animal> returnAnimalsBySpecificRequestParameters(SearchForAnimalParams searchParams, Pageable pageable, RequestResolver resolver) {

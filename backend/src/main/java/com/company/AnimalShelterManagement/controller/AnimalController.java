@@ -30,10 +30,8 @@ public class AnimalController {
     }
 
     @GetMapping("${rest.animal.getAnimalsAvailableForAdoption}")
-    public Iterable<Animal> returnAnimalsAvailableForAdoption(@RequestParam(required = false) Animal.Type animalType,
-                                                              @RequestParam(required = false) String animalIdentifier,
-                                                              @RequestParam(required = false) String animalName) {
-        return animalService.returnAnimalsAvailableForAdoption(animalType, animalIdentifier, animalName);
+    public Page<Animal> returnAnimalsAvailableForAdoption(SearchForAnimalParams searchParams) {
+        return animalService.returnAnimalsAvailableForAdoption(searchParams);
     }
 
     @GetMapping("${rest.animal.getNotAdoptedAnimals}")

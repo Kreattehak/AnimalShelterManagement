@@ -9,8 +9,7 @@ public interface AnimalService extends CommonService<Animal> {
 
     Iterable<Animal> returnAnimals();
 
-    Iterable<Animal> returnAnimalsAvailableForAdoption(Animal.Type animalType, String animalIdentifier,
-                                                       String animalName);
+    Page<Animal> returnAnimalsAvailableForAdoption(SearchForAnimalParams searchParams);
 
     Page<Animal> returnNotAdoptedAnimals(SearchForAnimalParams searchParams);
 

@@ -1,10 +1,15 @@
 package com.company.AnimalShelterManagement.utils;
 
 import com.company.AnimalShelterManagement.model.Animal;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.io.Serializable;
 
 public class SearchForAnimalParams implements Serializable{
+
+    public static final int FIRST_PAGE = 0;
+    public static final int DEFAULT_PAGE_SIZE = 10;
 
     private static final long serialVersionUID = 680458360909659050L;
 
@@ -14,8 +19,11 @@ public class SearchForAnimalParams implements Serializable{
     private Integer pageNumber;
     private Integer pageSize;
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+    public static Pageable createPagination(Integer pageNumber, Integer pageSize) {
+        pageNumber = (pageNumber != null ? pageNumber : FIRST_PAGE);
+        pageSize = (pageSize != null ? pageSize : DEFAULT_PAGE_SIZE);
+
+        return new PageRequest(pageNumber, pageSize);
     }
 
     public Animal.Type getAnimalType() {
