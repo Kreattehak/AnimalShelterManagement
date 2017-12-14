@@ -88,7 +88,7 @@ public class AnimalControllerIntegrationTest {
 
     @Test
     public void shouldReturnAnimalsAvailableForAdoptionWithNoDataProvided() {
-        assertThatResponseHaveMultipleEntitiesReturned(home + apiForAnimals + animalsForAdoption,
+        assertThatResponseHavePagedEntitiesReturned(home + apiForAnimals + animalsForAdoption,
                 EXPECTED_ANIMALS_FOR_ADOPTION_COUNT);
     }
 
@@ -98,7 +98,7 @@ public class AnimalControllerIntegrationTest {
         params.put(ANIMAL_TYPE, DOG.toString());
         params.put(ANIMAL_NAME, AVAILABLE_ANIMAL_NAME);
 
-        assertThatResponseHaveMultipleEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption
+        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption
                 + withAnimalType + withAnimalNameAdditionalParameter, EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
     }
 
@@ -108,7 +108,7 @@ public class AnimalControllerIntegrationTest {
         params.put(ANIMAL_TYPE, DOG.toString());
         params.put(ANIMAL_IDENTIFIER, AVAILABLE_ANIMAL_IDENTIFIER_VALUE);
 
-        assertThatResponseHaveMultipleEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption
+        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption
                 + withAnimalType + withAnimalIdentifierAdditionalParameter, EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
     }
 

@@ -4,16 +4,20 @@ import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
 import com.company.AnimalShelterManagement.utils.RestResponsePage;
+import com.company.AnimalShelterManagement.utils.SearchForAnimalParams;
+import com.company.AnimalShelterManagement.utils.SearchForAnimalParamsTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 
+import static com.company.AnimalShelterManagement.utils.SearchForAnimalParamsTest.returnNoParams;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.mockito.Mockito.*;
 
@@ -40,12 +44,11 @@ public class AnimalControllerTest {
 
     @Test
     public void shouldPerformReturnAnimalsAvailableForAdoption() {
-        when(animalService.returnAnimalsAvailableForAdoption(any(Animal.Type.class), anyString(), anyString()))
-                .thenReturn(new ArrayList<>());
+        when(animalService.returnAnimalsAvailableForAdoption(any(SearchForAnimalParams.class))).thenReturn(new RestResponsePage<>());
 
-        animalController.returnAnimalsAvailableForAdoption(null, null, null);
+        animalController.returnAnimalsAvailableForAdoption(returnNoParams());
 
-        verify(animalService).returnAnimalsAvailableForAdoption(any(Animal.Type.class), anyString(), anyString());
+        verify(animalService).returnAnimalsAvailableForAdoption(any(SearchForAnimalParams.class));
         verifyNoMoreInteractions(animalService);
     }
 
