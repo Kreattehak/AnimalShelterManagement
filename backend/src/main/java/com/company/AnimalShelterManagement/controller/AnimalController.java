@@ -3,6 +3,7 @@ package com.company.AnimalShelterManagement.controller;
 import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
+import com.company.AnimalShelterManagement.utils.SearchForAnimalParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -36,12 +37,8 @@ public class AnimalController {
     }
 
     @GetMapping("${rest.animal.getNotAdoptedAnimals}")
-    public Page<Animal> returnNotAdoptedAnimals(@RequestParam(required = false) Animal.Type animalType,
-                                                @RequestParam(required = false) String animalIdentifier,
-                                                @RequestParam(required = false) String animalName,
-                                                @RequestParam(required = false) Integer pageNumber,
-                                                @RequestParam(required = false) Integer pageSize) {
-        return animalService.returnNotAdoptedAnimals(animalType, animalIdentifier, animalName, pageNumber, pageSize);
+    public Page<Animal> returnNotAdoptedAnimals(SearchForAnimalParams searchParams) {
+        return animalService.returnNotAdoptedAnimals(searchParams);
     }
 
     @GetMapping("${rest.animal.getAnimalsWithLongestWaitingTime}")

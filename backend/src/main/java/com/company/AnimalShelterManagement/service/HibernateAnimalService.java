@@ -5,7 +5,10 @@ import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.repository.AnimalRepository;
 import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
+import com.company.AnimalShelterManagement.utils.resolvers.NotAdoptedRequestResolver;
 import com.company.AnimalShelterManagement.utils.ProcessUserRequestException;
+import com.company.AnimalShelterManagement.utils.resolvers.RequestResolver;
+import com.company.AnimalShelterManagement.utils.SearchForAnimalParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,16 +25,17 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
         implements AnimalService {
 
     private final PersonService personService;
+    private final NotAdoptedRequestResolver notAdoptedRequestResolver;
     public static final int FIRST_PAGE = 0;
     public static final int DEFAULT_PAGE_SIZE = 10;
-    public static final int PAGE_NUMBER_INDEX = 0;
-    public static final int PAGE_SIZE_INDEX = 1;
 
     @Autowired
-    public HibernateAnimalService(AnimalRepository animalRepository, PersonService personService) {
+    public HibernateAnimalService(AnimalRepository animalRepository, PersonService personService,
+                                  NotAdoptedRequestResolver notAdoptedRequestResolver) {
         super(Animal.class);
         this.repository = animalRepository;
         this.personService = personService;
+        this.notAdoptedRequestResolver = notAdoptedRequestResolver;
     }
 
     @Override
@@ -55,34 +59,19 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
     }
 
     @Override
-    public Page<Animal> returnNotAdoptedAnimals(Animal.Type animalType, String animalIdentifier, String animalName,
-                                                Integer pageNumber, Integer pageSize) {
-        int[] pageData = checkPageData(pageNumber, pageSize);
-        Pageable pageable = new PageRequest(pageData[PAGE_NUMBER_INDEX], pageData[PAGE_SIZE_INDEX]);
-        if (animalType != null) {
-            if (animalName != null) {
-                return repository.findNotAdoptedAnimalsByName(animalType, animalName, pageable);
-            } else {
-                return repository.findNotAdoptedAnimalsByIdentifier(animalType, animalIdentifier, pageable);
-            }
-        } else {
-            System.out.println("TYPE NULL");
-            return repository.findNotAdoptedAnimals(pageable);
-        }
+    public Page<Animal> returnNotAdoptedAnimals(SearchForAnimalParams searchParams) {
+        Pageable pageable = createPagination(searchParams.getPageNumber(), searchParams.getPageSize());
+        return returnAnimalsBySpecificRequestParameters(searchParams, pageable, notAdoptedRequestResolver);
     }
 
     @Override
     public Page<Animal> returnAnimalsWithLongestWaitingTime(Integer pageNumber, Integer pageSize) {
-        int[] pageData = checkPageData(pageNumber, pageSize);
-        return repository.findAnimalsWithLongestWaitingTime(new PageRequest(pageData[PAGE_NUMBER_INDEX],
-                pageData[PAGE_SIZE_INDEX]));
+        return repository.findAnimalsWithLongestWaitingTime(createPagination(pageNumber, pageSize));
     }
 
     @Override
     public Page<Animal> returnRecentlyAddedAnimals(Integer pageNumber, Integer pageSize) {
-        int[] pageData = checkPageData(pageNumber, pageSize);
-        return repository.findRecentlyAddedAnimals(new PageRequest(pageData[PAGE_NUMBER_INDEX],
-                pageData[PAGE_SIZE_INDEX]));
+        return repository.findRecentlyAddedAnimals(createPagination(pageNumber, pageSize));
     }
 
     @Override
@@ -142,11 +131,24 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
         this.repository = animalRepository;
     }
 
-    public static int[] checkPageData(Integer pageNumber, Integer pageSize) {
+    public static Pageable createPagination(Integer pageNumber, Integer pageSize) {
         pageNumber = (pageNumber != null ? pageNumber : FIRST_PAGE);
         pageSize = (pageSize != null ? pageSize : DEFAULT_PAGE_SIZE);
 
-        return new int[]{pageNumber, pageSize};
+        return new PageRequest(pageNumber, pageSize);
+    }
+
+    private Page<Animal> returnAnimalsBySpecificRequestParameters(SearchForAnimalParams searchParams, Pageable pageable, RequestResolver resolver) {
+        if (searchParams.getAnimalType() != null) {
+            if (searchParams.getAnimalName() != null) {
+                return resolver.findByName(searchParams.getAnimalType(), searchParams.getAnimalName(), pageable);
+            } else {
+                return resolver.findByIdentifier(searchParams.getAnimalType(), searchParams.getAnimalIdentifier(), pageable);
+            }
+        } else {
+            System.out.println("TYPE NULL");
+            return resolver.findWithoutParams(pageable);
+        }
     }
 
     private boolean canAddAnimalToPerson(Person personFromDatabase, Animal animalFromDatabase) {

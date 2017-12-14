@@ -2,6 +2,7 @@ package com.company.AnimalShelterManagement.service.interfaces;
 
 import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.model.Person;
+import com.company.AnimalShelterManagement.utils.SearchForAnimalParams;
 import org.springframework.data.domain.Page;
 
 public interface AnimalService extends CommonService<Animal> {
@@ -11,8 +12,7 @@ public interface AnimalService extends CommonService<Animal> {
     Iterable<Animal> returnAnimalsAvailableForAdoption(Animal.Type animalType, String animalIdentifier,
                                                        String animalName);
 
-    Page<Animal> returnNotAdoptedAnimals(Animal.Type animalType, String animalIdentifier, String animalName,
-                                         Integer pageNumber, Integer pageSize);
+    Page<Animal> returnNotAdoptedAnimals(SearchForAnimalParams searchParams);
 
     Page<Animal> returnAnimalsWithLongestWaitingTime(Integer pageNumber, Integer pageSize);
 
