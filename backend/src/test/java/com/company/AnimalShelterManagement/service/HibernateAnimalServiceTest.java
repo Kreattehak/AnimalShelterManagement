@@ -9,7 +9,6 @@ import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
 import com.company.AnimalShelterManagement.service.interfaces.PersonService;
 import com.company.AnimalShelterManagement.utils.ProcessUserRequestException;
 import com.company.AnimalShelterManagement.utils.RestResponsePage;
-import com.company.AnimalShelterManagement.utils.SearchForAnimalParams;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
@@ -28,8 +27,7 @@ import java.util.ArrayList;
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.ADOPTED;
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.AVAILABLE;
 import static com.company.AnimalShelterManagement.model.Animal.Type.DOG;
-import static com.company.AnimalShelterManagement.utils.SearchForAnimalParamsTest.returnAnimalTypeAndIdentifierParams;
-import static com.company.AnimalShelterManagement.utils.SearchForAnimalParamsTest.returnAnimalTypeAndNameParams;
+import static com.company.AnimalShelterManagement.utils.SearchForAnimalParamsTest.*;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -74,9 +72,10 @@ public class HibernateAnimalServiceTest {
 
     @Test
     public void shouldPerformReturnAnimalsAvailableForAdoptionWithNoDataProvided() {
-        when(animalRepository.findAnimalsByAvailableForAdoption(any(Pageable.class))).thenReturn(new RestResponsePage<>());
+        when(animalRepository.findAnimalsByAvailableForAdoption(any(Pageable.class)))
+                .thenReturn(new RestResponsePage<>());
 
-        animalService.returnAnimalsAvailableForAdoption(new SearchForAnimalParams());
+        animalService.returnAnimalsAvailableForAdoption(returnNoParams());
 
         verify(animalRepository).findAnimalsByAvailableForAdoption(any(Pageable.class));
         verifyNoMoreInteractions(animalRepository);
@@ -103,6 +102,40 @@ public class HibernateAnimalServiceTest {
                 ANIMAL_IDENTIFIER_PATTERN));
 
         verify(animalRepository).findAnimalsAvailableForAdoptionByIdentifier(any(Animal.Type.class), anyString(),
+                any(Pageable.class));
+        verifyNoMoreInteractions(animalRepository);
+    }
+
+    @Test
+    public void shouldPerformReturnNotAdoptedAnimalsWithNoDataProvided() {
+        when(animalRepository.findNotAdoptedAnimals(any(Pageable.class))).thenReturn(new RestResponsePage<>());
+
+        animalService.returnNotAdoptedAnimals(returnNoParams());
+
+        verify(animalRepository).findNotAdoptedAnimals(any(Pageable.class));
+        verifyNoMoreInteractions(animalRepository);
+    }
+
+    @Test
+    public void shouldPerformReturnNotAdoptedAnimalsByName() {
+        when(animalRepository.findNotAdoptedAnimalsByName(any(Animal.Type.class), anyString(), any(Pageable.class)))
+                .thenReturn(new RestResponsePage<>());
+
+        animalService.returnNotAdoptedAnimals(returnAnimalTypeAndNameParams(DOG, DOG_NAME));
+
+        verify(animalRepository).findNotAdoptedAnimalsByName(any(Animal.Type.class), anyString(), any(Pageable.class));
+        verifyNoMoreInteractions(animalRepository);
+    }
+
+    @Test
+    public void shouldPerformReturnNotAdoptedAnimalsByIdentifier() {
+        when(animalRepository.findNotAdoptedAnimalsByIdentifier(any(Animal.Type.class), anyString(),
+                any(Pageable.class))).thenReturn(new RestResponsePage<>());
+
+        animalService.returnNotAdoptedAnimals(returnAnimalTypeAndIdentifierParams(DOG,
+                ANIMAL_IDENTIFIER_PATTERN));
+
+        verify(animalRepository).findNotAdoptedAnimalsByIdentifier(any(Animal.Type.class), anyString(),
                 any(Pageable.class));
         verifyNoMoreInteractions(animalRepository);
     }

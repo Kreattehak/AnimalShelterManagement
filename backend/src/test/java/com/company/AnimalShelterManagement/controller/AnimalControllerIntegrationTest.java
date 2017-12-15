@@ -64,6 +64,7 @@ public class AnimalControllerIntegrationTest {
     private String apiForPerson = "/api/person/";
     private String previousOwner = "/previousOwner";
     private String animalsForAdoption = "/availableForAdoption";
+    private String notAdoptedAnimals = "/notAdopted";
     private String longestWaitingTime = "/longestWaitingTime";
     private String recentlyAdded = "/recentlyAdded";
     private String withAnimalType = "?animalType={animalType}";
@@ -110,6 +111,54 @@ public class AnimalControllerIntegrationTest {
 
         assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption
                 + withAnimalType + withAnimalIdentifierAdditionalParameter, EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
+    }
+
+    @Test
+    public void shouldReturnPagedAnimalsAvailableForAdoption() {
+        Map<String, String> params = new HashMap<>();
+        params.put(PAGE_SIZE, String.valueOf(EXPECTED_ANIMALS_FOR_ADOPTION_COUNT));
+        params.put(PAGE_NUMBER, String.valueOf(FIRST_PAGE));
+
+        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + animalsForAdoption
+                        + WITH_PAGE_SIZE_PARAMETER + WITH_PAGE_NUMBER_ADDITIONAL_PARAMETER,
+                EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
+    }
+
+    @Test
+    public void shouldReturnNotAdoptedAnimalsWithNoDataProvided() {
+        assertThatResponseHavePagedEntitiesReturned(home + apiForAnimals + notAdoptedAnimals,
+                EXPECTED_ANIMALS_IN_SHELTER_COUNT);
+    }
+
+    @Test
+    public void shouldReturnNotAdoptedAnimalsByName() {
+        Map<String, String> params = new HashMap<>();
+        params.put(ANIMAL_TYPE, DOG.toString());
+        params.put(ANIMAL_NAME, AVAILABLE_ANIMAL_NAME);
+
+        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + notAdoptedAnimals
+                + withAnimalType + withAnimalNameAdditionalParameter, ONE_ENTITY, params);
+    }
+
+    @Test
+    public void shouldReturnNotAdoptedAnimalsByIdentifier() {
+        Map<String, String> params = new HashMap<>();
+        params.put(ANIMAL_TYPE, DOG.toString());
+        params.put(ANIMAL_IDENTIFIER, AVAILABLE_ANIMAL_IDENTIFIER_VALUE);
+
+        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + notAdoptedAnimals
+                + withAnimalType + withAnimalIdentifierAdditionalParameter, ONE_ENTITY, params);
+    }
+
+    @Test
+    public void shouldReturnPagedNotAdoptedAnimals() {
+        Map<String, String> params = new HashMap<>();
+        params.put(PAGE_SIZE, String.valueOf(EXPECTED_ANIMALS_IN_SHELTER_COUNT));
+        params.put(PAGE_NUMBER, String.valueOf(FIRST_PAGE));
+
+        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + notAdoptedAnimals
+                        + WITH_PAGE_SIZE_PARAMETER + WITH_PAGE_NUMBER_ADDITIONAL_PARAMETER,
+                EXPECTED_ANIMALS_IN_SHELTER_COUNT, params);
     }
 
     @Test

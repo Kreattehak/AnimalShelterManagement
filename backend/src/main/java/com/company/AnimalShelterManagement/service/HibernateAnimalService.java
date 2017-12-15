@@ -49,16 +49,6 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
     public Page<Animal> returnAnimalsAvailableForAdoption(SearchForAnimalParams searchParams) {
         Pageable pageable = createPagination(searchParams.getPageNumber(), searchParams.getPageSize());
         return returnAnimalsBySpecificRequestParameters(searchParams, pageable, availableForAdoptionRequestResolver);
-//        if (animalType != null) {
-//            if (animalName != null) {
-//                return repository.findAnimalsAvailableForAdoptionByName(animalType, animalName);
-//            } else {
-//                return repository.findAnimalsAvailableForAdoptionByIdentifier(animalType, animalIdentifier);
-//            }
-//        } else {
-//            System.out.println("TYPE NULL");
-//            return repository.findAnimalsByAvailableForAdoption();
-//        }
     }
 
     @Override

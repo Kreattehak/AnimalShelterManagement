@@ -12,6 +12,7 @@ public class SearchForAnimalParamsTest {
         SearchForAnimalParams searchParams = new SearchForAnimalParams();
         searchParams.setAnimalType(animalType);
         searchParams.setAnimalName(animalName);
+
         return searchParams;
     }
 
@@ -20,6 +21,15 @@ public class SearchForAnimalParamsTest {
         SearchForAnimalParams searchParams = new SearchForAnimalParams();
         searchParams.setAnimalType(animalType);
         searchParams.setAnimalIdentifier(animalIdentifier);
+
+        return searchParams;
+    }
+
+    public static SearchForAnimalParams returnPageableParams(Integer pageNumber, Integer pageSize) {
+        SearchForAnimalParams searchParams = new SearchForAnimalParams();
+        searchParams.setPageNumber(pageNumber);
+        searchParams.setPageSize(pageSize);
+
         return searchParams;
     }
 }

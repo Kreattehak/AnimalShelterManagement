@@ -1,18 +1,15 @@
 package com.company.AnimalShelterManagement.controller;
 
-import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.service.interfaces.AnimalService;
 import com.company.AnimalShelterManagement.utils.RestResponsePage;
 import com.company.AnimalShelterManagement.utils.SearchForAnimalParams;
-import com.company.AnimalShelterManagement.utils.SearchForAnimalParamsTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -44,11 +41,23 @@ public class AnimalControllerTest {
 
     @Test
     public void shouldPerformReturnAnimalsAvailableForAdoption() {
-        when(animalService.returnAnimalsAvailableForAdoption(any(SearchForAnimalParams.class))).thenReturn(new RestResponsePage<>());
+        when(animalService.returnAnimalsAvailableForAdoption(any(SearchForAnimalParams.class)))
+                .thenReturn(new RestResponsePage<>());
 
         animalController.returnAnimalsAvailableForAdoption(returnNoParams());
 
         verify(animalService).returnAnimalsAvailableForAdoption(any(SearchForAnimalParams.class));
+        verifyNoMoreInteractions(animalService);
+    }
+
+    @Test
+    public void shouldPerformReturnNotAdoptedAnimals() {
+        when(animalService.returnNotAdoptedAnimals(any(SearchForAnimalParams.class)))
+                .thenReturn(new RestResponsePage<>());
+
+        animalController.returnNotAdoptedAnimals(returnNoParams());
+
+        verify(animalService).returnNotAdoptedAnimals(any(SearchForAnimalParams.class));
         verifyNoMoreInteractions(animalService);
     }
 

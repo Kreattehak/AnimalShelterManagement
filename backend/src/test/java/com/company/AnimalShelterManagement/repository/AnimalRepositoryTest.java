@@ -79,6 +79,15 @@ public class AnimalRepositoryTest {
     }
 
     @Test
+    public void shouldPerformReturnPagedAnimalsAvailableForAdoption() {
+        Pageable pageable = new PageRequest(FIRST_PAGE, EXPECTED_ANIMALS_FOR_ADOPTION_COUNT );
+
+        Page<Animal> animals = animalRepository.findAnimalsByAvailableForAdoption(pageable);
+
+        assertEquals(EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, animals.getNumberOfElements());
+    }
+
+    @Test
     public void shouldPerformReturnNotAdoptedAnimalsWithNoDataProvided() {
         createAndPersistTwoDogs();
         Pageable pageable = new PageRequest(FIRST_PAGE, DEFAULT_PAGE_SIZE);
