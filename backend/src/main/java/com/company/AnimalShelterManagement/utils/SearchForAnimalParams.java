@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.io.Serializable;
 
-public class SearchForAnimalParams implements Serializable{
+public class SearchForAnimalParams implements Serializable {
 
     public static final int FIRST_PAGE = 0;
     public static final int DEFAULT_PAGE_SIZE = 10;
@@ -16,14 +16,14 @@ public class SearchForAnimalParams implements Serializable{
     private Animal.Type animalType;
     private String animalIdentifier;
     private String animalName;
-    private Integer pageNumber;
-    private Integer pageSize;
+    private Integer number;
+    private Integer size;
 
-    public static Pageable createPagination(Integer pageNumber, Integer pageSize) {
-        pageNumber = (pageNumber != null ? pageNumber : FIRST_PAGE);
-        pageSize = (pageSize != null ? pageSize : DEFAULT_PAGE_SIZE);
+    public static Pageable createPagination(Integer number, Integer size) {
+        number = (number != null ? number : FIRST_PAGE);
+        size = (size != null ? size : DEFAULT_PAGE_SIZE);
 
-        return new PageRequest(pageNumber, pageSize);
+        return new PageRequest(number, size);
     }
 
     public Animal.Type getAnimalType() {
@@ -50,19 +50,19 @@ public class SearchForAnimalParams implements Serializable{
         this.animalName = animalName;
     }
 
-    public Integer getPageNumber() {
-        return pageNumber;
+    public Integer getNumber() {
+        return number;
     }
 
-    public void setPageNumber(Integer pageNumber) {
-        this.pageNumber = pageNumber;
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 
-    public Integer getPageSize() {
-        return pageSize;
+    public Integer getSize() {
+        return size;
     }
 
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
+    public void setSize(Integer size) {
+        this.size = size;
     }
 }

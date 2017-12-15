@@ -10,14 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 
 import static com.company.AnimalShelterManagement.utils.SearchForAnimalParamsTest.returnNoParams;
+import static com.company.AnimalShelterManagement.utils.SearchForAnimalParamsTest.returnPageable;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.mockito.Mockito.*;
-
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(AnimalController.class)
@@ -63,21 +64,21 @@ public class AnimalControllerTest {
 
     @Test
     public void shouldPerformReturnAnimalsWithLongestWaitingTime() {
-        when(animalService.returnAnimalsWithLongestWaitingTime(anyInt(), anyInt())).thenReturn(new RestResponsePage<>());
+        when(animalService.returnAnimalsWithLongestWaitingTime(any(Pageable.class))).thenReturn(new RestResponsePage<>());
 
-        animalController.returnAnimalsWithLongestWaitingTime(FIRST_PAGE, PAGE_SIZE_VALUE);
+        animalController.returnAnimalsWithLongestWaitingTime(returnPageable(FIRST_PAGE, PAGE_SIZE_VALUE));
 
-        verify(animalService).returnAnimalsWithLongestWaitingTime(anyInt(), anyInt());
+        verify(animalService).returnAnimalsWithLongestWaitingTime(any(Pageable.class));
         verifyNoMoreInteractions(animalService);
     }
 
     @Test
     public void shouldPerformReturnRecentlyAddedAnimals() {
-        when(animalService.returnRecentlyAddedAnimals(anyInt(), anyInt())).thenReturn(new RestResponsePage<>());
+        when(animalService.returnRecentlyAddedAnimals(any(Pageable.class))).thenReturn(new RestResponsePage<>());
 
-        animalController.returnRecentlyAddedAnimals(FIRST_PAGE, PAGE_SIZE_VALUE);
+        animalController.returnRecentlyAddedAnimals(returnPageable(FIRST_PAGE, PAGE_SIZE_VALUE));
 
-        verify(animalService).returnRecentlyAddedAnimals(anyInt(), anyInt());
+        verify(animalService).returnRecentlyAddedAnimals(any(Pageable.class));
         verifyNoMoreInteractions(animalService);
     }
 

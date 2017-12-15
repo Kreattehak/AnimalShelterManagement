@@ -144,7 +144,7 @@ public class HibernateAnimalServiceTest {
     public void shouldPerformReturnAnimalsWithLongestWaitingTime() {
         when(animalRepository.findAnimalsWithLongestWaitingTime(any(Pageable.class))).thenReturn(new RestResponsePage<>());
 
-        animalService.returnAnimalsWithLongestWaitingTime(FIRST_PAGE, PAGE_SIZE_VALUE);
+        animalService.returnAnimalsWithLongestWaitingTime(returnPageable(FIRST_PAGE, PAGE_SIZE_VALUE));
 
         verify(animalRepository).findAnimalsWithLongestWaitingTime(any(Pageable.class));
         verifyNoMoreInteractions(animalRepository);
@@ -154,7 +154,7 @@ public class HibernateAnimalServiceTest {
     public void shouldPerformReturnRecentlyAddedAnimals() {
         when(animalRepository.findRecentlyAddedAnimals(any(Pageable.class))).thenReturn(new RestResponsePage<>());
 
-        animalService.returnRecentlyAddedAnimals(FIRST_PAGE, PAGE_SIZE_VALUE);
+        animalService.returnRecentlyAddedAnimals(returnPageable(FIRST_PAGE, PAGE_SIZE_VALUE));
 
         verify(animalRepository).findRecentlyAddedAnimals(any(Pageable.class));
         verifyNoMoreInteractions(animalRepository);

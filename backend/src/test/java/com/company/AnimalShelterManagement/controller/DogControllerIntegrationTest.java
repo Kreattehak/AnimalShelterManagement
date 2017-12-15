@@ -26,13 +26,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.*;
-import static com.company.AnimalShelterManagement.controller.AnimalControllerIntegrationTest.WITH_PAGE_NUMBER_ADDITIONAL_PARAMETER;
-import static com.company.AnimalShelterManagement.controller.AnimalControllerIntegrationTest.WITH_PAGE_SIZE_PARAMETER;
 import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseEntityNotFoundException;
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.*;
 import static com.company.AnimalShelterManagement.model.Dog.Race.GERMAN_SHEPERD;
 import static com.company.AnimalShelterManagement.service.HibernateDogServiceTest.checkDogDtoFieldsEquality;
 import static com.company.AnimalShelterManagement.service.HibernateDogServiceTest.checkDogFieldsEquality;
+import static com.company.AnimalShelterManagement.utils.SearchForAnimalParamsTest.WITH_PAGE_NUMBER_ADDITIONAL_PARAMETER;
+import static com.company.AnimalShelterManagement.utils.SearchForAnimalParamsTest.WITH_PAGE_SIZE_PARAMETER;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -98,10 +98,10 @@ public class DogControllerIntegrationTest {
     public void shouldReturnAllDogsWithStatusOtherThanAdoptedWithPageSizeAndNumberParameters() {
         Map<String, String> params = new HashMap<>();
         params.put(PAGE_SIZE, Integer.toString(EXPECTED_ANIMALS_FOR_ADOPTION_COUNT));
-        params.put(PAGE_NUMBER, Integer.toString(SECOND_PAGE));
+        params.put(PAGE_NUMBER, Integer.toString(FIRST_PAGE));
 
         assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForDogs + notAdoptedDogs
-                + WITH_PAGE_SIZE_PARAMETER + WITH_PAGE_NUMBER_ADDITIONAL_PARAMETER, NO_ENTITIES, params);
+                + WITH_PAGE_SIZE_PARAMETER + WITH_PAGE_NUMBER_ADDITIONAL_PARAMETER, ONE_ENTITY, params);
     }
 
     @Test

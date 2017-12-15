@@ -4,6 +4,7 @@ import com.company.AnimalShelterManagement.controller.*;
 import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.repository.AddressRepositoryTest;
 import com.company.AnimalShelterManagement.repository.AnimalRepositoryTest;
+import com.company.AnimalShelterManagement.repository.DogRepositoryTest;
 import com.company.AnimalShelterManagement.service.HibernateAddressServiceTest;
 import com.company.AnimalShelterManagement.service.HibernateAnimalServiceTest;
 import com.company.AnimalShelterManagement.service.HibernateDogServiceTest;
@@ -11,6 +12,7 @@ import com.company.AnimalShelterManagement.service.HibernatePersonServiceTest;
 import com.company.AnimalShelterManagement.utils.AnimalFactoryTest;
 import com.company.AnimalShelterManagement.utils.AnimalShelterExceptionTest;
 import com.company.AnimalShelterManagement.utils.RestResponsePage;
+import com.company.AnimalShelterManagement.utils.SearchForAnimalParamsTest;
 import org.hamcrest.Matcher;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -37,20 +39,22 @@ import static org.springframework.http.HttpStatus.OK;
         AnimalShelterExceptionTest.class,
         RestExceptionHandlerTest.class,
         AnimalFactoryTest.class,
+        SearchForAnimalParamsTest.class,
         AddressRepositoryTest.class,
         AnimalRepositoryTest.class,
-        HibernatePersonServiceTest.class,
+        DogRepositoryTest.class,
         HibernateAddressServiceTest.class,
         HibernateAnimalServiceTest.class,
         HibernateDogServiceTest.class,
-        PersonControllerTest.class,
-        PersonControllerIntegrationTest.class,
+        HibernatePersonServiceTest.class,
         AddressControllerTest.class,
         AddressControllerIntegrationTest.class,
         AnimalControllerTest.class,
         AnimalControllerIntegrationTest.class,
         DogControllerTest.class,
-        DogControllerIntegrationTest.class
+        DogControllerIntegrationTest.class,
+        PersonControllerTest.class,
+        PersonControllerIntegrationTest.class,
 })
 public class AnimalShelterManagementApplicationTests {
     public static void assertThatResponseHaveMultipleEntitiesReturned(String url, int count) {

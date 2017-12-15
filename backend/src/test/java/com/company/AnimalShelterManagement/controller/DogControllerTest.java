@@ -12,12 +12,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static com.company.AnimalShelterManagement.model.Dog.Race.GERMAN_SHEPERD;
+import static com.company.AnimalShelterManagement.utils.SearchForAnimalParams.createPagination;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -55,11 +57,11 @@ public class DogControllerTest {
 
     @Test
     public void shouldPerformReturnAllDogsWithStatusOtherThanAdopted() {
-        when(dogService.returnNotAdoptedDogs(anyInt(), anyInt())).thenReturn(new RestResponsePage<>());
+        when(dogService.returnNotAdoptedDogs(any(Pageable.class))).thenReturn(new RestResponsePage<>());
 
-        dogController.returnNotAdoptedDogs(FIRST_PAGE, PAGE_SIZE_VALUE);
+        dogController.returnNotAdoptedDogs(createPagination(FIRST_PAGE, PAGE_SIZE_VALUE));
 
-        verify(dogService).returnNotAdoptedDogs(anyInt(), anyInt());
+        verify(dogService).returnNotAdoptedDogs(any(Pageable.class));
         verifyNoMoreInteractions(dogService);
     }
 

@@ -31,6 +31,8 @@ import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdopt
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.AVAILABLE;
 import static com.company.AnimalShelterManagement.model.Animal.Type.DOG;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
+import static com.company.AnimalShelterManagement.utils.SearchForAnimalParamsTest.WITH_PAGE_NUMBER_ADDITIONAL_PARAMETER;
+import static com.company.AnimalShelterManagement.utils.SearchForAnimalParamsTest.WITH_PAGE_SIZE_PARAMETER;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -70,8 +72,6 @@ public class AnimalControllerIntegrationTest {
     private String withAnimalType = "?animalType={animalType}";
     private String withAnimalNameAdditionalParameter = "&animalName={animalName}";
     private String withAnimalIdentifierAdditionalParameter = "&animalIdentifier={animalIdentifier}";
-    public static final String WITH_PAGE_SIZE_PARAMETER = "?pageSize={pageSize}";
-    public static final String WITH_PAGE_NUMBER_ADDITIONAL_PARAMETER = "&pageNumber={pageNumber}";
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -174,11 +174,10 @@ public class AnimalControllerIntegrationTest {
     public void shouldReturnAnimalsWithLongestWaitingTimeWithPageSizeAndNumberParameters() {
         Map<String, String> params = new HashMap<>();
         params.put(PAGE_SIZE, Integer.toString(EXPECTED_ANIMALS_FOR_ADOPTION_COUNT));
-        params.put(PAGE_NUMBER, Integer.toString(SECOND_PAGE));
+        params.put(PAGE_NUMBER, Integer.toString(FIRST_PAGE));
 
         assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForAnimals + longestWaitingTime
-                        + WITH_PAGE_SIZE_PARAMETER + WITH_PAGE_NUMBER_ADDITIONAL_PARAMETER,
-                NO_ENTITIES, params);
+                        + WITH_PAGE_SIZE_PARAMETER + WITH_PAGE_NUMBER_ADDITIONAL_PARAMETER, ONE_ENTITY, params);
     }
 
     @Test

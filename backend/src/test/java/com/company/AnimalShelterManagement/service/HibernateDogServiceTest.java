@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.AVAILABLE;
 import static com.company.AnimalShelterManagement.model.Dog.Race.GERMAN_SHEPERD;
+import static com.company.AnimalShelterManagement.utils.SearchForAnimalParams.createPagination;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -70,7 +71,7 @@ public class HibernateDogServiceTest {
     public void shouldPerformReturnAllDogsWithStatusOtherThanAdopted() {
         when(dogRepository.findNotAdoptedDogs(any(Pageable.class))).thenReturn(new RestResponsePage<>());
 
-        dogService.returnNotAdoptedDogs(FIRST_PAGE, PAGE_SIZE_VALUE);
+        dogService.returnNotAdoptedDogs(createPagination(FIRST_PAGE, PAGE_SIZE_VALUE));
 
         verify(dogRepository).findNotAdoptedDogs(any(Pageable.class));
         verifyNoMoreInteractions(dogRepository);
@@ -113,7 +114,7 @@ public class HibernateDogServiceTest {
         dogService.updateDog(mapper.map(setUpAnotherDog(), DogDTO.class));
 
         assertThat(testDog, is(checkDogFieldsEquality(ANOTHER_DOG_NAME, GERMAN_SHEPERD,
-                DATE_OF_BIRTH_VALUE , AVAILABLE)));
+                DATE_OF_BIRTH_VALUE, AVAILABLE)));
 
         verify(dogRepository).findOne(anyLong());
         verify(dogRepository).save(any(Dog.class));
@@ -134,7 +135,7 @@ public class HibernateDogServiceTest {
     private Dog setUpAnotherDog() {
         Dog dog = AnimalFactory.newlyReceivedDog(ANOTHER_DOG_NAME, GERMAN_SHEPERD);
         dog.setId(ANOTHER_ID_VALUE);
-        dog.setDateOfBirth(DATE_OF_BIRTH_VALUE );
+        dog.setDateOfBirth(DATE_OF_BIRTH_VALUE);
         dog.setAvailableForAdoption(AVAILABLE);
         return dog;
     }

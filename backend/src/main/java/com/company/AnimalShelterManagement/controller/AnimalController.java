@@ -7,6 +7,7 @@ import com.company.AnimalShelterManagement.utils.SearchForAnimalParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,15 +41,13 @@ public class AnimalController {
     }
 
     @GetMapping("${rest.animal.getAnimalsWithLongestWaitingTime}")
-    public Page<Animal> returnAnimalsWithLongestWaitingTime(@RequestParam(required = false) Integer pageNumber,
-                                                            @RequestParam(required = false) Integer pageSize) {
-        return animalService.returnAnimalsWithLongestWaitingTime(pageNumber, pageSize);
+    public Page<Animal> returnAnimalsWithLongestWaitingTime(Pageable pageable) {
+        return animalService.returnAnimalsWithLongestWaitingTime(pageable);
     }
 
     @GetMapping("${rest.animal.getRecentlyAddedAnimals}")
-    public Page<Animal> returnRecentlyAddedAnimals(@RequestParam(required = false) Integer pageNumber,
-                                                   @RequestParam(required = false) Integer pageSize) {
-        return animalService.returnRecentlyAddedAnimals(pageNumber, pageSize);
+    public Page<Animal> returnRecentlyAddedAnimals(Pageable pageable) {
+        return animalService.returnRecentlyAddedAnimals(pageable);
     }
 
     @GetMapping("${rest.person.getAnimalsOwnedByPerson}")

@@ -25,8 +25,8 @@ public class TestConstant {
     public static final int EXPECT_PERSON_WITH_TWO_ANIMALS = 2;
     public static final int EXPECTED_ANIMALS_COUNT = 3;
 
-    public static final String PAGE_SIZE = "pageSize";
-    public static final String PAGE_NUMBER = "pageNumber";
+    public static final String PAGE_SIZE = "size";
+    public static final String PAGE_NUMBER = "number";
     public static final String FILL_UP = "00";
     public static final String ID = "id";
     public static final String FIRST_NAME = "firstName";
@@ -70,7 +70,7 @@ public class TestConstant {
     public static final String ANIMAL_IDENTIFIER = "animalIdentifier";
     public static final String AVAILABLE_ANIMAL_IDENTIFIER_VALUE = "00050003";
     public static final String ANIMAL_NAME = "animalName";
-    public static final String AVAILABLE_ANIMAL_NAME= "Fire";
+    public static final String AVAILABLE_ANIMAL_NAME = "Fire";
 
     public static final LocalDate DATE_OF_BIRTH_VALUE = LocalDate.of(1999, 11, 06);
 }

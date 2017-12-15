@@ -47,24 +47,24 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
 
     @Override
     public Page<Animal> returnAnimalsAvailableForAdoption(SearchForAnimalParams searchParams) {
-        Pageable pageable = createPagination(searchParams.getPageNumber(), searchParams.getPageSize());
+        Pageable pageable = createPagination(searchParams.getNumber(), searchParams.getSize());
         return returnAnimalsBySpecificRequestParameters(searchParams, pageable, availableForAdoptionRequestResolver);
     }
 
     @Override
     public Page<Animal> returnNotAdoptedAnimals(SearchForAnimalParams searchParams) {
-        Pageable pageable = createPagination(searchParams.getPageNumber(), searchParams.getPageSize());
+        Pageable pageable = createPagination(searchParams.getNumber(), searchParams.getSize());
         return returnAnimalsBySpecificRequestParameters(searchParams, pageable, notAdoptedRequestResolver);
     }
 
     @Override
-    public Page<Animal> returnAnimalsWithLongestWaitingTime(Integer pageNumber, Integer pageSize) {
-        return repository.findAnimalsWithLongestWaitingTime(createPagination(pageNumber, pageSize));
+    public Page<Animal> returnAnimalsWithLongestWaitingTime(Pageable pageable) {
+        return repository.findAnimalsWithLongestWaitingTime(pageable);
     }
 
     @Override
-    public Page<Animal> returnRecentlyAddedAnimals(Integer pageNumber, Integer pageSize) {
-        return repository.findRecentlyAddedAnimals(createPagination(pageNumber, pageSize));
+    public Page<Animal> returnRecentlyAddedAnimals(Pageable pageable) {
+        return repository.findRecentlyAddedAnimals(pageable);
     }
 
     @Override

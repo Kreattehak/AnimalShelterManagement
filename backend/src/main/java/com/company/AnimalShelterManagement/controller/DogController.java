@@ -4,6 +4,7 @@ import com.company.AnimalShelterManagement.model.Dog;
 import com.company.AnimalShelterManagement.model.dto.DogDTO;
 import com.company.AnimalShelterManagement.service.interfaces.DogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,9 +31,8 @@ public class DogController {
     }
 
     @GetMapping("${rest.dog.getNotAdoptedDogs}")
-    public Iterable<Dog> returnNotAdoptedDogs(@RequestParam(required = false) Integer pageNumber,
-                                              @RequestParam(required = false) Integer pageSize) {
-        return dogService.returnNotAdoptedDogs(pageNumber, pageSize);
+    public Iterable<Dog> returnNotAdoptedDogs(Pageable pageable) {
+        return dogService.returnNotAdoptedDogs(pageable);
     }
 
     @GetMapping("${rest.dog.getDog}")

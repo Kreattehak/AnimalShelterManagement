@@ -4,6 +4,7 @@ import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.utils.SearchForAnimalParams;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface AnimalService extends CommonService<Animal> {
 
@@ -13,9 +14,9 @@ public interface AnimalService extends CommonService<Animal> {
 
     Page<Animal> returnNotAdoptedAnimals(SearchForAnimalParams searchParams);
 
-    Page<Animal> returnAnimalsWithLongestWaitingTime(Integer pageNumber, Integer pageSize);
+    Page<Animal> returnAnimalsWithLongestWaitingTime(Pageable pageable);
 
-    Page<Animal> returnRecentlyAddedAnimals(Integer pageNumber, Integer pageSize);
+    Page<Animal> returnRecentlyAddedAnimals(Pageable pageable);
 
     Iterable<Animal> returnAnimalsOwnedByPerson(Long personId);
 
