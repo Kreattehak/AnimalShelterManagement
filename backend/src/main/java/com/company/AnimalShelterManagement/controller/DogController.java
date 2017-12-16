@@ -4,7 +4,6 @@ import com.company.AnimalShelterManagement.model.Dog;
 import com.company.AnimalShelterManagement.model.dto.DogDTO;
 import com.company.AnimalShelterManagement.service.interfaces.DogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,20 +29,25 @@ public class DogController {
         return dogService.returnDogs();
     }
 
-    @GetMapping("${rest.dog.getDog}")
-    public DogDTO returnDog(@PathVariable Long dogId) {
+    @GetMapping("${rest.dog.getDogDTO}")
+    public DogDTO returnDogDTO(@PathVariable Long dogId) {
         return mapToDTO(dogService.returnDog(dogId));
+    }
+
+    @GetMapping("${rest.dog.getDog}")
+    public Dog returnDog(@PathVariable Long dogId) {
+        return dogService.returnDog(dogId);
     }
 
     @PostMapping(value = "${rest.dog.postDog}", consumes = APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(CREATED)
-    public DogDTO saveDog(@Valid @RequestBody DogDTO dog) {
+    public Dog saveDog(@Valid @RequestBody Dog dog) {
         return dogService.saveDog(dog);
     }
 
     @PutMapping(value = "${rest.dog.putDog}", consumes = APPLICATION_JSON_UTF8_VALUE)
-    public DogDTO updateDog(@RequestBody DogDTO dogDTO) {
-        return dogService.updateDog(dogDTO);
+    public Dog updateDog(@RequestBody Dog dog) {
+        return dogService.updateDog(dog);
     }
 
     @DeleteMapping("${rest.dog.deleteDog}")

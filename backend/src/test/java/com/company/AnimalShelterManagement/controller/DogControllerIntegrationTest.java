@@ -7,7 +7,6 @@ import com.company.AnimalShelterManagement.utils.AnimalFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -56,18 +55,16 @@ public class DogControllerIntegrationTest {
     private DogRepository dogRepository;
     @Autowired
     private DogController dogController;
-    @Autowired
-    private ModelMapper mapper;
 
     private RestTemplate restTemplate;
     private HttpHeaders httpHeaders;
     private Dog testDog;
-    private ResponseEntity<DogDTO> response;
+    private ResponseEntity<Dog> response;
 
     private String home = "http://localhost:";
     private String apiForDogs = "/api/dogs";
     private String apiForDog = "/api/dog/";
-    private String notAdoptedDogs = "/notAdopted";
+    private String apiForDogDTO = "/api/dogDTO/";
 
     @Before
     public void setUp() {
@@ -86,35 +83,19 @@ public class DogControllerIntegrationTest {
     }
 
     @Test
-    public void shouldReturnAllDogsWithStatusOtherThanAdoptedWithPageSizeParameter() {
-        Map<String, String> params = new HashMap<>();
-        params.put(PAGE_SIZE, Integer.toString(EXPECTED_ANIMALS_FOR_ADOPTION_COUNT));
+    public void shouldReturnDogDTO() throws Exception {
+        ResponseEntity<DogDTO> response = restTemplate.getForEntity(home + apiForDog + ID_VALUE, DogDTO.class);
 
-        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForDogs + notAdoptedDogs
-                + WITH_PAGE_SIZE_PARAMETER, EXPECTED_ANIMALS_FOR_ADOPTION_COUNT, params);
-    }
-
-    @Test
-    public void shouldReturnAllDogsWithStatusOtherThanAdoptedWithPageSizeAndNumberParameters() {
-        Map<String, String> params = new HashMap<>();
-        params.put(PAGE_SIZE, Integer.toString(EXPECTED_ANIMALS_FOR_ADOPTION_COUNT));
-        params.put(PAGE_NUMBER, Integer.toString(FIRST_PAGE));
-
-        assertThatResponseHavePagedEntitiesReturnedWithParams(home + apiForDogs + notAdoptedDogs
-                + WITH_PAGE_SIZE_PARAMETER + WITH_PAGE_NUMBER_ADDITIONAL_PARAMETER, ONE_ENTITY, params);
-    }
-
-    @Test
-    public void shouldReturnAllDogsWithStatusOtherThanAdoptedWithoutParameters() {
-        assertThatResponseHavePagedEntitiesReturned(home + apiForDogs + notAdoptedDogs,
-                EXPECTED_ANIMALS_FOR_ADOPTION_COUNT);
+        System.out.println(response.getBody());
+        assertResponse(response, OK, is(checkDogDtoFieldsEquality(DOG_NAME, GERMAN_SHEPERD, DATE_OF_BIRTH_VALUE)));
     }
 
     @Test
     public void shouldReturnDog() throws Exception {
-        response = restTemplate.getForEntity(home + apiForDog + ID_VALUE, DogDTO.class);
+        response = restTemplate.getForEntity(home + apiForDog + ID_VALUE, Dog.class);
 
-        assertResponse(response, OK, is(checkDogDtoFieldsEquality(DOG_NAME, GERMAN_SHEPERD,
+        System.out.println(response.getBody());
+        assertResponse(response, OK, is(checkDogFieldsEquality(DOG_NAME, GERMAN_SHEPERD,
                 DATE_OF_BIRTH_VALUE, ADOPTED)));
     }
 
@@ -126,9 +107,9 @@ public class DogControllerIntegrationTest {
     @Test
     public void shouldSaveDog() {
         testDog.setId(null);
-        DogDTO dogDTO = dogController.saveDog(mapper.map(testDog, DogDTO.class));
+        dogController.saveDog(testDog);
 
-        assertThat(dogRepository.findOne(dogDTO.getId()), is(checkDogFieldsEquality(DOG_NAME, GERMAN_SHEPERD,
+        assertThat(dogRepository.findOne(testDog.getId()), is(checkDogFieldsEquality(DOG_NAME, GERMAN_SHEPERD,
                 LocalDate.now(), AVAILABLE)));
     }
 
@@ -137,11 +118,11 @@ public class DogControllerIntegrationTest {
     @Commit
     public void shouldResponseWithSavedDogData() {
         testDog.setId(null);
-        HttpEntity<DogDTO> entity = new HttpEntity<>(mapper.map(testDog, DogDTO.class), httpHeaders);
+        HttpEntity<Dog> entity = new HttpEntity<>(testDog, httpHeaders);
 
-        response = restTemplate.postForEntity(home + apiForDogs, entity, DogDTO.class);
+        response = restTemplate.postForEntity(home + apiForDogs, entity, Dog.class);
 
-        assertResponse(response, CREATED, is(checkDogDtoFieldsEquality(DOG_NAME, GERMAN_SHEPERD,
+        assertResponse(response, CREATED, is(checkDogFieldsEquality(DOG_NAME, GERMAN_SHEPERD,
                 LocalDate.now(), AVAILABLE)));
     }
 
@@ -149,7 +130,7 @@ public class DogControllerIntegrationTest {
     public void shouldUpdateDog() {
         changeDogData();
 
-        dogController.updateDog(mapper.map(testDog, DogDTO.class));
+        dogController.updateDog(testDog);
 
         assertThat(dogRepository.findOne(ID_VALUE), is(checkDogFieldsEquality(ANOTHER_DOG_NAME,
                 GERMAN_SHEPERD, DATE_OF_BIRTH_VALUE, UNDER_VETERINARY_CARE)));
@@ -160,11 +141,11 @@ public class DogControllerIntegrationTest {
     @Commit
     public void shouldResponseWithUpdatedDogData() {
         changeDogData();
-        HttpEntity<DogDTO> entity = new HttpEntity<>(mapper.map(testDog, DogDTO.class), httpHeaders);
+        HttpEntity<Dog> entity = new HttpEntity<>(testDog, httpHeaders);
 
-        response = restTemplate.exchange(home + apiForDog + ID_VALUE, PUT, entity, DogDTO.class);
+        response = restTemplate.exchange(home + apiForDog + ID_VALUE, PUT, entity, Dog.class);
 
-        assertResponse(response, OK, is(checkDogDtoFieldsEquality(ANOTHER_DOG_NAME, GERMAN_SHEPERD,
+        assertResponse(response, OK, is(checkDogFieldsEquality(ANOTHER_DOG_NAME, GERMAN_SHEPERD,
                 DATE_OF_BIRTH_VALUE, UNDER_VETERINARY_CARE)));
     }
 

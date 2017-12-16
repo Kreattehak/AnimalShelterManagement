@@ -2,17 +2,18 @@ package com.company.AnimalShelterManagement.service.interfaces;
 
 import com.company.AnimalShelterManagement.model.Dog;
 import com.company.AnimalShelterManagement.model.dto.DogDTO;
-import org.springframework.data.domain.Pageable;
 
 public interface DogService extends CommonDTOService<Dog, DogDTO> {
 
     Iterable<DogDTO> returnDogs();
 
+    DogDTO returnDogDTO(Long dogId);
+
     Dog returnDog(Long dogId);
 
-    DogDTO saveDog(DogDTO dogDTO);
+    Dog saveDog(Dog dog);
 
-    DogDTO updateDog(DogDTO dogDTO);
+    Dog updateDog(Dog dog);
 
     void deleteDog(Long dogId);
 }

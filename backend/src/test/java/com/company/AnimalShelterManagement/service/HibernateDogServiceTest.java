@@ -7,7 +7,6 @@ import com.company.AnimalShelterManagement.repository.DogRepository;
 import com.company.AnimalShelterManagement.service.interfaces.DogService;
 import com.company.AnimalShelterManagement.utils.AnimalFactory;
 import com.company.AnimalShelterManagement.utils.EntityNotFoundException;
-import com.company.AnimalShelterManagement.utils.RestResponsePage;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
@@ -18,7 +17,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
@@ -26,7 +24,6 @@ import java.util.ArrayList;
 
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.AVAILABLE;
 import static com.company.AnimalShelterManagement.model.Dog.Race.GERMAN_SHEPERD;
-import static com.company.AnimalShelterManagement.utils.SearchForAnimalParams.createPagination;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -68,6 +65,16 @@ public class HibernateDogServiceTest {
     }
 
     @Test
+    public void shouldPerformReturnDogDTO() {
+        when(dogRepository.findOne(anyLong())).thenReturn(testDog);
+
+        dogService.returnDogDTO(ID_VALUE);
+
+        verify(dogRepository).findOne(anyLong());
+        verifyNoMoreInteractions(dogRepository);
+    }
+
+    @Test
     public void shouldPerformReturnDog() {
         when(dogRepository.findOne(anyLong())).thenReturn(testDog);
 
@@ -90,7 +97,7 @@ public class HibernateDogServiceTest {
     public void shouldPerformSaveDog() {
         when(dogRepository.save(any(Dog.class))).thenReturn(testDog);
 
-        dogService.saveDog(mapper.map(testDog, DogDTO.class));
+        dogService.saveDog(testDog);
 
         verify(dogRepository).save(any(Dog.class));
         verifyNoMoreInteractions(dogRepository);
@@ -101,7 +108,7 @@ public class HibernateDogServiceTest {
         when(dogRepository.findOne(anyLong())).thenReturn(testDog);
         when(dogRepository.save(any(Dog.class))).thenReturn(testDog);
 
-        dogService.updateDog(mapper.map(setUpAnotherDog(), DogDTO.class));
+        dogService.updateDog(setUpAnotherDog());
 
         assertThat(testDog, is(checkDogFieldsEquality(ANOTHER_DOG_NAME, GERMAN_SHEPERD,
                 DATE_OF_BIRTH_VALUE, AVAILABLE)));
@@ -130,19 +137,19 @@ public class HibernateDogServiceTest {
         return dog;
     }
 
-    public static Matcher<DogDTO> checkDogDtoFieldsEquality(String name, Dog.Race race, LocalDate dateOfBirth,
-                                                            Animal.AvailableForAdoption availableForAdoption) {
+    public static Matcher<DogDTO> checkDogDtoFieldsEquality(String name, Dog.Race race, LocalDate dateOfBirth) {
         return allOf(
+                instanceOf(DogDTO.class),
                 hasProperty(TYPE, is(Animal.Type.DOG)),
                 hasProperty(NAME, is(name)),
                 hasProperty(SUB_TYPE, is(race)),
-                hasProperty(DATE_OF_BIRTH, is(dateOfBirth)),
-                hasProperty(AVAILABLE_FOR_ADOPTION, is(availableForAdoption)));
+                hasProperty(DATE_OF_BIRTH, is(dateOfBirth)));
     }
 
     public static Matcher<Dog> checkDogFieldsEquality(String name, Dog.Race race, LocalDate dateOfBirth,
                                                       Animal.AvailableForAdoption availableForAdoption) {
         return allOf(
+                instanceOf(Dog.class),
                 hasProperty(TYPE, is(Animal.Type.DOG)),
                 hasProperty(NAME, is(name)),
                 hasProperty(SUB_TYPE, is(race)),

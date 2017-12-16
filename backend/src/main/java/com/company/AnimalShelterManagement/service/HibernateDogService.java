@@ -7,7 +7,6 @@ import com.company.AnimalShelterManagement.service.interfaces.DogService;
 import com.company.AnimalShelterManagement.utils.AnimalFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,27 +29,32 @@ public class HibernateDogService extends HibernateCommonDTOService<Dog, DogDTO, 
 
     @Override
     @Transactional(readOnly = true)
+    public DogDTO returnDogDTO(Long dogId) {
+        return mapToDTO(ifExistsReturnEntity(dogId));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Dog returnDog(Long dogId) {
         return ifExistsReturnEntity(dogId);
     }
 
     @Override
-    public DogDTO saveDog(DogDTO dogDTO) {
-        Dog dog = mapFromDTO(dogDTO);
-        dog = repository.save(dog);
+    public Dog saveDog(Dog dog) {
+        repository.save(dog);
         AnimalFactory.generateAnimalIdentifier(dog);
 
-        return mapToDTO(dog);
+        return dog;
     }
 
     @Override
-    public DogDTO updateDog(DogDTO dogDTO) {
-        Dog dog = returnDog(dogDTO.getId());
-        dog.setName(dogDTO.getName());
-        dog.setDateOfBirth(dogDTO.getDateOfBirth());
-        dog.setAvailableForAdoption(dogDTO.getAvailableForAdoption());
+    public Dog updateDog(Dog dog) {
+        Dog dogFromDatabase = returnDog(dog.getId());
+        dogFromDatabase.setName(dog.getName());
+        dogFromDatabase.setDateOfBirth(dog.getDateOfBirth());
+        dogFromDatabase.setAvailableForAdoption(dog.getAvailableForAdoption());
 
-        return mapToDTO(repository.save(dog));
+        return repository.save(dogFromDatabase);
     }
 
     @Override

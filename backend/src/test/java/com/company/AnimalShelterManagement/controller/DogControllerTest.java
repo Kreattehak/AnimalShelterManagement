@@ -4,7 +4,6 @@ import com.company.AnimalShelterManagement.model.Dog;
 import com.company.AnimalShelterManagement.model.dto.DogDTO;
 import com.company.AnimalShelterManagement.service.interfaces.DogService;
 import com.company.AnimalShelterManagement.utils.AnimalFactory;
-import com.company.AnimalShelterManagement.utils.RestResponsePage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,15 +11,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static com.company.AnimalShelterManagement.model.Dog.Race.GERMAN_SHEPERD;
-import static com.company.AnimalShelterManagement.utils.SearchForAnimalParams.createPagination;
-import static com.company.AnimalShelterManagement.utils.TestConstant.*;
+import static com.company.AnimalShelterManagement.utils.TestConstant.DOG_NAME;
+import static com.company.AnimalShelterManagement.utils.TestConstant.ID_VALUE;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -56,11 +54,11 @@ public class DogControllerTest {
     }
 
     @Test
-    public void shouldPerformReturnDog() {
+    public void shouldPerformReturnDogDTO() {
         when(dogService.returnDog(anyLong())).thenReturn(testDog);
         when(dogService.mapToDTO(any(Dog.class))).thenReturn(mapper.map(testDog, DogDTO.class));
 
-        dogController.returnDog(ID_VALUE);
+        dogController.returnDogDTO(ID_VALUE);
 
         verify(dogService).returnDog(anyLong());
         verify(dogService).mapToDTO(any(Dog.class));
@@ -68,24 +66,32 @@ public class DogControllerTest {
     }
 
     @Test
+    public void shouldPerformReturnDog() {
+        when(dogService.returnDog(anyLong())).thenReturn(testDog);
+
+        dogController.returnDog(ID_VALUE);
+
+        verify(dogService).returnDog(anyLong());
+        verifyNoMoreInteractions(dogService);
+    }
+
+    @Test
     public void shouldPerformSaveDog() {
-        DogDTO testDogDTO = mapper.map(testDog, DogDTO.class);
-        when(dogService.saveDog(any(DogDTO.class))).thenReturn(testDogDTO);
+        when(dogService.saveDog(any(Dog.class))).thenReturn(testDog);
 
-        dogController.saveDog(testDogDTO);
+        dogController.saveDog(testDog);
 
-        verify(dogService).saveDog(any(DogDTO.class));
+        verify(dogService).saveDog(any(Dog.class));
         verifyNoMoreInteractions(dogService);
     }
 
     @Test
     public void shouldPerformUpdateDog() {
-        DogDTO testDogDTO = mapper.map(testDog, DogDTO.class);
-        when(dogService.updateDog(any(DogDTO.class))).thenReturn(testDogDTO);
+        when(dogService.updateDog(any(Dog.class))).thenReturn(testDog);
 
-        dogController.updateDog(testDogDTO);
+        dogController.updateDog(testDog);
 
-        verify(dogService).updateDog(any(DogDTO.class));
+        verify(dogService).updateDog(any(Dog.class));
         verifyNoMoreInteractions(dogService);
     }
 
