@@ -8,6 +8,4 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface DogRepository extends CrudRepository<Dog, Long> {
 
-    @Query("SELECT d FROM Dog d WHERE d.availableForAdoption <> 'ADOPTED' ORDER BY d.dateOfRegistration ASC")
-    Page<Dog> findNotAdoptedDogs(Pageable pageable);
 }

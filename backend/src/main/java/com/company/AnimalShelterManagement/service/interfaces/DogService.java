@@ -8,8 +8,6 @@ public interface DogService extends CommonDTOService<Dog, DogDTO> {
 
     Iterable<DogDTO> returnDogs();
 
-    Iterable<Dog> returnNotAdoptedDogs(Pageable pageable);
-
     Dog returnDog(Long dogId);
 
     DogDTO saveDog(DogDTO dogDTO);

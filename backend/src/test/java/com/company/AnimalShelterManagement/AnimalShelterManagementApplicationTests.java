@@ -4,7 +4,6 @@ import com.company.AnimalShelterManagement.controller.*;
 import com.company.AnimalShelterManagement.model.Animal;
 import com.company.AnimalShelterManagement.repository.AddressRepositoryTest;
 import com.company.AnimalShelterManagement.repository.AnimalRepositoryTest;
-import com.company.AnimalShelterManagement.repository.DogRepositoryTest;
 import com.company.AnimalShelterManagement.service.HibernateAddressServiceTest;
 import com.company.AnimalShelterManagement.service.HibernateAnimalServiceTest;
 import com.company.AnimalShelterManagement.service.HibernateDogServiceTest;
@@ -42,7 +41,6 @@ import static org.springframework.http.HttpStatus.OK;
         SearchForAnimalParamsTest.class,
         AddressRepositoryTest.class,
         AnimalRepositoryTest.class,
-        DogRepositoryTest.class,
         HibernateAddressServiceTest.class,
         HibernateAnimalServiceTest.class,
         HibernateDogServiceTest.class,

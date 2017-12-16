@@ -56,16 +56,6 @@ public class DogControllerTest {
     }
 
     @Test
-    public void shouldPerformReturnAllDogsWithStatusOtherThanAdopted() {
-        when(dogService.returnNotAdoptedDogs(any(Pageable.class))).thenReturn(new RestResponsePage<>());
-
-        dogController.returnNotAdoptedDogs(createPagination(FIRST_PAGE, PAGE_SIZE_VALUE));
-
-        verify(dogService).returnNotAdoptedDogs(any(Pageable.class));
-        verifyNoMoreInteractions(dogService);
-    }
-
-    @Test
     public void shouldPerformReturnDog() {
         when(dogService.returnDog(anyLong())).thenReturn(testDog);
         when(dogService.mapToDTO(any(Dog.class))).thenReturn(mapper.map(testDog, DogDTO.class));

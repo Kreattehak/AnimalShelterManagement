@@ -30,11 +30,6 @@ public class DogController {
         return dogService.returnDogs();
     }
 
-    @GetMapping("${rest.dog.getNotAdoptedDogs}")
-    public Iterable<Dog> returnNotAdoptedDogs(Pageable pageable) {
-        return dogService.returnNotAdoptedDogs(pageable);
-    }
-
     @GetMapping("${rest.dog.getDog}")
     public DogDTO returnDog(@PathVariable Long dogId) {
         return mapToDTO(dogService.returnDog(dogId));

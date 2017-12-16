@@ -30,12 +30,6 @@ public class HibernateDogService extends HibernateCommonDTOService<Dog, DogDTO, 
 
     @Override
     @Transactional(readOnly = true)
-    public Iterable<Dog> returnNotAdoptedDogs(Pageable pageable) {
-        return repository.findNotAdoptedDogs(pageable);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Dog returnDog(Long dogId) {
         return ifExistsReturnEntity(dogId);
     }

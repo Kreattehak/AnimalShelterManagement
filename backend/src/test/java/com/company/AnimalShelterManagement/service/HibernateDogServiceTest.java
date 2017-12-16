@@ -68,16 +68,6 @@ public class HibernateDogServiceTest {
     }
 
     @Test
-    public void shouldPerformReturnAllDogsWithStatusOtherThanAdopted() {
-        when(dogRepository.findNotAdoptedDogs(any(Pageable.class))).thenReturn(new RestResponsePage<>());
-
-        dogService.returnNotAdoptedDogs(createPagination(FIRST_PAGE, PAGE_SIZE_VALUE));
-
-        verify(dogRepository).findNotAdoptedDogs(any(Pageable.class));
-        verifyNoMoreInteractions(dogRepository);
-    }
-
-    @Test
     public void shouldPerformReturnDog() {
         when(dogRepository.findOne(anyLong())).thenReturn(testDog);
 
