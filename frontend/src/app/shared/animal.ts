@@ -7,4 +7,5 @@ export class Animal {
   availableForAdoption: string;
   animalIdentifier: string;
   dateOfBirth: Date;
+  dateOfRegistration: Date;
 }
