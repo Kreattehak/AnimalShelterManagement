@@ -1,7 +1,6 @@
 package com.company.AnimalShelterManagement.controller;
 
 import com.company.AnimalShelterManagement.model.Dog;
-import com.company.AnimalShelterManagement.model.dto.DogDTO;
 import com.company.AnimalShelterManagement.repository.DogRepository;
 import com.company.AnimalShelterManagement.utils.AnimalFactory;
 import org.junit.Before;
@@ -21,17 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
-import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.*;
+import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertResponse;
+import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertThatResponseHaveMultipleEntitiesReturned;
 import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseEntityNotFoundException;
 import static com.company.AnimalShelterManagement.model.Animal.AvailableForAdoption.*;
 import static com.company.AnimalShelterManagement.model.Dog.Race.GERMAN_SHEPERD;
-import static com.company.AnimalShelterManagement.service.HibernateDogServiceTest.checkDogDtoFieldsEquality;
 import static com.company.AnimalShelterManagement.service.HibernateDogServiceTest.checkDogFieldsEquality;
-import static com.company.AnimalShelterManagement.utils.SearchForAnimalParamsTest.WITH_PAGE_NUMBER_ADDITIONAL_PARAMETER;
-import static com.company.AnimalShelterManagement.utils.SearchForAnimalParamsTest.WITH_PAGE_SIZE_PARAMETER;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -82,19 +77,20 @@ public class DogControllerIntegrationTest {
         assertThatResponseHaveMultipleEntitiesReturned(home + apiForDogs, DOGS_COUNT);
     }
 
+    /* RestTemplate cast Dog to DogDTO, only difference is, that DogDTO doesn't have availableForAdoption field.
+       In the test below I cast from DogDTO to Dog, just to see if that field is null
+     */
     @Test
     public void shouldReturnDogDTO() throws Exception {
-        ResponseEntity<DogDTO> response = restTemplate.getForEntity(home + apiForDog + ID_VALUE, DogDTO.class);
+        ResponseEntity<Dog> response = restTemplate.getForEntity(home + apiForDogDTO + ID_VALUE, Dog.class);
 
-        System.out.println(response.getBody());
-        assertResponse(response, OK, is(checkDogDtoFieldsEquality(DOG_NAME, GERMAN_SHEPERD, DATE_OF_BIRTH_VALUE)));
+        assertResponse(response, OK, is(checkDogFieldsEquality(DOG_NAME, GERMAN_SHEPERD, DATE_OF_BIRTH_VALUE, null)));
     }
 
     @Test
     public void shouldReturnDog() throws Exception {
         response = restTemplate.getForEntity(home + apiForDog + ID_VALUE, Dog.class);
 
-        System.out.println(response.getBody());
         assertResponse(response, OK, is(checkDogFieldsEquality(DOG_NAME, GERMAN_SHEPERD,
                 DATE_OF_BIRTH_VALUE, ADOPTED)));
     }

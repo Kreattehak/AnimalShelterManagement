@@ -13,7 +13,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,6 +26,7 @@ import static com.company.AnimalShelterManagement.model.Dog.Race.GERMAN_SHEPERD;
 import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.isA;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
@@ -39,8 +39,6 @@ public class HibernateDogServiceTest {
     private DogRepository dogRepository;
     @Autowired
     private DogService dogService;
-    @Autowired
-    private ModelMapper mapper;
 
     private Dog testDog;
 
@@ -139,7 +137,7 @@ public class HibernateDogServiceTest {
 
     public static Matcher<DogDTO> checkDogDtoFieldsEquality(String name, Dog.Race race, LocalDate dateOfBirth) {
         return allOf(
-                instanceOf(DogDTO.class),
+                isA(DogDTO.class),
                 hasProperty(TYPE, is(Animal.Type.DOG)),
                 hasProperty(NAME, is(name)),
                 hasProperty(SUB_TYPE, is(race)),
@@ -149,7 +147,7 @@ public class HibernateDogServiceTest {
     public static Matcher<Dog> checkDogFieldsEquality(String name, Dog.Race race, LocalDate dateOfBirth,
                                                       Animal.AvailableForAdoption availableForAdoption) {
         return allOf(
-                instanceOf(Dog.class),
+                isA(Dog.class),
                 hasProperty(TYPE, is(Animal.Type.DOG)),
                 hasProperty(NAME, is(name)),
                 hasProperty(SUB_TYPE, is(race)),
