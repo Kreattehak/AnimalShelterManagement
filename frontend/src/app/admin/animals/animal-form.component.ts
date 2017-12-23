@@ -49,11 +49,7 @@ export class AnimalFormComponent implements OnInit, OnDestroy {
     if (this.isNewAnimal) {
       this.tryToSaveNewAnimal();
     } else {
-      // if (this.checkForAnimalDataDuplication()) {
-      //   return;
-      // } else {
-      //   this.tryToUpdateAnimal(id);
-      // }
+      this.tryToUpdateAnimal(id);
     }
   }
 
@@ -76,37 +72,26 @@ export class AnimalFormComponent implements OnInit, OnDestroy {
       );
   }
 
-
-  // private tryToUpdateAnimal(id: number): void {
-  //   this.activeAnimal = this.animalForm.value;
-  //   this.activeAnimal.id = id;
-  //   this._animalService.updateAnimal(this.activeAnimal)
-  //     .takeUntil(this.ngUnsubscribe)
-  //     .subscribe(
-  //       response => this._toastr.success(response,
-  //         this._validationService.getLocalizedMessages('successTitle')).then(
-  //         () => this.onBack()),
-  //       error => this._toastr.error(error,
-  //         this._validationService.getLocalizedMessages('errorTitle')));
-  // }
-
-  // private checkForAnimalDataDuplication(): boolean {
-  //   if (this.activeAnimal.lastName === this.animalForm.value.lastName
-  //     && this.activeAnimal.firstName === this.animalForm.value.firstName) {
-  //     this._toastr.error(this._validationService.getLocalizedMessages('animalExists'),
-  //       this._validationService.getLocalizedMessages('errorTitle'));
-  //     this.submitted = false;
-  //     return true;
-  //   }
-  //   return false;
-  // }
+  private tryToUpdateAnimal(id: number): void {
+    this.activeAnimal = this.animalForm.value;
+    this.activeAnimal.id = id;
+    this._animalService.updateAnimal(this.activeAnimal)
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(
+        response => console.log('Animal updated successfully' + response),
+        error => console.log('Error! Animal was not updated!' + error)
+      );
+  }
 
   private getFormData(): void {
     if (!this._route.snapshot.data['animal']) {
       this.activeAnimal = new Animal();
       this.isNewAnimal = true;
     } else {
-      this.activeAnimal = this._route.snapshot.data['animal'];
+      const data = this._route.snapshot.data['animal'];
+      const animalId = +this._route.snapshot.paramMap.get('animalId');
+      this.activeAnimal =  data.find((element) => element.id === animalId);
+      this.selectedValue = this.activeAnimal.type;
       this.isNewAnimal = false;
     }
   }
@@ -122,7 +107,7 @@ export class AnimalFormComponent implements OnInit, OnDestroy {
     const availableForAdoption = new FormControl(this.activeAnimal.availableForAdoption,
       [Validators.required]);
     const animalIdentifier = new FormControl();
-    const dateOfBirth = new FormControl(this.activeAnimal.animalIdentifier,
+    const dateOfBirth = new FormControl(this.activeAnimal.dateOfBirth,
       [Validators.pattern(/\d{4}-\d{2}-\d{2}/i)]);
 
     this.animalForm = new FormGroup({
