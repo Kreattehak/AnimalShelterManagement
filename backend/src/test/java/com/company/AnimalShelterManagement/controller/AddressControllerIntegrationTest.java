@@ -3,6 +3,7 @@ package com.company.AnimalShelterManagement.controller;
 import com.company.AnimalShelterManagement.model.Address;
 import com.company.AnimalShelterManagement.model.Person;
 import com.company.AnimalShelterManagement.repository.AddressRepository;
+import com.company.AnimalShelterManagement.repository.PersonRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,8 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertResponse;
 import static com.company.AnimalShelterManagement.AnimalShelterManagementApplicationTests.assertThatResponseHaveMultipleEntitiesReturned;
-import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseEntityNotFoundException;
-import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.checkResponseProcessUserRequestException;
+import static com.company.AnimalShelterManagement.controller.RestExceptionHandlerTest.*;
 import static com.company.AnimalShelterManagement.service.HibernateAddressServiceTest.checkAddressFieldsEquality;
 import static com.company.AnimalShelterManagement.service.HibernateAddressServiceTest.checkAddressFieldsEqualityWithPerson;
 import static com.company.AnimalShelterManagement.service.HibernatePersonServiceTest.checkPersonFieldsEquality;
@@ -30,6 +30,7 @@ import static com.company.AnimalShelterManagement.utils.TestConstant.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -47,6 +48,8 @@ public class AddressControllerIntegrationTest {
     @Autowired
     private AddressRepository addressRepository;
     @Autowired
+    private PersonRepository personRepository;
+    @Autowired
     private AddressController addressController;
 
     private RestTemplate restTemplate;
@@ -56,9 +59,11 @@ public class AddressControllerIntegrationTest {
     private ResponseEntity<Address> response;
 
     private String home = "http://localhost:";
-    private String apiForPerson = "/api/person/";
+    private String api = "/api";
+    private String apiForPerson = api + "/person/";
     private String addresses = "/addresses";
     private String address = "/address/";
+    private String updateMainAddress = "/updateMainAddress";
 
     @Before
     public void setUp() {
@@ -184,9 +189,56 @@ public class AddressControllerIntegrationTest {
         assertEquals(addressRepository.count(), countBeforeDelete);
     }
 
+    @Test
+    public void shouldUpdateMainAddress() {
+        Address oldPersonMainAddress = personRepository.findOne(ID_VALUE).getMainAddress();
+
+        AddressController.Params params = createRequestBodyWithParams(ID_VALUE, ANOTHER_ID_VALUE);
+
+        addressController.editMainAddress(params);
+
+        Address newPersonMainAddress = personRepository.findOne(ID_VALUE).getMainAddress();
+        assertNotEquals(oldPersonMainAddress, newPersonMainAddress);
+        assertEquals(newPersonMainAddress.getId(), ANOTHER_ID_VALUE);
+    }
+
+    @Test
+    @Sql(value = "classpath:data-test.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Commit
+    public void shouldResponseWithMessageAfterEditingMainAddress() {
+        HttpEntity<Object> entity = createHttpEntityOnParams(ID_VALUE, ANOTHER_ID_VALUE);
+
+        ResponseEntity<String> response = restTemplate.exchange(home + api + updateMainAddress,
+                PUT, entity, String.class);
+
+        assertResponse(response, OK, containsString("Main address was set to address with id: "
+                + ANOTHER_ID_VALUE));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenTryToUpdateMainAddressToTheSameAddress() {
+        HttpEntity<Object> entity = createHttpEntityOnParams(ID_VALUE, ID_VALUE);
+
+        String message = "Request could not be processed for ADDRESS, " + "for parameters: {address_id="
+                + ID_VALUE + ", person_id=" + ID_VALUE + '}';
+
+        checkResponseProcessUserRequestExceptionWithBody(home + api + updateMainAddress, PUT, message, entity);
+    }
+
     private void changeAddressData() {
         testAddress.setStreetName(ANOTHER_ADDRESS_STREET_NAME);
         testAddress.setCityName(ANOTHER_ADDRESS_CITY_NAME);
         testAddress.setZipCode(ANOTHER_ADDRESS_ZIP_CODE);
+    }
+
+    private AddressController.Params createRequestBodyWithParams(Long personId, Long addressId) {
+        AddressController.Params params = new AddressController.Params();
+        params.setPersonId(personId);
+        params.setAddressId(addressId);
+        return params;
+    }
+
+    private HttpEntity<Object> createHttpEntityOnParams(Long personId, Long addressId) {
+        return new HttpEntity<>(createRequestBodyWithParams(personId, addressId), httpHeaders);
     }
 }

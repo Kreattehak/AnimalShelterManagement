@@ -63,7 +63,7 @@ public class AddressControllerTest {
     }
 
     @Test
-    public void shouldPerformUpdatePerson() {
+    public void shouldPerformUpdateAddress() {
         when(addressService.updateAddress(any(Address.class))).thenReturn(testAddress);
 
         addressController.updateAddress(testAddress);
@@ -73,7 +73,7 @@ public class AddressControllerTest {
     }
 
     @Test
-    public void shouldPerformDeletePerson() {
+    public void shouldPerformDeleteAddress() {
         addressController.deleteAddress(anyLong(), anyLong());
 
         verify(addressService).deleteAddress(anyLong(), anyLong());
