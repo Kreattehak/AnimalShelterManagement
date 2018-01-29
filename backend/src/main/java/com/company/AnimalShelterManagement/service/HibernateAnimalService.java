@@ -132,7 +132,6 @@ public class HibernateAnimalService extends HibernateCommonService<Animal, Anima
                 return resolver.findByIdentifier(searchParams.getAnimalType(), searchParams.getAnimalIdentifier(), pageable);
             }
         } else {
-            System.out.println("TYPE NULL");
             return resolver.findWithoutParams(pageable);
         }
     }

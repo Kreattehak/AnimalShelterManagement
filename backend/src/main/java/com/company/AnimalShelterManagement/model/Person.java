@@ -73,10 +73,6 @@ public class Person extends BaseEntity {
         return address;
     }
 
-    public void setAddress(Set<Address> address) {
-        this.address = address;
-    }
-
     public void addAddress(Address address) {
         if (this.address.isEmpty()) {
             this.mainAddress = address;
@@ -94,10 +90,6 @@ public class Person extends BaseEntity {
         return dateOfRegistration;
     }
 
-    public void setDateOfRegistration(LocalDate dateOfRegistration) {
-        this.dateOfRegistration = dateOfRegistration;
-    }
-
     public Address getMainAddress() {
         return mainAddress;
     }
@@ -108,10 +100,6 @@ public class Person extends BaseEntity {
 
     public Set<Animal> getAnimal() {
         return animal;
-    }
-
-    public void setAnimal(Set<Animal> animal) {
-        this.animal = animal;
     }
 
     public boolean addAnimal(Animal animal) {
