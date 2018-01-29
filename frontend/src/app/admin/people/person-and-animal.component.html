@@ -1,0 +1,69 @@
+<div class="container" *ngIf="filteredAnimals && filteredAnimals.length; else emptyFilter">
+  <div class="jumbotron">
+    <h2>Adding animal to: {{ person.firstName + ' ' + person.lastName }}</h2>
+    <p>Main address: {{ person.mainAddress.cityName + ', ' + person.mainAddress.streetName + ', '
+      + person.mainAddress.zipCode }}</p>
+  </div>
+  <table class="table" id="personDetails">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Animal Name</th>
+      <th>Animal Type</th>
+      <th>Animal Subtype</th>
+      <th>Animal Identifier</th>
+      <th>Birthdate</th>
+    </thead>
+    <tbody>
+    <tr *ngFor="let animal of filteredAnimals" (click)="markAsActive(animal)" [class.success]="animal === activeAnimal">
+      <th scope="row">{{ animal.id }}</th>
+      <td>{{ animal.name }}</td>
+      <td>{{ animal.type }}</td>
+      <td>{{ animal.subType }}</td>
+      <td>{{ animal.animalIdentifier }}</td>
+      <td>{{ animal.dateOfBirth }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="form-group">
+      <div class="col-lg-4">
+        <button type="button" id="bAddAnimal" class="btn btn-info" (click)="onAddAnimal()">
+          Add Animal
+        </button>
+        <button type="button" class="btn btn-warning" (click)="onBack()">
+          Back
+        </button>
+      </div>
+      <div class="col-lg-8">
+        <div class="col-md-4 pull-right">
+          <input type="text" class="form-control" placeholder="Filter animal identifier"
+                 [(ngModel)]='filterAnimalIdentifier'
+                 (keyup.enter)="getAnimalByIdentifier()"/>
+        </div>
+        <div class="col-md-4 pull-right">
+          <input type="text" class="form-control" placeholder="Filter animal name" [(ngModel)]='filterAnimalName'
+                 (keyup.enter)="getAnimalByName()"/>
+        </div>
+        <div class="col-lg-4 pull-right">
+          <select class="form-control" [(ngModel)]="animalType">
+            <option [disabled]="true" selected>Select animal type</option>
+            <option *ngFor="let type of _animalService.animalTypes" [ngValue]="type.value">{{type.option}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #emptyFilter>
+  <div class="container" *ngIf="filteredAnimals && filteredAnimals.length === 0">
+    <div class="jumbotron">
+      <p>Empty database</p>
+    </div>
+  </div>
+</ng-template>
+
