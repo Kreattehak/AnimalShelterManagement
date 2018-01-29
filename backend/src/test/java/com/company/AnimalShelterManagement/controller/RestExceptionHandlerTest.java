@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,12 +52,17 @@ public class RestExceptionHandlerTest {
     }
 
     static void checkResponseEntityNotFoundException(String url, HttpMethod method) {
-        callForResponse(url, method);
+        callForResponse(url, method, null);
         assertApiErrorResponseForEntityNotFound();
     }
 
     static void checkResponseProcessUserRequestException(String url, HttpMethod method, String message) {
-        callForResponse(url, method);
+        checkResponseProcessUserRequestExceptionWithBody(url, method, message, null);
+    }
+
+    static void checkResponseProcessUserRequestExceptionWithBody(String url, HttpMethod method, String message,
+                                                                 HttpEntity<Object> body) {
+        callForResponse(url, method, body);
         assertApiErrorResponseForProcessUserRequestException(message);
     }
 
@@ -79,9 +85,9 @@ public class RestExceptionHandlerTest {
         assertThat(response.getBody().toString(), containsString(message));
     }
 
-    private static void callForResponse(String url, HttpMethod method) {
+    private static void callForResponse(String url, HttpMethod method, HttpEntity<Object> entity) {
         skipHandleErrorWhenNot404Found();
-        response = restTemplate.exchange(url, method, null, Object.class);
+        response = restTemplate.exchange(url, method, entity, Object.class);
     }
 
     private static void skipHandleErrorWhenNot404Found() {
