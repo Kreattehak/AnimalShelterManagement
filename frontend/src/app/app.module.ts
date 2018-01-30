@@ -26,8 +26,9 @@ import {PersonAnimalDetailComponent} from './admin/people/person-animal-detail.c
 import {AddressService} from './admin/addresses/address.service';
 import {ValidationService} from './shared/validation.service';
 import {PersonAddressesResolve} from './admin/addresses/person-addresses.resolve';
-import {PersonAnimalsResolve} from './admin/animals/person-animals.resolve';
+import {PersonAnimalsResolve} from './admin/people/person-animals.resolve';
 import {AnimalService} from './shared/animal.service';
+import {PersonAndAnimalComponent} from './admin/people/person-and-animal.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import {AnimalService} from './shared/animal.service';
     PersonAnimalDetailComponent,
     PersonListComponent,
     ComplexAnimalDetailComponent,
-    PersonAnimalDetailComponent
+    PersonAnimalDetailComponent,
+    PersonAndAnimalComponent
   ],
   imports: [
     BrowserModule,

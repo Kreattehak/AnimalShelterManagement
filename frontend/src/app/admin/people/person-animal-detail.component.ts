@@ -15,7 +15,7 @@ export class PersonAnimalDetailComponent implements OnInit, OnDestroy {
   public animals: Animal[];
   public activeAnimal: Animal;
 
-  private ngUnsubscribe: Subject<string> = new Subject();
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(private _animalService: AnimalService, private _route: ActivatedRoute,
               private _router: Router) {
@@ -24,6 +24,7 @@ export class PersonAnimalDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.person = this._route.snapshot.data['person'];
     this.animals = this._route.snapshot.data['animals'];
+    console.log(this.animals);
   }
 
   markAsActive(activeRow: Animal): void {

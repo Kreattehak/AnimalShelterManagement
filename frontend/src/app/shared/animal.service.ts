@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Animal} from './animal';
+import {Page} from './page';
 
 @Injectable()
 export class AnimalService {
@@ -15,9 +16,15 @@ export class AnimalService {
     dog: '/api/dogs',
     bird: '/api/birds'
   };
-  private _deleteAnimalFromOwner = '/api/person/{personId}/animals/{animalId}';
+  private _updateAnimal = {
+    cat: '/api/cat/',
+    dog: '/api/dog/',
+    bird: '/api/bird/'
+  };
+  private _addOrDeleteAnimalFromOwner = '/api/person/{personId}/animals/{animalId}';
   private _getAnimalsOwnedByPerson = '/api/person/{personId}/animals';
   private _getAnimalsAvailableForAdoption = '/api/animals/availableForAdoption';
+  private _getAnimalsWithLongestWaitingTime = '/api/animals/longestWaitingTime';
 
   public animalTypes: {} = [
     {value: 'DOG', option: 'Dog'},
@@ -70,17 +77,52 @@ export class AnimalService {
     return this._http.get<Animal[]>(this._getAnimalsAvailableForAdoption);
   }
 
+  getAnimalsAvailableForAdoptionByName(type: string, animalName: string): Observable<Animal[]> {
+    return this._http.get<Animal[]>(this._getAnimalsAvailableForAdoption,
+      {
+        params:
+          {
+            animalType: type, animalName: animalName
+          }
+      });
+  }
+
+  getAnimalAvailableForAdoptionByIdentifier(type: string, animalIdentifier: string): Observable<Animal[]> {
+    return this._http.get<Animal[]>(this._getAnimalsAvailableForAdoption,
+      {
+        params: {
+          animalType: type, animalIdentifier: animalIdentifier
+        }
+      }
+    );
+  }
+
+  getAnimalsWithLongestWaitingTime(): Observable<Page<Animal[]>> {
+    return this._http.get<Page<Animal[]>>(this._getAnimalsWithLongestWaitingTime);
+  }
+
   saveNewAnimal(animal: Animal): Observable<Animal> {
-    return this._http.post<Animal>(this.getRequestUrlByAnimalType(animal.type), animal, this.headers);
+    return this._http.post<Animal>(this.getRequestUrlByAnimalType(this._saveOrDeleteAnimal, animal.type),
+      animal, this.headers);
+  }
+
+  updateAnimal(animal: Animal): Observable<Animal> {
+    return this._http.put<Animal>(this.getRequestUrlByAnimalType(this._updateAnimal, animal.type),
+      animal, this.headers);
+  }
+
+  addAnimalToPerson(personId: number, animalId: number): Observable<string> {
+    return this._http.put(this._addOrDeleteAnimalFromOwner.replace('{personId}', personId.toString())
+      .replace('{animalId}', animalId.toString()), null, {responseType: 'text'});
   }
 
   // only removes OneToOne relationship between person and animal, animal is still in animal table
   deleteOwnedAnimal(personId: number, animalId: number): Observable<string> {
-    return this._http.delete(this._deleteAnimalFromOwner.replace('{personId}', personId.toString())
+    return this._http.delete(this._addOrDeleteAnimalFromOwner.replace('{personId}', personId.toString())
       .replace('{animalId}', animalId.toString()), {responseType: 'text'});
   }
 
-  private getRequestUrlByAnimalType(animalType: string) {
-    return this._saveOrDeleteAnimal[animalType.toLowerCase()];
+  private getRequestUrlByAnimalType(url: object, animalType: string) {
+    return url[animalType.toLowerCase()];
   }
 }

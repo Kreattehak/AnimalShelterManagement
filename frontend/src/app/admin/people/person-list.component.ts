@@ -127,7 +127,7 @@ export class PersonListComponent implements OnInit, OnDestroy {
 
   private checkArrayForPeople(): void {
     if (this.people.length === 0) {
-      this.errorMessage = 'empty database';
+      this.errorMessage = 'Empty database';
     }
   }
 

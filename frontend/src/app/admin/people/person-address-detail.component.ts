@@ -15,7 +15,7 @@ export class PersonAddressDetailComponent implements OnInit, OnDestroy {
   public addresses: Address[];
   public activeAddress: Address;
 
-  private ngUnsubscribe: Subject<string> = new Subject();
+  private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(private _addressService: AddressService, private _route: ActivatedRoute,
               private _router: Router) {

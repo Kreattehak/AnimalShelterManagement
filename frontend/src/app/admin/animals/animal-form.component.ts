@@ -1,9 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Location} from '@angular/common';
 import {Animal} from '../../shared/animal';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs/Subject';
 import {AnimalService} from '../../shared/animal.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {ValidationService} from '../../shared/validation.service';
 
 @Component({
@@ -27,7 +28,7 @@ export class AnimalFormComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(public _animalService: AnimalService, private _validationService: ValidationService,
-              private _route: ActivatedRoute, private _router: Router) {
+              private _route: ActivatedRoute, private _location: Location) {
   }
 
   ngOnInit() {
@@ -54,7 +55,7 @@ export class AnimalFormComponent implements OnInit, OnDestroy {
   }
 
   onBack(): void {
-    this._router.navigate(['/admin', 'animals']);
+    this._location.back();
   }
 
   ngOnDestroy() {
@@ -90,7 +91,7 @@ export class AnimalFormComponent implements OnInit, OnDestroy {
     } else {
       const data = this._route.snapshot.data['animal'];
       const animalId = +this._route.snapshot.paramMap.get('animalId');
-      this.activeAnimal =  data.find((element) => element.id === animalId);
+      this.activeAnimal = data.find((element) => element.id === animalId);
       this.selectedValue = this.activeAnimal.type;
       this.isNewAnimal = false;
     }
