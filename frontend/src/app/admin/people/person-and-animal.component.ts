@@ -47,6 +47,7 @@ export class PersonAndAnimalComponent implements OnInit, OnDestroy {
       response => console.log(response),
       error => console.log(error)
     );
+    this.filteredAnimals = this.filteredAnimals.filter((element) => element !== this.activeAnimal);
   }
 
   onBack(): void {
