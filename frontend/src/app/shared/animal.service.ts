@@ -25,6 +25,7 @@ export class AnimalService {
   private _getAnimalsOwnedByPerson = '/api/person/{personId}/animals';
   private _getAnimalsAvailableForAdoption = '/api/animals/availableForAdoption';
   private _getAnimalsWithLongestWaitingTime = '/api/animals/longestWaitingTime';
+  private _pageSize = 10;
 
   public animalTypes: {} = [
     {value: 'DOG', option: 'Dog'},
@@ -98,7 +99,11 @@ export class AnimalService {
   }
 
   getAnimalsWithLongestWaitingTime(): Observable<Page<Animal[]>> {
-    return this._http.get<Page<Animal[]>>(this._getAnimalsWithLongestWaitingTime);
+    return this._http.get<Page<Animal[]>>(this._getAnimalsWithLongestWaitingTime,
+      {
+        params:
+          {pageSize: this._pageSize.toString()}
+      });
   }
 
   saveNewAnimal(animal: Animal): Observable<Animal> {
