@@ -18,6 +18,7 @@ import {AddressFormComponent} from './admin/addresses/address-form.component';
 import {PersonAddressesResolve} from './admin/addresses/person-addresses.resolve';
 import {PersonAnimalsResolve} from './admin/people/person-animals.resolve';
 import {PersonAndAnimalComponent} from './admin/people/person-and-animal.component';
+import {AnimalResolve} from './admin/addresses/animal.resolve';
 
 @NgModule({
   imports: [
@@ -50,7 +51,7 @@ import {PersonAndAnimalComponent} from './admin/people/person-and-animal.compone
       },
       {
         path: 'admin/people/:id/animals/:animalId', component: AnimalFormComponent,
-        resolve: {animal: PersonAnimalsResolve}
+        resolve: {animal: AnimalResolve}
       },
       {
         path: 'admin/people/:id', component: PersonFormComponent,
@@ -59,7 +60,10 @@ import {PersonAndAnimalComponent} from './admin/people/person-and-animal.compone
       {path: 'admin/animals', component: AnimalListComponent},
       {path: 'admin/animals/new', component: AnimalFormComponent},
       {path: 'admin/animals/:id/details', component: ComplexAnimalDetailComponent},
-      {path: 'admin/animals/:id', component: AnimalFormComponent},
+      {
+        path: 'admin/animals/:id', component: AnimalFormComponent,
+        resolve: {animal: AnimalResolve}
+      },
       {path: 'availableAnimals', component: AvailableAnimalsListComponent},
       {path: 'availableAnimals/:id/details', component: AnimalDetailComponent},
       {path: '**', redirectTo: '', pathMatch: 'full'}

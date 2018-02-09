@@ -29,6 +29,7 @@ import {PersonAddressesResolve} from './admin/addresses/person-addresses.resolve
 import {PersonAnimalsResolve} from './admin/people/person-animals.resolve';
 import {AnimalService} from './shared/animal.service';
 import {PersonAndAnimalComponent} from './admin/people/person-and-animal.component';
+import {AnimalResolve} from "./admin/addresses/animal.resolve";
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import {PersonAndAnimalComponent} from './admin/people/person-and-animal.compone
     AuthenticationService,
     FilterService,
     PersonResolve,
+    AnimalResolve,
     PersonAddressesResolve,
     PersonAnimalsResolve
   ],
