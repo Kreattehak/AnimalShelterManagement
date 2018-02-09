@@ -24,14 +24,15 @@
 <div class="container">
   <div class="row">
     <div class="form-group">
-      <div class="col-lg-6">
+      <div class="col-lg-8">
         <button type="button" id="bAdd" class="btn btn-success" [routerLink]="['/admin', 'people', 'new']">
           Add Person
         </button>
+        <button type="button" id="bEditPerson" class="btn btn-warning" (click)="onEditPerson()">Edit Person</button>
         <button type="button" id="bInfoAddress" class="btn btn-info" (click)="onInfoAddress()">Person Details</button>
         <button type="button" id="bInfoAnimal" class="btn btn-info" (click)="onInfoAnimal()">Owned animals</button>
-        <button type="button" id="bEditPerson" class="btn btn-warning" (click)="onEditPerson()">Edit Person</button>
         <button type="button" id="bRemove" class="btn btn-danger" (click)="onRemove()">Remove</button>
+        <button type="button" class="btn btn-default" (click)="onBack()">Back</button>
       </div>
       <div class="col-xs-2 col-md-2 pull-right">
         <div class="input-group">

@@ -4,7 +4,7 @@
     <p>Main address: {{ person.mainAddress.cityName + ', ' + person.mainAddress.streetName + ', '
       + person.mainAddress.zipCode }}</p>
   </div>
-  <table class="table" id="personDetails">
+  <table class="table" id="personAndAnimalDetails">
     <thead>
     <tr>
       <th>#</th>
@@ -34,7 +34,7 @@
         <button type="button" id="bAddAnimal" class="btn btn-info" (click)="onAddAnimal()">
           Add Animal
         </button>
-        <button type="button" class="btn btn-warning" (click)="onBack()">
+        <button type="button" class="btn btn-default" (click)="onBack()">
           Back
         </button>
       </div>
