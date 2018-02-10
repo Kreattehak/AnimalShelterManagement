@@ -81,6 +81,10 @@ export class PersonListComponent implements OnInit, OnDestroy {
     }
   }
 
+  onBack(): void {
+    this._router.navigate(['admin']);
+  }
+
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
