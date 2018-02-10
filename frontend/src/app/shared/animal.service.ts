@@ -16,7 +16,7 @@ export class AnimalService {
     dog: '/api/dogs',
     bird: '/api/birds'
   };
-  private _updateAnimal = {
+  private _getOrUpdateAnimal = {
     cat: '/api/cat/',
     dog: '/api/dog/',
     bird: '/api/bird/'
@@ -25,6 +25,7 @@ export class AnimalService {
   private _getAnimalsOwnedByPerson = '/api/person/{personId}/animals';
   private _getAnimalsAvailableForAdoption = '/api/animals/availableForAdoption';
   private _getAnimalsWithLongestWaitingTime = '/api/animals/longestWaitingTime';
+  private _getRecentlyAddedAnimals= '/api/animals/recentlyAdded';
   private _pageSize = 10;
 
   public animalTypes: {} = [
@@ -106,13 +107,25 @@ export class AnimalService {
       });
   }
 
+  getRecentlyAddedAnimals(): Observable<Page<Animal[]>> {
+    return this._http.get<Page<Animal[]>>(this._getRecentlyAddedAnimals,
+      {
+        params:
+          {pageSize: this._pageSize.toString()}
+      });
+  }
+
+  getAnimal(animalType: string, animalId: number): Observable<Animal> {
+    return this._http.get<Animal>(this.getRequestUrlByAnimalType(this._getOrUpdateAnimal, animalType) + animalId);
+  }
+
   saveNewAnimal(animal: Animal): Observable<Animal> {
     return this._http.post<Animal>(this.getRequestUrlByAnimalType(this._saveOrDeleteAnimal, animal.type),
       animal, this.headers);
   }
 
   updateAnimal(animal: Animal): Observable<Animal> {
-    return this._http.put<Animal>(this.getRequestUrlByAnimalType(this._updateAnimal, animal.type),
+    return this._http.put<Animal>(this.getRequestUrlByAnimalType(this._getOrUpdateAnimal, animal.type) + animal.id,
       animal, this.headers);
   }
 
@@ -127,7 +140,7 @@ export class AnimalService {
       .replace('{animalId}', animalId.toString()), {responseType: 'text'});
   }
 
-  private getRequestUrlByAnimalType(url: object, animalType: string) {
+  private getRequestUrlByAnimalType(url: object, animalType: string): string {
     return url[animalType.toLowerCase()];
   }
 }

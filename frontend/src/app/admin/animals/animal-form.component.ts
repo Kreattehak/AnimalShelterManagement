@@ -74,9 +74,10 @@ export class AnimalFormComponent implements OnInit, OnDestroy {
   }
 
   private tryToUpdateAnimal(id: number): void {
-    this.activeAnimal = this.animalForm.value;
-    this.activeAnimal.id = id;
-    this._animalService.updateAnimal(this.activeAnimal)
+    const animalData: Animal =  this.animalForm.value;
+    animalData.id = id;
+    console.log(animalData);
+    this._animalService.updateAnimal(animalData)
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
         response => console.log('Animal updated successfully' + response),
@@ -89,9 +90,7 @@ export class AnimalFormComponent implements OnInit, OnDestroy {
       this.activeAnimal = new Animal();
       this.isNewAnimal = true;
     } else {
-      const data = this._route.snapshot.data['animal'];
-      const animalId = +this._route.snapshot.paramMap.get('animalId');
-      this.activeAnimal = data.find((element) => element.id === animalId);
+      this.activeAnimal = this._route.snapshot.data['animal'];
       this.selectedValue = this.activeAnimal.type;
       this.isNewAnimal = false;
     }
