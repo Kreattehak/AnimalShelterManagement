@@ -1,8 +1,9 @@
-<p> Animals count: {{animalsCount}}</p>
-<a (click)="getAllAnimals()">Get All Animals</a>
-<a (click)="getAllPeople()">Get All People</a>
-<pre *ngIf="animals">{{animals | json}}</pre>
-<pre *ngIf="people">{{people | json}}</pre>
-<a [routerLink]="['animals', 'new']">Add new animal</a>
-<a [routerLink]="['people', 'new']">Add new person</a>
-
+<p> Currently in our shelter are {{animalsCount || 'NO DATA'}} animals</p>
+<div class="inline">
+    <div id="animalList" [routerLink]="['/admin', 'animals']">
+      <p>Animal List</p>
+    </div>
+    <div id="personList" [routerLink]="['/admin', 'animals']">
+      <p>Person List</p>
+    </div>
+</div>
