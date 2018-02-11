@@ -44,8 +44,9 @@
       <div class="form-group">
         <label class="col-md-2 control-label" for="type">Animal Type</label>
         <div class="col-lg-4">
-          <select class="form-control" id="type" [(ngModel)]="selectedValue" formControlName="type">
-              <option [disabled]="true" [selected]="isNewAnimal">Select animal type</option>
+          <select class="form-control" id="type" [(ngModel)]="selectedValue" formControlName="type"
+                  (change)="resetSubTypeOnTypeChange()">
+            <option [disabled]="true" [selected]="isNewAnimal">Select animal type</option>
             <option *ngFor="let type of _animalService.animalTypes" [ngValue]="type.value">{{type.option}}</option>
           </select>
         </div>
@@ -64,15 +65,15 @@
           <select class="form-control" id="subType" formControlName="subType">
 
             <ng-template [ngIf]="selectedValue === 'DOG'">
-                <option disabled="true" [selected]="isNewAnimal">Select race</option>
+              <option [disabled]="true" value="">Select race</option>
               <option *ngFor="let race of _animalService.dogRaces" [ngValue]="race.value">{{race.option}}</option>
             </ng-template>
             <ng-template [ngIf]="selectedValue  === 'CAT'">
-              <option [disabled]="true" [selected]="isNewAnimal">Select race</option>
+              <option [disabled]="true" value="">Select race</option>
               <option *ngFor="let race of _animalService.catRaces" [ngValue]="race.value">{{race.option}}</option>
             </ng-template>
             <ng-template [ngIf]="selectedValue  === 'BIRD'">
-              <option [disabled]="true" [selected]="isNewAnimal">Select species</option>
+              <option [disabled]="true" value="">Select species</option>
               <option *ngFor="let species of _animalService.birdSpecies" [ngValue]="species.value">{{species.option}}
               </option>
             </ng-template>

@@ -58,6 +58,13 @@ export class AnimalFormComponent implements OnInit, OnDestroy {
     this._location.back();
   }
 
+  resetSubTypeOnTypeChange(): void {
+    this.animalForm.controls.subType.reset('');
+    if (this.animalForm.value.type === this.activeAnimal.type) {
+      this.animalForm.controls.subType.setValue(this.activeAnimal.subType);
+    }
+  }
+
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
@@ -76,7 +83,6 @@ export class AnimalFormComponent implements OnInit, OnDestroy {
   private tryToUpdateAnimal(id: number): void {
     const animalData: Animal =  this.animalForm.value;
     animalData.id = id;
-    console.log(animalData);
     this._animalService.updateAnimal(animalData)
       .takeUntil(this.ngUnsubscribe)
       .subscribe(
