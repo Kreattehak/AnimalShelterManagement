@@ -54,25 +54,25 @@ export class PersonAndAnimalComponent implements OnInit, OnDestroy {
     this._router.navigate(['admin', 'people', this.person.id, 'animals']);
   }
 
-  getAnimalByName() {
-    if (this.isAnimalTypeSelected()) {
+  getAnimalsByName() {
+    if (this.filterAnimalName && this.isAnimalTypeSelected()) {
       this._animalService.getAnimalsAvailableForAdoptionByName(this.animalType, this.filterAnimalName).subscribe(
         response => this.filteredAnimals = response,
         error => console.log(error)
       );
     } else {
-      alert('Please select animal type');
+      alert('Please select animal type or insert any input');
     }
   }
 
-  getAnimalByIdentifier() {
-    if (this.isAnimalTypeSelected()) {
-      this._animalService.getAnimalAvailableForAdoptionByIdentifier(this.animalType, this.filterAnimalIdentifier).subscribe(
+  getAnimalsByIdentifier() {
+    if (this.filterAnimalIdentifier && this.isAnimalTypeSelected()) {
+      this._animalService.getAnimalsAvailableForAdoptionByIdentifier(this.animalType, this.filterAnimalIdentifier).subscribe(
         response => this.filteredAnimals = response,
         error => console.log(error)
       );
     } else {
-      alert('Please select animal type');
+      alert('Please select animal type or insert any input');
     }
   }
 

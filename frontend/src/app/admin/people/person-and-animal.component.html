@@ -1,8 +1,11 @@
 <div class="container" *ngIf="filteredAnimals && filteredAnimals.length; else emptyFilter">
   <div class="jumbotron">
     <h2>Adding animal to: {{ person.firstName + ' ' + person.lastName }}</h2>
-    <p>Main address: {{ person.mainAddress.cityName + ', ' + person.mainAddress.streetName + ', '
+    <p *ngIf="person.mainAddress; else userWithoutMainAddress">Main address: {{ person.mainAddress.cityName + ', ' + person.mainAddress.streetName + ', '
       + person.mainAddress.zipCode }}</p>
+    <ng-template #userWithoutMainAddress>
+      <p>User doesn't have main address</p>
+    </ng-template>
   </div>
   <table class="table" id="personAndAnimalDetails">
     <thead>
@@ -41,12 +44,11 @@
       <div class="col-lg-8">
         <div class="col-md-4 pull-right">
           <input type="text" class="form-control" placeholder="Filter animal identifier"
-                 [(ngModel)]='filterAnimalIdentifier'
-                 (keyup.enter)="getAnimalByIdentifier()"/>
+                 [(ngModel)]='filterAnimalIdentifier' (keyup.enter)="getAnimalsByIdentifier()"/>
         </div>
         <div class="col-md-4 pull-right">
           <input type="text" class="form-control" placeholder="Filter animal name" [(ngModel)]='filterAnimalName'
-                 (keyup.enter)="getAnimalByName()"/>
+                 (keyup.enter)="getAnimalsByName()"/>
         </div>
         <div class="col-lg-4 pull-right">
           <select class="form-control" [(ngModel)]="animalType">
